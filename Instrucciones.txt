@@ -1,0 +1,34 @@
+Comandos para ejecutar en la consola: 
+iniciar un proyecto en reac.js puro
+--> npx create-react-app frontend // asigna un nombre 
+--> cd frontend // Ingresa a tu nuevo proyecto creado
+--> npm start // Manera de correr el programa 
+-->  ctrl+d // si deseas detener
+
+------------- Importantes
+
+
+npm install --save react-router-dom
+npm install --save axios
+npm install styled-components
+npm install --save-dev @babel/plugin-proposal-private-property-in-object
+npm install jwt-decode
+
+ ------ Php JWT-------
+se mecesita instalar composer https://getcomposer.org/download/
+ejecuta 
+selecciona el ejecutable de PHP que usa tu XAMPP es: C:\xampp\php\php.exe
+Asegúrate de que la opción "Add Composer to PATH" esté marcada
+
+PARA MAYOR FACILIDAD DESDE CONSOLA DE CMD EJECUTA
+cd C:\xampp\htdocs\"direccion de donde vas a instalar"
+composer require firebase/php-jwt
+ y listo en 
+
+
+<<<frontend>>>>
+npm install js-cookie
+
+
+
+

@@ -1,0 +1,1 @@
+export const apiUrl="http://localhost/Aguiles/backend/Controllers/ApiRest.php";
