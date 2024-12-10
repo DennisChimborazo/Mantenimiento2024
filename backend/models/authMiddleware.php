@@ -12,8 +12,8 @@ function verifyToken() {
         
         try {
             $decoded = JWT::decode($token, new Key('Mantenimientoequipos', 'HS256'));
-            return (array) $decoded; // Devuelve el contenido del token
-        } catch (Exception $e) {
+            return (array) $decoded; 
+                } catch (Exception $e) {
             http_response_code(401);
             echo json_encode([
                 "message" => "Token no válido o ha expirado",

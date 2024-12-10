@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./ActiveViewStyles.css";
+import ActiveCreateView from "./ActiveCreateView";
 
 function ActiveView() {
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="active-form-container">
       <h2 className="form-title">Gestión de Activos</h2>
@@ -47,7 +57,7 @@ function ActiveView() {
           />
           <div className="action-buttons">
             <button type="submit" className="primary-button">Buscar</button>
-            <button type="button" className="secondary-button">Agregar Activo</button>
+            <button type="button" className="secondary-button" onClick={handleOpenModal}>Agregar Activo</button>
             <button type="button" className="secondary-button">Agregar por Lotes</button>
           </div>
         </div>
@@ -76,6 +86,14 @@ function ActiveView() {
           </tbody>
         </table>
       </form>
+       {/* Modal: Mostramos el componente NuevaProcCompra como una ventana emergente */}
+       {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <ActiveCreateView onClose={handleCloseModal} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

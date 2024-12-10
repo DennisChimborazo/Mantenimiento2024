@@ -2,13 +2,14 @@ import axios from "axios";
 import { apiUrl } from "./ApiRest.js"; // Asegúrate de que apiUrl esté correctamente configurado
 
 class ApiService {
+
   static async traerDatos(getApi) {
     try {
       const token = localStorage.getItem("authToken"); // Obtener el token del localStorage
       if (!token) {
         throw new Error("No se encontró un token. Por favor, inicia sesión.");
       }
-
+ console.log(apiUrl + `?${getApi}=true`);
       const response = await axios.get(apiUrl + `?${getApi}=true`, {
         headers: {
           Authorization: `Bearer ${token}`, // Incluir el token
@@ -27,6 +28,7 @@ class ApiService {
     }
   }
 
+  
   static async enviarDatos(postApi, form) {
     try {
       const token = localStorage.getItem("authToken");
@@ -36,7 +38,7 @@ class ApiService {
       }
 
       const response = await axios.post(
-        apiUrl + `?${postApi}=true`, // Dynamic endpoint (postApi)
+        apiUrl + `?${postApi}=true`, 
         form,
         {
           headers: {
@@ -46,14 +48,42 @@ class ApiService {
         }
       );
 
-      console.log("Respuesta del servidor:", response.data);
       return response.data; // Retornamos los datos de la respuesta para su uso posterior
     } catch (error) {
       console.error("Error al enviar los datos:", error);
-      alert("Error al guardar los datos. Revisa los datos y vuelve a intentar.");
       return null; // Retorna null en caso de error
     }
   }
+
+  static async buscarDatos(getApi, id) {
+    try {
+      const token = localStorage.getItem("authToken"); // Obtener el token del localStorage
+      if (!token) {
+        throw new Error("No se encontró un token. Por favor, inicia sesión.");
+      }
+
+      console.log(apiUrl + `?${getApi}=${id}`); // Aquí se construye correctamente la URL
+
+      const response = await axios.get(apiUrl + `?${getApi}=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Incluir el token
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 401) {
+        throw new Error("No autorizado. Por favor, inicia sesión.");
+      }
+
+      return Array.isArray(response.data) ? response.data : []; // Asegurarse de que siempre sea un arreglo
+    } catch (error) {
+      console.error("Error al cargar los datos:", error);
+      return []; // Retornar un arreglo vacío en caso de error
+    }
+  }
+  
 }
+
+  
 
 export default ApiService;

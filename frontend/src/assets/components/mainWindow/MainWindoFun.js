@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import ActiveView from "../Actives/ActiveView";
-import ActiveCreateView from "../Actives/ActiveCreateView";
 import { useTokenVerification } from "../../Services/TokenVerification"; // Importa el hook
 import ProcesoCompraView from "../compra/ProcesoCompraView";
+import ActiveView from "../Actives/ActiveView";
+import Prueba from "../Pruebas/Prueba";
 
 const MainWindoFun = ({ activeView, setActiveView }) => {
   const checkTokenAndRedirect = useTokenVerification(); // Usa el hook
@@ -21,8 +21,9 @@ const MainWindoFun = ({ activeView, setActiveView }) => {
   return (
     <section className="content">
       {activeView === "activo" && <ActiveView />}
-      {activeView === "mantenimiento" && <ActiveCreateView />}
       {activeView === "procesoCompra" && <ProcesoCompraView />}
+      {activeView === "reportes" && <Prueba />}
+
     </section>
   );
 };

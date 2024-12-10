@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NuevaProcCompra from "./NuevaProcCompra"; // Importamos el componente del modal
 import { cargarProcesosCompra } from "./ProcesoCompraFun"; // Importar servicio para cargar procesos
-import "./ModalStyles.css"; // Importamos los estilos del modal
+import "./ModalStyles.css"; 
 
 function ProcesoCompraView() {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal

@@ -5,7 +5,6 @@ export const cargarProveedores = async () => {
         return data;
 };
 
-// Función para guardar el nuevo proceso de compra
 export const guardarProcesoCompra = async (form) => {
     try {
         const resultado = await ApiService.enviarDatos("proccompra", form);

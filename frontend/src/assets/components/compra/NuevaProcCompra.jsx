@@ -11,7 +11,6 @@ function NuevaProcCompra({ onClose }) {
     proveedor: "",
   }); // Estado del formulario
 
-  // Cargar proveedores al montar el componente
   useEffect(() => {
     const obtenerProveedores = async () => {
       try {
@@ -27,7 +26,6 @@ function NuevaProcCompra({ onClose }) {
     obtenerProveedores();
   }, []);
 
-  // Actualizar el estado del formulario
   const nameChange = (e) => {
     setForm({
       ...form,
@@ -35,7 +33,6 @@ function NuevaProcCompra({ onClose }) {
     });
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -45,7 +42,6 @@ function NuevaProcCompra({ onClose }) {
     }
 
     try {
-     
       await guardarProcesoCompra(form); // Llama a la función para guardar
       onClose(); // Cierra el modal después de guardar
     } catch (error) {

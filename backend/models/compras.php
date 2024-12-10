@@ -34,6 +34,7 @@ class Compra {
             echo json_encode(['success' => false, 'message' => 'Error al guardar el proceso de compra: ' . $e->getMessage()]);
         }
     }
+    
     public static function cargarCompra(){
         $sqlSelect = "SELECT * FROM procesocompra";
         $conn = Conexion::getInstance()->getConnection();

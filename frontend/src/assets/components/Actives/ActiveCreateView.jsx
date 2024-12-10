@@ -1,204 +1,339 @@
-import React, { useEffect } from "react";
-import { useForm } from "./AcriveCreateFun.js"; // Hook personalizado para manejar la lógica
-import {
-  FormContainer,
-  FormTitle,
-  Form,
-  FormGrid,
-  FormGroup,
-  FormInput,
-  FormSelect,
-  FormButton,
-  ErrorMessage,
-} from "./ActiveCreateStyles.js"; // Estilos personalizados
-import "./ActiveCreateBody.css"; // Estilo CSS específico
+import { useEffect, useState } from "react";
+import { useGuardarActivo } from "./ActiveCreateFun"; 
+import "./ActiveCreateViewStyles.css"
 
-const ActiveCreateView = () => {
-  const { form, handleInputChange, handleSubmit, error, errorMessage } = useForm();
+const ActiveCreateView = ({ onClose }) => {
+  const {
+    form,
+    setForm, // Asegúrate de importar setForm aquí
+    nameChange,
+    actionButtonGuardar,
+    cargarProcesosCompra,
+    cargarTipoBiem,
+    cargarBienesPorTipo,
+    cargarUbicacion,
+    cargarResponsable,
+    cargarEstado,
+  } = useGuardarActivo();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [datos, setDatos] = useState({
+    procesoCompras: [],
+    tipoBienes: [],
+    bienes: [],
+    responsables: [],
+    estados: [],
+    ubicaciones: [],
+  });
 
   useEffect(() => {
-    document.body.classList.add("form-view-body");
-    return () => {
-      document.body.classList.remove("form-view-body");
+    const obtenerDatos = async () => {
+      setIsLoading(true);
+      try {
+        const [
+          procesoCompras,
+          tipoBienes,
+          responsables,
+          estados,
+          ubicaciones,
+        ] = await Promise.all([
+          cargarProcesosCompra(),
+          cargarTipoBiem(),
+          cargarResponsable(),
+          cargarEstado(),
+          cargarUbicacion(),
+        ]);
+        setDatos({ procesoCompras, tipoBienes, bienes: [], responsables, estados, ubicaciones });
+      } catch (error) {
+        console.error("Error al cargar datos:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
+    obtenerDatos();
   }, []);
 
+  const handleTipoBienChange = async (e) => {
+    const selectedTipoBien = e.target.value;
+    console.log("Tipo de Bien seleccionado:", selectedTipoBien); // Para depuración
+    nameChange(e);
+    setForm((prevForm) => ({
+      ...prevForm,
+      bien: "", // Resetear selección de bienes
+    }));
+
+    if (selectedTipoBien) {
+      try {
+        setIsLoading(true);
+        setDatos((prevDatos) => ({
+          ...prevDatos,
+          bienes: [], // Limpiar bienes antes de cargar
+        }));
+        const bienesCargados = await cargarBienesPorTipo(selectedTipoBien);
+        setDatos((prevDatos) => ({
+          ...prevDatos,
+          bienes: bienesCargados,
+        }));
+      } catch (error) {
+        console.error("Error al cargar bienes:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setDatos((prevDatos) => ({
+        ...prevDatos,
+        bienes: [], // Limpiar bienes si no hay selección
+      }));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    actionButtonGuardar(form, onClose);
+  };
+
+  const { procesoCompras, tipoBienes, bienes, responsables, estados, ubicaciones } = datos;
+
   return (
-    <FormContainer>
-      <FormTitle>Nuevo Activo</FormTitle>
-      <Form>
-        {/* Grid para organizar los campos */}
-        <FormGrid>
-          <FormGroup>
-            <label htmlFor="typeActive">Tipo Activo</label>
-            <FormSelect
-              id="typeActive"
-              name="typeActive"
-              required
-              value={form.typeActive}
-              onChange={handleInputChange}
-            >
-              <option value="">Seleccione un tipo</option>
-              <option value="Informatico">Informático</option>
-              <option value="Limpieza">Limpieza</option>
-              <option value="Decorativo">Decorativo</option>
-            </FormSelect>
-          </FormGroup>
+    <div className="modal-overlay">
+      <div className="modal">
+        <button className="modal-close" onClick={onClose}>
+          &times;
+        </button>
+        <h3 className="modal-title">Agregar Nuevo Activo</h3>
+        <form className="form" onSubmit={handleSubmit}>
+          {/* Proceso de Compra */}
+          <div className="form-group">
+            <label htmlFor="procesoCompra" className="form-label">Proceso de Compra</label>
+            {isLoading ? (
+              <p>Cargando Procesos compra...</p>
+            ) : (
+              <select
+                name="procesoCompra"
+                id="procesoCompra"
+                className="form-select"
+                value={form.procesoCompra}
+                onChange={nameChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                {procesoCompras.map((procesoCompra) => (
+                  <option key={procesoCompra.idCompra} value={procesoCompra.idCompra}>
+                    {procesoCompra.idCompra}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
 
-          <FormGroup>
-            <label htmlFor="activo">Activo</label>
-            <FormSelect
-              id="activo"
-              name="activo"
-              required
-              value={form.activo}
-              onChange={handleInputChange}
-            >
-              <option value="">Seleccione un activo</option>
-              <option value="Informatico">Informático</option>
-              <option value="Limpieza">Limpieza</option>
-              <option value="Decorativo">Decorativo</option>
-            </FormSelect>
-          </FormGroup>
-          
-          <FormGroup>
-            <label htmlFor="series">Serie</label>
-            <FormInput
+          {/* Tipo de Bien */}
+          <div className="form-group">
+            <label htmlFor="tipoBien" className="form-label">Tipo de Bien</label>
+            {isLoading ? (
+              <p>Cargando Tipo bien...</p>
+            ) : (
+              <select
+                name="tipoBien"
+                id="tipoBien"
+                className="form-select"
+                value={form.tipoBien}
+                onChange={handleTipoBienChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                {tipoBienes.map((tipoBien) => (
+                  <option key={tipoBien.idtipBien} value={tipoBien.idtipBien}>
+                    {tipoBien.nomtipBien}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          {/* Bien */}
+          <div className="form-group">
+            <label htmlFor="bien" className="form-label">Bien</label>
+            {isLoading ? (
+              <p>Cargando bien...</p>
+            ) : (
+              <select
+                name="bien"
+                id="bien"
+                className="form-select"
+                value={form.bien}
+                onChange={nameChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                {bienes.map((bien) => (
+                  <option key={bien.idbien} value={bien.idbien}>
+                    {bien.nombien}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          {/* Serie */}
+          <div className="form-group">
+            <label htmlFor="serie" className="form-label">Serie</label>
+            <input
               type="text"
-              id="series"
-              name="series"
-              placeholder="Ingrese la serie"
+              name="serie"
+              id="serie"
+              className="form-input"
+              placeholder="Ej: 0097987"
+              value={form.serie}
+              onChange={nameChange}
               required
-              value={form.series}
-              onChange={handleInputChange}
             />
-          </FormGroup>
-          
+          </div>
 
-          <FormGroup>
-            <label htmlFor="marca">Marca</label>
-            <FormInput
+          {/* Marca */}
+          <div className="form-group">
+            <label htmlFor="marca" className="form-label">Marca</label>
+            <input
               type="text"
-              id="marca"
               name="marca"
-              placeholder="Ingrese el proveedor"
-              required
+              id="marca"
+              className="form-input"
+              placeholder="Ej: DELL"
               value={form.marca}
-              onChange={handleInputChange}
+              onChange={nameChange}
+              required
             />
-          </FormGroup>
-          <FormGroup>
-            <label htmlFor="modelo">Modelo</label>
-            <FormInput
+          </div>
+
+          {/* Modelo */}
+          <div className="form-group">
+            <label htmlFor="modelo" className="form-label">Modelo</label>
+            <input
               type="text"
-              id="modelo"
               name="modelo"
-              placeholder="Ingrese el proveedor"
-              required
+              id="modelo"
+              className="form-input"
+              placeholder="Ej: D-08"
               value={form.modelo}
-              onChange={handleInputChange}
+              onChange={nameChange}
+              required
             />
-          </FormGroup>
-          
-          <FormGroup>
-            <label htmlFor="color">Color</label>
-            <FormInput
+          </div>
+
+          {/* Color */}
+          <div className="form-group">
+            <label htmlFor="color" className="form-label">Color</label>
+            <input
               type="text"
-              id="color"
               name="color"
-              placeholder="Ingrese la serie"
-              required
+              id="color"
+              className="form-input"
+              placeholder="Ej: Azul"
               value={form.color}
-              onChange={handleInputChange}
+              onChange={nameChange}
+              required
             />
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <label htmlFor="barcode">Código de Barras</label>
-            <FormInput
+          {/* Código de Barras */}
+          <div className="form-group">
+            <label htmlFor="codigoBarra" className="form-label">Código de Barras</label>
+            <input
               type="text"
-              id="barcode"
-              name="barcode"
-              placeholder="Ingrese el código de barras"
+              name="codigoBarra"
+              id="codigoBarra"
+              className="form-input"
+              placeholder="Ej: 98797098"
+              value={form.codigoBarra}
+              onChange={nameChange}
               required
-              value={form.barcode}
-              onChange={handleInputChange}
             />
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <label htmlFor="compra">Proceso de compra</label>
-            <FormSelect
-              id="compra"
-              name="compra"
-              required
-              value={form.compra}
-              onChange={handleInputChange}
-            >
-              <option value="">Seleccione un proceso</option>
-              <option value="Informatico">Informático</option>
-              <option value="Limpieza">Limpieza</option>
-              <option value="Decorativo">Decorativo</option>
-            </FormSelect>
-          </FormGroup>
+        
+          {/* Responsable */}
+          <div className="form-group">
+            <label htmlFor="responsable" className="form-label">Responsable</label>
+            {isLoading ? (
+              <p>Cargando responsables...</p>
+            ) : (
+              <select
+                name="responsable"
+                id="responsable"
+                className="form-select"
+                value={form.responsable}
+                onChange={nameChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                {responsables.map((responsable) => (
+                  <option key={responsable.idPers} value={responsable.idPers}>
+                    {responsable.nomPers}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
 
-          <FormGroup>
-            <label htmlFor="ubicacion">Ubicacion</label>
-            <FormSelect
-              id="ubicacion"
-              name="ubicacion"
-              required
-              value={form.ubicacion}
-              onChange={handleInputChange}
-            >
-              <option value="">Seleccione una ubicacion</option>
-              <option value="Informatico">Informático</option>
-              <option value="Limpieza">Limpieza</option>
-              <option value="Decorativo">Decorativo</option>
-            </FormSelect>
-          </FormGroup>
-          <FormGroup>
-            <label htmlFor="responsable">Responsable</label>
-            <FormSelect
-              id="responsable"
-              name="responsable"
-              required
-              value={form.responsable}
-              onChange={handleInputChange}
-            >
-              <option value="">Seleccione un responsable</option>
-              <option value="Informatico">Informático</option>
-              <option value="Limpieza">Limpieza</option>
-              <option value="Decorativo">Decorativo</option>
-            </FormSelect>
-          </FormGroup>
+          {/* Estado */}
+          <div className="form-group">
+            <label htmlFor="estado" className="form-label">Estado</label>
+            {isLoading ? (
+              <p>Cargando estados...</p>
+            ) : (
+              <select
+                name="estado"
+                id="estado"
+                className="form-select"
+                value={form.estado}
+                onChange={nameChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                {estados.map((estado) => (
+                  <option key={estado.idEstado} value={estado.idEstado}>
+                    {estado.nomEstado}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
 
-          <FormGroup>
-            <label htmlFor="status">Estado</label>
-            <FormSelect
-              id="status"
-              name="status"
-              required
-              value={form.status}
-              onChange={handleInputChange}
-            >
-              <option value="">Seleccione un estado</option>
-              <option value="activo">Activo</option>
-              <option value="inactivo">Inactivo</option>
-              <option value="pendiente">Pendiente</option>
-            </FormSelect>
-          </FormGroup>
-        </FormGrid>
-
-        {/* Botón de enviar */}
-        <FormButton type="button" onClick={handleSubmit}>
-          Guardar
-        </FormButton>
-      </Form>
-
-      {/* Mostrar error si existe */}
-      {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
-    </FormContainer>
+           {/* Ubicacion */}
+           <div className="form-group">
+            <label htmlFor="ubicacion" className="form-label">Ubicacion</label>
+            {isLoading ? (
+              <p>Cargando estados...</p>
+            ) : (
+              <select
+                name="ubicacion"
+                id="ubicacion"
+                className="form-select"
+                value={form.ubicacion}
+                onChange={nameChange}
+                required
+              >
+                <option value="">Seleccione</option>
+                {ubicaciones.map((ubicacion) => (
+                  <option key={ubicacion.idUbic} 
+                  value={ubicacion.idUbic}>
+                    {ubicacion.nomUbic}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+                    {/* Botones de Acción */}
+          <div className="form-actions">
+            <button type="submit" className="btn btn-primary">
+              Guardar
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 
