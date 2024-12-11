@@ -36,7 +36,18 @@ class Compra {
     }
     
     public static function cargarCompra(){
-        $sqlSelect = "SELECT * FROM procesocompra";
+        $sqlSelect = "SELECT 
+                            pc.idCompra,
+                            pc.fechaCompra,
+                            p.nomProveedor,
+                            COUNT(a.idCompra) AS TotalActivos
+                        FROM  procesocompra pc
+                        INNER JOIN 
+                            proveedor p ON pc.idProveedor = p.idProveedor
+                        LEFT JOIN 
+                            activo a ON a.idCompra = pc.idCompra
+                        GROUP BY 
+                            pc.idCompra, pc.fechaCompra, p.nomProveedor";
         $conn = Conexion::getInstance()->getConnection();
         $result=$conn->prepare($sqlSelect);
         $result->execute();
@@ -44,6 +55,6 @@ class Compra {
         $dataJson=json_encode($data);
         echo ($dataJson); 
     }
-}
+}   
 
 ?>

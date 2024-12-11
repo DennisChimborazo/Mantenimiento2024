@@ -4,7 +4,7 @@ import ProcesoCompraView from "../compra/ProcesoCompraView";
 import ActiveView from "../Actives/ActiveView";
 import Prueba from "../Pruebas/Prueba";
 
-const MainWindoFun = ({ activeView, setActiveView }) => {
+const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
   const checkTokenAndRedirect = useTokenVerification(); // Usa el hook
 
   useEffect(() => {
@@ -28,4 +28,4 @@ const MainWindoFun = ({ activeView, setActiveView }) => {
   );
 };
 
-export default MainWindoFun;
+export default VentanaPrincipalFun;

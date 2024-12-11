@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./NuevaProcCompraStyles.css";
+import modalStyles from "./NuevoProcesoCompraEstilos.module.css";
 import { cargarProveedores, guardarProcesoCompra } from "./NuevaProCompraFun.js";
 
 function NuevaProcCompra({ onClose }) {
@@ -50,76 +50,83 @@ function NuevaProcCompra({ onClose }) {
   };
 
   return (
-    <div className="form-container">
-      <form className="form" onSubmit={handleSubmit}>
-        <h3 className="form-title">Agregar Nuevo Proceso</h3>
+    <div className={modalStyles.modalGlobal}>
+      <div className={modalStyles.NuevoProcesoComp}>
+        <form className={modalStyles.form} onSubmit={handleSubmit}>
+          <h3 className={modalStyles.formTitle}>Agregar Nuevo Proceso</h3>
 
-        <div className="form-group">
-          <label htmlFor="proceso" className="form-label">
-            Proceso de Compra
-          </label>
-          <input
-            type="text"
-            name="proceso"
-            id="proceso"
-            className="form-input"
-            placeholder="Ej: COM-001"
-            required
-            onChange={nameChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="fecha" className="form-label">
-            Fecha
-          </label>
-          <input
-            type="date"
-            name="fecha"
-            id="fecha"
-            className="form-input"
-            required
-            onChange={nameChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="proveedor" className="form-label">
-            Proveedor
-          </label>
-          {isLoading ? (
-            <p>Cargando proveedores...</p> // Mensaje mientras carga
-          ) : (
-            <select
-              name="proveedor"
-              id="proveedor"
-              className="form-select"
-              value={form.proveedor}
-              onChange={nameChange}
+          <div className={modalStyles.formGroup}>
+            <label htmlFor="proceso" className={modalStyles.formLabel}>
+              Proceso de Compra
+            </label>
+            <input
+              type="text"
+              name="proceso"
+              id="proceso"
+              className={modalStyles.formInput}
+              placeholder="Ej: COM-001"
               required
-            >
-              <option value="">Seleccione un proveedor</option>
-              {proveedores.map((proveedor) => (
-                <option
-                  key={proveedor.idProveedor}
-                  value={proveedor.idProveedor}
-                >
-                  {proveedor.nomProveedor}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
+              onChange={nameChange}
+            />
+          </div>
 
-        <div className="form-actions">
-          <button type="submit" className="btn btn-primary">
-            Guardar
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={onClose}>
-            Cancelar
-          </button>
-        </div>
-      </form>
+          <div className={modalStyles.formGroup}>
+            <label htmlFor="fecha" className={modalStyles.formLabel}>
+              Fecha
+            </label>
+            <input
+              type="date"
+              name="fecha"
+              id="fecha"
+              className={modalStyles.formInput}
+              required
+              onChange={nameChange}
+            />
+          </div>
+
+          <div className={modalStyles.formGroup}>
+            <label htmlFor="proveedor" className={modalStyles.formLabel}>
+              Proveedor
+            </label>
+            {isLoading ? (
+              <p>Cargando proveedores...</p> // Mensaje mientras carga
+            ) : (
+              <select
+                name="proveedor"
+                id="proveedor"
+                className={modalStyles.formSelect}
+                value={form.proveedor}
+                onChange={nameChange}
+                required
+              >
+                <option value="">Seleccione un proveedor</option>
+                {proveedores.map((proveedor) => (
+                  <option
+                    key={proveedor.idProveedor}
+                    value={proveedor.idProveedor}
+                  >
+                    {proveedor.nomProveedor}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          <br />
+          <div className={modalStyles.formActions}>
+            <button type="submit" className={`${modalStyles.btn} ${modalStyles.btnPrimary}`}>
+              Guardar
+            </button>
+            <button
+              type="button"
+              className={`${modalStyles.btn} ${modalStyles.btnSecondary}`}
+              onClick={onClose}
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

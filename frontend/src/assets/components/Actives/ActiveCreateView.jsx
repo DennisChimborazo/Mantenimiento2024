@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGuardarActivo } from "./ActiveCreateFun"; 
-import "./ActiveCreateViewStyles.css"
+import Styles from "./ActivoNuevoEstilos.module.css";
+
 
 const ActiveCreateView = ({ onClose }) => {
   const {
@@ -95,23 +96,21 @@ const ActiveCreateView = ({ onClose }) => {
   const { procesoCompras, tipoBienes, bienes, responsables, estados, ubicaciones } = datos;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <button className="modal-close" onClick={onClose}>
-          &times;
-        </button>
-        <h3 className="modal-title">Agregar Nuevo Activo</h3>
-        <form className="form" onSubmit={handleSubmit}>
+    <div className={Styles.modalGlobal}>
+      <div className={Styles.NuevoActivo}>
+      <h3 className={Styles.formTitle}>Agregar Nuevo Activo</h3>
+        <form className={Styles.form} onSubmit={handleSubmit}>
           {/* Proceso de Compra */}
-          <div className="form-group">
-            <label htmlFor="procesoCompra" className="form-label">Proceso de Compra</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="procesoCompra" className={Styles.formLabel}>
+              Proceso de Compra</label>
             {isLoading ? (
               <p>Cargando Procesos compra...</p>
             ) : (
               <select
                 name="procesoCompra"
                 id="procesoCompra"
-                className="form-select"
+                className={Styles.formSelect}
                 value={form.procesoCompra}
                 onChange={nameChange}
                 required
@@ -127,15 +126,16 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Tipo de Bien */}
-          <div className="form-group">
-            <label htmlFor="tipoBien" className="form-label">Tipo de Bien</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="tipoBien" className={Styles.formLabel}>
+              Tipo de Bien</label>
             {isLoading ? (
               <p>Cargando Tipo bien...</p>
             ) : (
               <select
                 name="tipoBien"
                 id="tipoBien"
-                className="form-select"
+                className={Styles.formSelect}
                 value={form.tipoBien}
                 onChange={handleTipoBienChange}
                 required
@@ -151,15 +151,16 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Bien */}
-          <div className="form-group">
-            <label htmlFor="bien" className="form-label">Bien</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="bien" className={Styles.formLabel}>
+              Bien</label>
             {isLoading ? (
               <p>Cargando bien...</p>
             ) : (
               <select
                 name="bien"
                 id="bien"
-                className="form-select"
+                className={Styles.formSelect}
                 value={form.bien}
                 onChange={nameChange}
                 required
@@ -175,13 +176,14 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Serie */}
-          <div className="form-group">
-            <label htmlFor="serie" className="form-label">Serie</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="serie" className={Styles.formLabel}>
+              Serie</label>
             <input
               type="text"
               name="serie"
               id="serie"
-              className="form-input"
+              className={Styles.formInput}
               placeholder="Ej: 0097987"
               value={form.serie}
               onChange={nameChange}
@@ -190,13 +192,14 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Marca */}
-          <div className="form-group">
-            <label htmlFor="marca" className="form-label">Marca</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="marca" className={Styles.formLabel}>
+              Marca</label>
             <input
               type="text"
               name="marca"
               id="marca"
-              className="form-input"
+              className={Styles.formInput}
               placeholder="Ej: DELL"
               value={form.marca}
               onChange={nameChange}
@@ -205,13 +208,14 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Modelo */}
-          <div className="form-group">
-            <label htmlFor="modelo" className="form-label">Modelo</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="modelo" className={Styles.formLabel}>
+              Modelo</label>
             <input
               type="text"
               name="modelo"
               id="modelo"
-              className="form-input"
+              className={Styles.formInput}
               placeholder="Ej: D-08"
               value={form.modelo}
               onChange={nameChange}
@@ -220,13 +224,14 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Color */}
-          <div className="form-group">
-            <label htmlFor="color" className="form-label">Color</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="color" className={Styles.formLabel}>
+              Color</label>
             <input
               type="text"
               name="color"
               id="color"
-              className="form-input"
+              className={Styles.formInput}
               placeholder="Ej: Azul"
               value={form.color}
               onChange={nameChange}
@@ -235,13 +240,14 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Código de Barras */}
-          <div className="form-group">
-            <label htmlFor="codigoBarra" className="form-label">Código de Barras</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="codigoBarra" className={Styles.formLabel}>
+              Código de Barras</label>
             <input
               type="text"
               name="codigoBarra"
               id="codigoBarra"
-              className="form-input"
+              className={Styles.formInput}
               placeholder="Ej: 98797098"
               value={form.codigoBarra}
               onChange={nameChange}
@@ -251,15 +257,16 @@ const ActiveCreateView = ({ onClose }) => {
 
         
           {/* Responsable */}
-          <div className="form-group">
-            <label htmlFor="responsable" className="form-label">Responsable</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="responsable" className={Styles.formLabel}>
+              Responsable</label>
             {isLoading ? (
               <p>Cargando responsables...</p>
             ) : (
               <select
                 name="responsable"
                 id="responsable"
-                className="form-select"
+                className={Styles.formSelect}
                 value={form.responsable}
                 onChange={nameChange}
                 required
@@ -275,15 +282,16 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
           {/* Estado */}
-          <div className="form-group">
-            <label htmlFor="estado" className="form-label">Estado</label>
+          <div className={Styles.formGroup}>
+            <label htmlFor="estado" className={Styles.formLabel}>
+              Estado</label>
             {isLoading ? (
               <p>Cargando estados...</p>
             ) : (
               <select
                 name="estado"
                 id="estado"
-                className="form-select"
+                className={Styles.formSelect}
                 value={form.estado}
                 onChange={nameChange}
                 required
@@ -299,15 +307,16 @@ const ActiveCreateView = ({ onClose }) => {
           </div>
 
            {/* Ubicacion */}
-           <div className="form-group">
-            <label htmlFor="ubicacion" className="form-label">Ubicacion</label>
+           <div className={Styles.formGroup}>
+            <label htmlFor="ubicacion" className={Styles.formLabel}>
+              Ubicacion</label>
             {isLoading ? (
               <p>Cargando estados...</p>
             ) : (
               <select
                 name="ubicacion"
                 id="ubicacion"
-                className="form-select"
+                className={Styles.formSelect}
                 value={form.ubicacion}
                 onChange={nameChange}
                 required
@@ -322,16 +331,23 @@ const ActiveCreateView = ({ onClose }) => {
               </select>
             )}
           </div>
-                    {/* Botones de Acción */}
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary">
-              Guardar
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+         
+        </form>
+        <div className={Styles.formActions}>
+        <button
+            className={`${Styles.btn} ${Styles.btnPrimary}`}
+            onClick={handleSubmit} // Llama manualmente a handleSubmit
+          >
+            Guardar
+          </button>
+            <button
+              type="button"
+              className={`${Styles.btn} ${Styles.btnSecondary}`}
+              onClick={onClose}
+            >
               Cancelar
             </button>
           </div>
-        </form>
       </div>
     </div>
   );

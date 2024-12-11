@@ -1,0 +1,74 @@
+/* ProcesosCompraEstilos.module.css */
+
+/* Estilos para el contenedor principal del componente */
+.ProcesoCompra {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%; /* Ocupa toda la altura del contenedor padre */
+    width: 100%; /* Ocupa todo el ancho del contenedor padre */
+    padding: 20px;
+    background-color: #ffffff;
+    box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
+    overflow-y: auto; /* Habilitar scroll si el contenido es extenso */
+  }
+  
+  /* Estilos para el título principal */
+  .ProcesoCompra h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  /* Estilos para los botones */
+  .ProcesoCompra button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+  }
+  
+  .ProcesoCompra button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Estilos para la tabla de procesos */
+  .active-table {
+    width: 100%; /* Asegura que la tabla ocupe el ancho completo del contenedor */
+    max-width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .active-table th,
+  .active-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .active-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .active-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .active-table tr:hover {
+    background-color: #ddd;
+  }
+  
+  .active-table td {
+    color: #555;
+  }
+  

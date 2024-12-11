@@ -1,0 +1,60 @@
+CREATE TABLE activo();
+	idActivo INT AUTO_INCREMENT PRIMARY KEY,
+	serieAct varchar (40),
+	marcaAct varchar (40),	
+	modeloAct varchar (40),
+	colorAct varchar (30),
+	codigoBarraAct varchar (30),
+	idCompra varchar (30),
+	idUbic INT,
+	idPers INT ,
+	idbien INT,
+	idEstado INT,
+	FOREIGN KEY (idCompra) REFERENCES procesoCompra (idCompra),
+	FOREIGN KEY (idUbic) REFERENCES ubicacion (idUbic),
+	FOREIGN KEY (idPers) REFERENCES persona (idPers ),
+	FOREIGN KEY (idbien) REFERENCES bien (idbien),
+	FOREIGN KEY (idEstado) REFERENCES estado (idEstado)
+);
+
+CREATE TABLE proveedor(
+	idProveedor INT AUTO_INCREMENT PRIMARY KEY,
+    	nomProveedor varchar (20)
+);
+
+
+CREATE TABLE procesoCompra();
+	idCompra varchar(40) PRIMARY KEY,
+	fechaCompra date,
+	idProveedor int,
+	FOREIGN KEY idProveedor REFERENCES proveedor (idProveedor)
+)
+ 
+CREATE TABLE ubicacion(
+	idUbic INT AUTO_INCREMENT PRIMARY KEY,
+    	nomUbic varchar (20)
+);
+
+CREATE TABLE persona(
+	idPers INT AUTO_INCREMENT PRIMARY KEY,
+    	nomPers varchar (20)
+);
+
+CREATE TABLE tipoBien(
+	idtipBien INT AUTO_INCREMENT PRIMARY KEY,
+    	nomtipBien varchar (30)
+);
+
+CREATE TABLE bien(
+	idbien INT AUTO_INCREMENT PRIMARY KEY,
+    	nombien varchar (30),
+	idtipBien INT,
+	FOREIGN KEY (idtipBien) REFERENCES tipoBien(idtipBien)
+	
+);
+
+
+CREATE TABLE estado(
+	idEstado INT AUTO_INCREMENT PRIMARY KEY,
+    	nomEstado varchar (30)
+);

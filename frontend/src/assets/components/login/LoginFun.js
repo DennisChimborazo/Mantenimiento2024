@@ -17,8 +17,8 @@ export const useLogin = () => {
     });
   };
 
-  const actionButtonLogin = async () => {
-
+  const actionButtonLogin = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post(apiUrl+"?login=true", form, {
         headers: {
