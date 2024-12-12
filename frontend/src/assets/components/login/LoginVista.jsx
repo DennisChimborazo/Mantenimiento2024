@@ -15,36 +15,41 @@ const LoginVista = () => {
   }, []);
 
   return (
-    <div className={styles.LoginVistaLV}>
-      <title>Iniciar Sesión</title>
-      <form className={styles.form}>
-        <label htmlFor="username" className={styles.label}>Usuario</label>
-        <input
-          className={styles.input}
-          type="text"
-          id="username"
-          name="username"
-          placeholder="Ingrese su usuario"
-          required
-          value={form.username}
-          onChange={nameChange}
-        />
-        <label htmlFor="pass" className={styles.label}>Contraseña</label>
-        <input
-          className={styles.input}
-          type="password"
-          id="pass"
-          name="pass"
-          placeholder="Ingrese su Contraseña"
-          required
-          value={form.pass}
-          onChange={nameChange}
-        />
-        <button className={styles.button} type="button" onClick={actionButtonLogin}>
-          Ingresar
-        </button>
-        {error && <p className={styles.errorMessage}>{smserror}</p>}
-      </form>
+    <div>
+      <div className={styles.banner}></div> {/* Banner agregado aquí */}
+      <div className={styles.LoginVistaLV}>
+
+        <form className={styles.form}>
+        <h1 className={styles.title}>Iniciar Sesión</h1> 
+        <div className={styles.formImage}></div>
+          <label htmlFor="username" className={styles.label}>Usuario</label>
+          <input
+            className={styles.input}
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Ingrese su usuario"
+            required
+            value={form.username}
+            onChange={nameChange}
+          />
+          <label htmlFor="pass" className={styles.label}>Contraseña</label>
+          <input
+            className={styles.input}
+            type="password"
+            id="pass"
+            name="pass"
+            placeholder="Ingrese su Contraseña"
+            required
+            value={form.pass}
+            onChange={nameChange}
+          />
+          <button className={styles.button} type="button" onClick={actionButtonLogin}>
+            Ingresar
+          </button>
+          {error && <p className={styles.errorMessage}>{smserror}</p>}
+        </form>
+      </div>
     </div>
   );
 };

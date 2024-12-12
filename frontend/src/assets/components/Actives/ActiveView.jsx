@@ -8,7 +8,6 @@ import { useVistaActivo } from "./ActiveViewFun.js";
     const {
       form,
       setForm, // Asegúrate de importar setForm aquí
-      nameChange,
       cargarProcesosCompra ,
       cargarTipoActivo,
       cargarUbicacion,
