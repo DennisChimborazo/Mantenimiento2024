@@ -47,7 +47,28 @@ switch ($opc) {
         } elseif (isset($_GET['busBines'])) {
             $idTipoBien =  $_GET['busBines'];
             BuscarDatos::buscarBienes($idTipoBien); 
+
+        }elseif (isset($_GET['busActProceso'])) {
+            $compra =  $_GET['busActProceso'];
+            BuscarDatos::buscActPorCompra($compra); 
+
+        }elseif (isset($_GET['busActTipoBien'])) {
+            $tipobn =  $_GET['busActTipoBien'];
+            BuscarDatos::buscActTipoBien($tipobn); 
+
+        }elseif (isset($_GET['busActUbicacion'])) {
+            $ubi =  $_GET['busActUbicacion'];
+            BuscarDatos::buscActUbicacion($ubi);
+
+        }elseif (isset($_GET['busActEstado'])) {
+            $est =  $_GET['busActEstado'];
+            BuscarDatos::buscActEstado($est); 
+            
+        }elseif (isset($_GET['busActSerie'])) {
+            $serie =  $_GET['busActSerie'];
+            BuscarDatos::buscActSerie($serie); 
         }
+        
         break;
 
     case 'POST':

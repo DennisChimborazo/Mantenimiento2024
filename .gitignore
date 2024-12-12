@@ -1,0 +1,3 @@
+backend/models/vendor/
+backend/models/composer.json
+backend/models/composer.lock
