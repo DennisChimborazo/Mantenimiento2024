@@ -9,7 +9,6 @@ class ApiService {
       if (!token) {
         throw new Error("No se encontró un token. Por favor, inicia sesión.");
       }
- console.log(apiUrl + `?${getApi}=true`);
       const response = await axios.get(apiUrl + `?${getApi}=true`, {
         headers: {
           Authorization: `Bearer ${token}`, // Incluir el token

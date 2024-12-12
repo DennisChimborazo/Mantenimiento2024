@@ -18,7 +18,7 @@ function ProcesoCompraView() {
       }
     };
     obtenerProcesos();
-  }, []); // El arreglo vacío asegura que esto solo se ejecute al montar el componente
+  }, []); 
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
