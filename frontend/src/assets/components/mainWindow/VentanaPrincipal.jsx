@@ -81,7 +81,7 @@ function VentanaPrincipal() {
               Bienvenido a la vista principal
             </h1>
             <p className={styles.ContentText}>
-              Aquí puedes gestionar los activos, mantenimientos y reportes.
+              Aquí puedes gestionar los activos, mantenimientos y reportes de la UTA.
             </p>
           </>
         )}
