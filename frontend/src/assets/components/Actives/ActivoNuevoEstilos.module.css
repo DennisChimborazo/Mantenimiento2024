@@ -53,6 +53,7 @@
     font-size: 1rem;
     font-weight: bold;
     color: #555;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   /* Estilos de inputs y selects */
@@ -63,6 +64,8 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+
   }
   
   .formInput:focus,
@@ -90,12 +93,12 @@
   }
   
   .btnPrimary {
-    background-color: #007bff;
+    background-color: #7c181a;
     color: white;
   }
   
   .btnPrimary:hover {
-    background-color: #0056b3;
+    background-color: #db212f;
   }
   
   .btnSecondary {
