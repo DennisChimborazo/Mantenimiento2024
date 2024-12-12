@@ -18,6 +18,8 @@ function VentanaPrincipal() {
   }, [checkTokenAndRedirect, navigate]);
 
   return (
+    <div>
+    <div className={styles.banner}></div>
     <div className={styles.VentanaPrinc}>
       <aside className={styles.Sidebar}>
         <ul className={styles.SidebarList}>
@@ -35,7 +37,9 @@ function VentanaPrincipal() {
           <li className={styles.SidebarItem}>
             <a
               href="#"
-              className={styles.SidebarLink}
+              className={`${styles.SidebarLink} ${
+                activeView === "procesoCompra" ? styles.active : ""
+              }`}
               onClick={() => setActiveView("procesoCompra")}
             >
               Procesos de compra
@@ -83,6 +87,7 @@ function VentanaPrincipal() {
         )}
         <VentanaPrincipalFun activeView={activeView} setActiveView={setActiveView} />
       </main>
+    </div>
     </div>
   );
 }

@@ -1,24 +1,45 @@
 /* Estilo general para el contenedor principal */
+/*Estilo para el banner*/
+.banner {
+  width: 100%;
+  height: 150px; /* Ajusta la altura según sea necesario */
+  background-image: url('../../../../../imagenes/banner.png'); /* Ruta a tu imagen */
+  background-size: cover; /* Asegura que la imagen cubra todo el banner */
+  background-position: center; /* Centra la imagen en el banner */
+  position: fixed; /* Fija el banner en la parte superior */
+  top: 0; /* Posición en la parte superior */
+  left: 0; /* Alinea el banner a la izquierda */
+  background-color: #fff;
+  z-index: 1000; /* Asegura que el banner esté por encima de otros elementos */
+}
+
+/* Asegúrate de que el contenido de la página no quede oculto detrás del banner */
+body.login-view-body {
+  margin-top: 200px; /* Ajusta este valor según la altura de tu banner */
+}
+
 .VentanaPrinc {
-    display: flex;
-    height: 100vh; /* Altura completa de la ventana */
-    width: 100vw; /* Ancho completo de la ventana */
-    background-color: #ffffff; /* Fondo blanco */
-    box-sizing: border-box;
-  }
+  display: flex;
+  height: calc(100vh - 150px); /* Altura completa de la ventana menos la altura del banner */
+  width: 100vw; /* Ancho completo de la ventana */
+  background-color: #ffffff; /* Fondo blanco */
+  box-sizing: border-box;
+  margin-top: 150px; /* Ajusta este valor según la altura de tu banner */
+  
+}
   
   /* Estilo para la barra lateral */
   .Sidebar {
     width: 250px; /* Ancho fijo para la barra lateral */
-    background-color: #333; /* Fondo gris oscuro */
-    color: #fff; /* Texto blanco */
+    background-color: #fff; /* Fondo blanco */
+    color: #333; /* Texto gris oscuro */
     display: flex;
     flex-direction: column;
     padding: 1rem;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
+    border: 2px solid #ccc; /* Agrega un borde gris claro */
   }
-  
   /* Lista dentro de la barra lateral */
   .SidebarList {
     list-style: none;
@@ -34,32 +55,36 @@
   /* Links en la barra lateral */
   .SidebarLink {
     text-decoration: none; /* Quitar subrayado */
-    color: #fff; /* Texto blanco */
+    color: black; /* Texto blanco */
     font-size: 1rem;
     font-weight: bold;
     display: block;
     padding: 0.5rem;
     border-radius: 4px;
     transition: background-color 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   /* Efectos de hover y estado activo para los links */
   .SidebarLink:hover {
-    background-color: #444; /* Fondo ligeramente más claro al pasar el mouse */
+    background-color: #7c181a; /* Fondo ligeramente más claro al pasar el mouse */
+    color: #fff;
   }
   
   .SidebarLink.active {
-    background-color: #007bff; /* Fondo azul para el link activo */
-    color: #fff; /* Texto blanco */
+    background-color: #7c181a; /* Fondo ligeramente más claro al pasar el mouse */
+    color: #fff;
   }
   
   /* Estilo para el contenido principal */
   .Content {
     flex: 1; /* Ocupa el resto del espacio disponible */
-    padding: 2rem;
+    padding: 0rem;
     background-color: #f5f5f5; /* Fondo gris claro */
     overflow-y: auto; /* Habilitar scroll si el contenido es extenso */
     box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+
   }
   
   /* Estilo del título dentro del contenido */
@@ -68,6 +93,8 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 1rem;
+    font-family: 'Times New Roman', Times, serif;
+
   }
   
   /* Estilo del texto dentro del contenido */
@@ -75,5 +102,6 @@
     font-size: 1.2rem;
     color: #555;
     line-height: 1.6;
+    font-family: 'Times New Roman', Times, serif;
   }
   
