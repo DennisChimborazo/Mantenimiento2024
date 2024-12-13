@@ -24,7 +24,7 @@
   
   /* Estilos para los botones */
   .ProcesoCompra button {
-    background-color: #007bff;
+    background-color: #7c181a;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -33,10 +33,11 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   .ProcesoCompra button:hover {
-    background-color: #0056b3;
+    background-color: #db212f;
   }
   
   /* Estilos para la tabla de procesos */
@@ -55,7 +56,7 @@
   }
   
   .active-table th {
-    background-color: #007bff;
+    background-color: #7c181a;
     color: white;
     font-weight: bold;
   }
