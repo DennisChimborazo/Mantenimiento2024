@@ -3,7 +3,7 @@ import { useLogin } from "./LoginFun";
 import styles from "./loginVistaEstilos.module.css"; // Importación de estilos locales
 
 const LoginVista = () => {
-  const { form, nameChange, actionButtonLogin } = useLogin();
+  const { form, nameChange, actionButtonLogin} = useLogin();
 
   useEffect(() => {
     // Añadir una clase al body solo cuando este componente esté montado

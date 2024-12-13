@@ -3,9 +3,10 @@ import ActiveCreateView from "./ActiveCreateView";
 import styles from "./ActivoVistaEstilos.module.css"; // Importa los estilos específicos
 import { useVistaActivo } from "./ActiveViewFun.js"; 
 import mostrarMensaje from "../Mensajes/Mensaje.js";
+import { useTokenVerification } from "../../Services/TokenVerification";
 
-
-  const ActiveView = ({ onClose }) => {
+const ActiveView = ({ onClose }) => {
+  const checkTokenAndRedirect = useTokenVerification(); // Verificar token
     const {
       form,
       setForm, // Asegúrate de importar setForm aquí
@@ -56,10 +57,16 @@ useEffect(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const ProcesoCompChange = async (e) => {
+    const tokenValid = checkTokenAndRedirect();
+    if (!tokenValid) {
+      mostrarMensaje({
+       title: "Has excedido el tiempo de la sesión",
+        text: "Inicia sesión nuevamente",
+        icon: "error",
+        timer: 3800,
+      });
+    }
     const { name, value } = e.target;
-    console.log(`Campo cambiado: ${name}, Valor seleccionado: ${value}`); // Para depuración
-  
-    // Actualiza el estado del formulario reiniciando los demás selects
     setForm((prevForm) => ({
       ...prevForm,
       [name]: value, // Actualiza el select que se modificó
@@ -69,7 +76,6 @@ useEffect(() => {
       estado: name === "estado" ? value : "",
     }));
   
-    // Si no hay valor seleccionado, reinicia los activos
     if (!value) {
       setDatos((prevDatos) => ({
         ...prevDatos,
@@ -101,9 +107,8 @@ useEffect(() => {
         title: "No se puede buscar",
         text: "Ingrese el numero de serie del activo",
         icon: "error",
-        timer: 3500,
+        timer: 2000,
       });
-      return;
     }
 
     try {
@@ -121,7 +126,17 @@ useEffect(() => {
   };
 
   const handleOpenModal = () => {
+    const tokenValid = checkTokenAndRedirect();
+    if (!tokenValid) {
+      mostrarMensaje({
+       title: "Has excedido el tiempo de la sesión",
+        text: "Inicia sesión nuevamente",
+        icon: "error",
+        timer: 3800,
+      });
+    }else{
     setIsModalOpen(true);
+  }
   };
 
   const handleCloseModal = () => {

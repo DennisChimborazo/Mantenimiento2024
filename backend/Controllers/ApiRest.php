@@ -21,7 +21,7 @@ $opc = $_SERVER['REQUEST_METHOD'];
 switch ($opc) {
     case 'GET':
 
-       //$decodedToken = verifyToken(); // Verificamos el token
+       $decodedToken = verifyToken(); // Verificamos el token
 
         if (isset($_GET['proovedor'])) {
             TraerDatos::cargarProveedor(); 
@@ -77,7 +77,7 @@ switch ($opc) {
         Login::login(); 
 
         }else {
-           //  $decodedToken = verifyToken(); // Verificamos el token
+             $decodedToken = verifyToken(); // Verificamos el token
             if (isset($_GET['proccompra'])) {
             Compra::nuevoProcesoCompra(); 
             }elseif (isset($_GET['nuevoActivo'])) {
