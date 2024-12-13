@@ -6,8 +6,6 @@ import mostrarMensaje from "../Mensajes/Mensaje.js";
 
 export const useLogin = () => {
   const [form, setForm] = useState({ username: "", pass: "" });
-  const [error, setError] = useState(false);
-  const [smserror, setSmserror] = useState("");
   const navigate = useNavigate();
 
   const nameChange = (e) => {
@@ -30,23 +28,20 @@ export const useLogin = () => {
         const token = response.data.token;
         if (token) {
           localStorage.setItem("authToken", token); 
-        
         navigate("/main"); // Redirigir al usuario a la página principal
         } else {
           console.error("No se recibió un token válido.");
         }
       } else {
         console.error("Error de autenticación:", response.data.message);
-        setError(true);
-        setSmserror(response.data.message);
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       const errorMessage =
         error.response?.data?.message || "Ocurrió un error inesperado.";
         mostrarMensaje({
-          title: "Verifica tus datos",
-          text: errorMessage,
+          title: errorMessage,
+          text:  "Verifica tus datos" ,
           icon: "error",
           timer: 3000,
         });
