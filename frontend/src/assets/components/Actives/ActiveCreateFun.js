@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ApiService from "../../Services/ApiMetodos.js";
+import mostrarMensaje from "../Mensajes/Mensaje.js";
 
 export const useGuardarActivo = () => {
   const [form, setForm] = useState({
@@ -42,7 +43,12 @@ export const useGuardarActivo = () => {
   const actionButtonGuardar = async (form, onClose) => {
     try {
       await ApiService.enviarDatos("nuevoActivo", form);
-      console.log("Se logró guardar con éxito");
+      mostrarMensaje({
+        title: "Exito",
+        text:"Se ha creado un nuevo activo",
+        icon: "success",
+        timer:"3500",
+      });
       onClose();
     } catch (error) {
       console.error("Error al guardar:", error);

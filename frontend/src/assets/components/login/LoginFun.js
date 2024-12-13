@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-//import Cookies from "js-cookie"; // Importar js-cookie
 import { apiUrl } from "../../Services/ApiRest.js"; // Asegúrate de que la URL esté correcta
 import { useNavigate } from "react-router-dom";
+import mostrarMensaje from "../Mensajes/Mensaje.js";
 
 export const useLogin = () => {
   const [form, setForm] = useState({ username: "", pass: "" });
@@ -26,8 +26,6 @@ export const useLogin = () => {
         },
       });
 
-      console.log("Respuesta del servidor:", response.data);
-
       if (response.data.success) {
         const token = response.data.token;
         if (token) {
@@ -46,10 +44,14 @@ export const useLogin = () => {
       console.error("Error en la solicitud:", error);
       const errorMessage =
         error.response?.data?.message || "Ocurrió un error inesperado.";
-      setError(true);
-      setSmserror(errorMessage);
+        mostrarMensaje({
+          title: "Verifica tus datos",
+          text: errorMessage,
+          icon: "error",
+          timer: 3000,
+        });
     }
   };
 
-  return { form, nameChange, actionButtonLogin, error, smserror };
+  return { form, nameChange, actionButtonLogin};
 };
