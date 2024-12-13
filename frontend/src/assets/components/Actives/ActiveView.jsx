@@ -2,6 +2,7 @@ import React, { useEffect,useState } from "react";
 import ActiveCreateView from "./ActiveCreateView";
 import styles from "./ActivoVistaEstilos.module.css"; // Importa los estilos específicos
 import { useVistaActivo } from "./ActiveViewFun.js"; 
+import mostrarMensaje from "../Mensajes/Mensaje.js";
 
 
   const ActiveView = ({ onClose }) => {
@@ -96,7 +97,12 @@ useEffect(() => {
   };
   const handleBuscar = async () => {
     if (!serie) {
-      alert("Por favor, ingrese una serie.");
+      mostrarMensaje({
+        title: "No se puede buscar",
+        text: "Ingrese el numero de serie del activo",
+        icon: "error",
+        timer: 3500,
+      });
       return;
     }
 
@@ -140,7 +146,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.procesoCompra}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {procesoCompras.map((procCompra) => (
@@ -164,7 +169,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.tipoActivo}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {tipoActivos.map((tipActivo) => (
@@ -187,7 +191,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.ubicacion}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {ubicaciones.map((ubicacion) => (
@@ -212,7 +215,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.estado}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {estados.map((estado) => (
