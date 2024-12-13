@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import NuevaProcCompra from "./NuevaProcCompra"; // Importamos el componente del modal
 import { cargarProcesosCompra } from "./ProcesoCompraFun"; // Importar servicio para cargar procesos
-import styles from "./ProcesosCompraEstilos.module.css"; // Estilos específicos del componente
+import styles from "./ProcesosCompraEstilos.module.css";
+import { useTokenVerification } from "../../Services/TokenVerification";
+import mostrarMensaje from "../Mensajes/Mensaje.js";
 
 function ProcesoCompraView() {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const checkTokenAndRedirect = useTokenVerification(); // Verificar token
   const [procesos, setProcesos] = useState([]); // Estado para almacenar los procesos de compra
 
   useEffect(() => {
-    // Cargar procesos al montar el componente
+
     const obtenerProcesos = async () => {
       try {
         const procesosData = await cargarProcesosCompra();
@@ -21,7 +24,17 @@ function ProcesoCompraView() {
   }, []); 
 
   const handleOpenModal = () => {
+  const tokenValid = checkTokenAndRedirect();
+    if (!tokenValid) {
+      mostrarMensaje({
+       title: "Has excedido el tiempo de la sesión",
+        text: "Inicia sesión nuevamente",
+        icon: "error",
+        timer: 3800,
+      });
+    }else{
     setIsModalOpen(true);
+  }
   };
 
   const handleCloseModal = () => {

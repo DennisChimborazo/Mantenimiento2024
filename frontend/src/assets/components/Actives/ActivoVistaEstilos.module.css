@@ -66,6 +66,7 @@
     font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   .action-buttons {
@@ -81,26 +82,30 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
+
   }
   
   .primary-button {
-    background-color: #007bff;
+    background-color: #7c181a;
     color: white;
     border: none;
   }
   
   .primary-button:hover {
-    background-color: #0056b3;
+    background-color: #db212f;
   }
   
   .secondary-button {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #7c181a;
+    color: #fff;
     border: 1px solid #ccc;
+    font-family: 'Times New Roman', Times, serif;
+
   }
   
   .secondary-button:hover {
-    background-color: #ddd;
+    background-color: #db212f;
   }
   
   /* Estilos para la tabla de activos */
@@ -119,7 +124,7 @@
   }
   
   .active-table th {
-    background-color: #007bff;
+    background-color: #7c181a;
     color: white;
     font-weight: bold;
   }

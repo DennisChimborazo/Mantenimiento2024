@@ -31,7 +31,7 @@ class Login {
                 $payload = [
                     'iss' => "http://yourdomain.com",
                     'iat' => time(),
-                    'exp' => time() + (60 * 120), // Token válido por 120 minutos
+                    'exp' => time() + (60 * 60), 
                     'data' => [
                         'username' => $data['username']
                     ]

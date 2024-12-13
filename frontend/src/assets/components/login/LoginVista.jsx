@@ -3,7 +3,7 @@ import { useLogin } from "./LoginFun";
 import styles from "./loginVistaEstilos.module.css"; // Importación de estilos locales
 
 const LoginVista = () => {
-  const { form, nameChange, actionButtonLogin, error, smserror } = useLogin();
+  const { form, nameChange, actionButtonLogin} = useLogin();
 
   useEffect(() => {
     // Añadir una clase al body solo cuando este componente esté montado
@@ -47,7 +47,6 @@ const LoginVista = () => {
           <button className={styles.button} type="button" onClick={actionButtonLogin}>
             Ingresar
           </button>
-          {error && <p className={styles.errorMessage}>{smserror}</p>}
         </form>
       </div>
     </div>

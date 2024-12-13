@@ -57,6 +57,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   .formInput:focus,
@@ -79,15 +80,16 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   .btnPrimary {
-    background-color: #007bff;
+    background-color: #7c181a;
     color: white;
   }
   
   .btnPrimary:hover {
-    background-color: #0056b3;
+    background-color: #db212f;
   }
   
   .btnSecondary {
