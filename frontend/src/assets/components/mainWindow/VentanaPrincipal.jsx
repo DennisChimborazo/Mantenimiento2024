@@ -27,7 +27,6 @@ function VentanaPrincipal() {
     }
   }, [checkTokenAndRedirect, navigate, sessionClosed]);
 
-  // Manejar el cierre de sesión
   const handleLogout = () => {
     localStorage.removeItem("authToken"); // Elimina el token
     setActiveView(null); // Restablecer la vista activa

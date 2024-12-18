@@ -3,7 +3,7 @@ import { useTokenVerification } from "../../Services/TokenVerification"; // Impo
 import ProcesoCompraView from "../compra/ProcesoCompraView";
 import ActiveView from "../Actives/ActiveView";
 import ReporteVista from "../Reporte/ReporteVista";
-import MantenVista from "../Manten/MantenVista";
+import MantenDetalle from "../Manten/MantenDetalle";
 
 const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
   const checkTokenAndRedirect = useTokenVerification(); // Usa el hook
@@ -24,7 +24,7 @@ const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
       {activeView === "activo" && <ActiveView />}
       {activeView === "procesoCompra" && <ProcesoCompraView />}
       {activeView === "reportes" && <ReporteVista />}
-      {activeView === "mantenimiento" && <MantenVista />}
+      {activeView === "mantenimiento" && <MantenDetalle />}
     </section>
   );
 };
