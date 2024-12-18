@@ -55,6 +55,7 @@ const ActiveCreateView = ({ onClose }) => {
   }, []);
 
   const handleTipoBienChange = async (e) => {
+    e.preventDefault();
     const selectedTipoBien = e.target.value;
     console.log("Tipo de Bien seleccionado:", selectedTipoBien); // Para depuración
     nameChange(e);

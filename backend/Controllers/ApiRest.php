@@ -41,6 +41,12 @@ switch ($opc) {
         } elseif (isset($_GET['estado'])) {
             TraerDatos::cargarEstado(); 
 
+        }elseif (isset($_GET['componen'])) {
+            TraerDatos::cargarComponen(); 
+
+        }elseif (isset($_GET['actividad'])) {
+            TraerDatos::cargarActividades(); 
+
         } elseif (isset($_GET['procompras'])) {
             Compra::cargarCompra(); 
 
@@ -67,6 +73,9 @@ switch ($opc) {
         }elseif (isset($_GET['busActSerie'])) {
             $serie =  $_GET['busActSerie'];
             BuscarDatos::buscActSerie($serie); 
+        }elseif (isset($_GET['activosTotales'])) {
+            $serie =  $_GET['activosTotales'];
+            BuscarDatos::cargarActivos($serie); 
         }
         
         break;

@@ -10,6 +10,7 @@ export const useVistaActivo = () => {
       [e.target.name]: e.target.value,
     });
   };
+  
 
   const cargarActivos = useCallback(async (id,nameSelect) => {
     try {
@@ -36,7 +37,7 @@ export const useVistaActivo = () => {
     }
   }, []);
   
-
+  const cargarTodosActivos = useCallback(() => ApiService.traerDatos("activosTotales"), []);
   const cargarProcesosCompra = useCallback(() => ApiService.traerDatos("procompras"), []);
   const cargarTipoActivo = useCallback(() => ApiService.traerDatos("tipobien"), []);
   const cargarUbicacion = useCallback(() => ApiService.traerDatos("ubicacion"), []);
@@ -51,5 +52,7 @@ export const useVistaActivo = () => {
     cargarUbicacion,
     cargarEstado,
     cargarActivos,
+    cargarTodosActivos,
+
   };
 };
