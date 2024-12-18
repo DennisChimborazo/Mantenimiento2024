@@ -2,9 +2,11 @@ import React, { useEffect,useState } from "react";
 import ActiveCreateView from "./ActiveCreateView";
 import styles from "./ActivoVistaEstilos.module.css"; // Importa los estilos específicos
 import { useVistaActivo } from "./ActiveViewFun.js"; 
+import mostrarMensaje from "../Mensajes/Mensaje.js";
+import { useTokenVerification } from "../../Services/TokenVerification";
 
-
-  const ActiveView = ({ onClose }) => {
+const ActiveView = ({ onClose }) => {
+  const checkTokenAndRedirect = useTokenVerification(); // Verificar token
     const {
       form,
       setForm, // Asegúrate de importar setForm aquí
@@ -55,10 +57,18 @@ useEffect(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const ProcesoCompChange = async (e) => {
+    
+    const tokenValid = checkTokenAndRedirect();
+    if (!tokenValid) {
+      mostrarMensaje({
+       title: "Has excedido el tiempo de la sesión",
+        text: "Inicia sesión nuevamente",
+        icon: "error",
+        timer: 3800,
+      });
+    }
+    e.preventDefault();
     const { name, value } = e.target;
-    console.log(`Campo cambiado: ${name}, Valor seleccionado: ${value}`); // Para depuración
-  
-    // Actualiza el estado del formulario reiniciando los demás selects
     setForm((prevForm) => ({
       ...prevForm,
       [name]: value, // Actualiza el select que se modificó
@@ -68,7 +78,6 @@ useEffect(() => {
       estado: name === "estado" ? value : "",
     }));
   
-    // Si no hay valor seleccionado, reinicia los activos
     if (!value) {
       setDatos((prevDatos) => ({
         ...prevDatos,
@@ -94,15 +103,21 @@ useEffect(() => {
   const handleInputChange = (e) => {
     setSerie(e.target.value); // Actualiza el estado con el valor del input
   };
-  const handleBuscar = async () => {
-    if (!serie) {
-      alert("Por favor, ingrese una serie.");
-      return;
+  const handleBuscar = async (e) => {
+    e.preventDefault();
+    const valorSerie = serie.trim();
+    if (!valorSerie) {
+      mostrarMensaje({
+        title: "No se puede buscar",
+        text: "Ingrese el numero de serie del activo",
+        icon: "error",
+        timer: 2000,
+      });
     }
 
     try {
       setIsLoading(true);
-      const activosEncontrados = await cargarActivos(serie, "serie");
+      const activosEncontrados = await cargarActivos(valorSerie, "serie");
       setDatos((prevDatos) => ({
         ...prevDatos,
         activos: activosEncontrados,
@@ -115,7 +130,17 @@ useEffect(() => {
   };
 
   const handleOpenModal = () => {
+    const tokenValid = checkTokenAndRedirect();
+    if (!tokenValid) {
+      mostrarMensaje({
+       title: "Has excedido el tiempo de la sesión",
+        text: "Inicia sesión nuevamente",
+        icon: "error",
+        timer: 3800,
+      });
+    }else{
     setIsModalOpen(true);
+  }
   };
 
   const handleCloseModal = () => {
@@ -140,7 +165,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.procesoCompra}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {procesoCompras.map((procCompra) => (
@@ -164,7 +188,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.tipoActivo}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {tipoActivos.map((tipActivo) => (
@@ -187,7 +210,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.ubicacion}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {ubicaciones.map((ubicacion) => (
@@ -212,7 +234,6 @@ useEffect(() => {
                 className={styles["filter-select"]}
                 value={form.estado}
                 onChange={ProcesoCompChange}
-                required
               >
                 <option value="">Seleccione</option>
                 {estados.map((estado) => (

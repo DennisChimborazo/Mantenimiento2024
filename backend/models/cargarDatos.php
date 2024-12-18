@@ -62,6 +62,27 @@ class TraerDatos {
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($data); 
     }
+    public static function cargarActivos() {
+        $sqlSelect = "SELECT * FROM activo";
+        $stmt = self::$conn->prepare($sqlSelect); // Usar self::$conn en lugar de $conn
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($data); 
+    }
+    public static function cargarComponen() {
+        $sqlSelect = "SELECT * FROM componente";
+        $stmt = self::$conn->prepare($sqlSelect); // Usar self::$conn en lugar de $conn
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($data); 
+    }
+    public static function cargarActividades() {
+        $sqlSelect = "SELECT * FROM actividad";
+        $stmt = self::$conn->prepare($sqlSelect); // Usar self::$conn en lugar de $conn
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($data); 
+    }
 }
 
 TraerDatos::init();

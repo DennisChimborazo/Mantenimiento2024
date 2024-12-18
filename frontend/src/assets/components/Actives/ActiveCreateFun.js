@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ApiService from "../../Services/ApiMetodos.js";
+import mostrarMensaje from "../Mensajes/Mensaje.js";
 
 export const useGuardarActivo = () => {
   const [form, setForm] = useState({
@@ -40,16 +41,64 @@ export const useGuardarActivo = () => {
   const cargarEstado = async () => ApiService.traerDatos("estado");
 
   const actionButtonGuardar = async (form, onClose) => {
+    // Validar que todos los campos del formulario tengan valores
+    const validarFormulario = (form) => {
+      const camposRequeridos = [
+        "procesoCompra",
+        "tipoBien",
+        "bien",
+        "serie",
+        "marca",
+        "modelo",
+        "color",
+        "codigoBarra",
+        "responsable",
+        "estado",
+        "ubicacion",
+      ];
+  
+      for (const campo of camposRequeridos) {
+        if (!form[campo] || form[campo].trim() === "") {
+          return `Todos los campos son obligatorio.`;
+        }
+      }
+  
+      return null; 
+    };
+  
+    const error = validarFormulario(form);
+  
+    if (error) {
+      mostrarMensaje({
+        title: "Campos faltantes",
+        text: error,
+        icon: "info",
+        timer: 3500,
+      });
+      return; // Detener la ejecución
+    }
+  
     try {
       await ApiService.enviarDatos("nuevoActivo", form);
-      console.log("Se logró guardar con éxito");
-      onClose();
+      mostrarMensaje({
+        title: "Éxito",
+        text: "Se ha creado un nuevo activo",
+        icon: "success",
+        timer: 3500,
+      });
+      onClose(); // Cierra el modal después de guardar
     } catch (error) {
       console.error("Error al guardar:", error);
+      mostrarMensaje({
+        title: "Error",
+        text: "Hubo un problema al guardar el activo. Por favor, inténtalo nuevamente.",
+        icon: "error",
+        timer: 3500,
+      });
     }
   };
 
-  return {
+    return {
     form,
     setForm, // Asegúrate de exportar setForm
     nameChange,

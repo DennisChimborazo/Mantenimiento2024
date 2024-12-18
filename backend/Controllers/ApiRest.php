@@ -21,7 +21,7 @@ $opc = $_SERVER['REQUEST_METHOD'];
 switch ($opc) {
     case 'GET':
 
-       //$decodedToken = verifyToken(); // Verificamos el token
+       $decodedToken = verifyToken(); // Verificamos el token
 
         if (isset($_GET['proovedor'])) {
             TraerDatos::cargarProveedor(); 
@@ -40,6 +40,12 @@ switch ($opc) {
 
         } elseif (isset($_GET['estado'])) {
             TraerDatos::cargarEstado(); 
+
+        }elseif (isset($_GET['componen'])) {
+            TraerDatos::cargarComponen(); 
+
+        }elseif (isset($_GET['actividad'])) {
+            TraerDatos::cargarActividades(); 
 
         } elseif (isset($_GET['procompras'])) {
             Compra::cargarCompra(); 
@@ -67,6 +73,9 @@ switch ($opc) {
         }elseif (isset($_GET['busActSerie'])) {
             $serie =  $_GET['busActSerie'];
             BuscarDatos::buscActSerie($serie); 
+        }elseif (isset($_GET['activosTotales'])) {
+            $serie =  $_GET['activosTotales'];
+            BuscarDatos::cargarActivos($serie); 
         }
         
         break;
@@ -77,7 +86,7 @@ switch ($opc) {
         Login::login(); 
 
         }else {
-           //  $decodedToken = verifyToken(); // Verificamos el token
+             $decodedToken = verifyToken(); // Verificamos el token
             if (isset($_GET['proccompra'])) {
             Compra::nuevoProcesoCompra(); 
             }elseif (isset($_GET['nuevoActivo'])) {

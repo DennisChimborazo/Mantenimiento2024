@@ -58,3 +58,34 @@ CREATE TABLE estado(
 	idEstado INT AUTO_INCREMENT PRIMARY KEY,
     	nomEstado varchar (30)
 );
+
+
+CREATE TABLE actividad(
+	idActi INT AUTO_INCREMENT PRIMARY KEY,
+    	nomActi varchar (130)
+);
+
+CREATE TABLE componente(
+	idCompo INT AUTO_INCREMENT PRIMARY KEY,
+	nomCompo varchar (100)
+);
+
+CREATE TABLE manteniento(
+	idManten INT AUTO_INCREMENT PRIMARY KEY,
+	codManten varchar(40),
+	fechaInico varchar(40),
+	fechaFin varchar(40),
+	idCompra varchar(40),
+	FOREIGN KEY (idCompra) REFERENCES procesoCompra(idCompra)
+);
+
+CREATE TABLE mantenientoDetalle(
+	idManten INT,
+	idCompo INT,
+	idActi INT,
+	nomCompo varchar (100)
+	observacion TINYTEXT,
+	FOREIGN KEY (idManten) REFERENCES manteniento(idManten)
+	FOREIGN KEY (idCompo) REFERENCES componente(idCompo),
+	FOREIGN KEY (idActi) REFERENCES actividad(idActi)
+);
