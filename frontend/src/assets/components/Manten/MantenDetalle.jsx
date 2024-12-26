@@ -31,7 +31,7 @@ function MantenDetalle() {
 ////////////////////////////////
   const buttonAgregarProv =(e)=>{
     e.preventDefault();
-if (datosEnvio.length==0) {
+if (datosEnvio.length===0) {
   mostrarMensaje(
     {title: "No se puede agregar",
       text: "Primero debe de selecionar una actividad",
@@ -57,7 +57,7 @@ const agregarValores=(val)=>{
 }
 
   const columas=[
-    {name:"Provedor",selector:row=>row.nomActi},
+    {name:"Actividades realizadas",selector:row=>row.nomActi},
     {name:"Eliminar",cell:(row)=>(<button onClick={()=>devolverValores(row.idActi)}>Eliminar</button>),ignoreRowClick: true},
   ];
 
@@ -65,7 +65,7 @@ const devolverValores=(id)=>{
 
 const n= dataTabla.filter((row)=>row.idActi!==id);
   setdataTable(n);
-  const nd= dataTabla.filter((row)=>row.idActi==id);
+  const nd= dataTabla.filter((row)=>row.idActi===id);
   setActividades((datos)=>[...datos,...nd]);
 }
 /////////////////////////
@@ -81,7 +81,7 @@ const columascomp=[
 
 const buttonAgregarCompo =(e)=>{
   e.preventDefault();
-  if (datosEnvioComp.length==0) {
+  if (datosEnvioComp.length===0) {
     mostrarMensaje({
       title: "No se puede agregar",
       text: "Selecione un componente primero",
@@ -104,7 +104,7 @@ const devolverValoresCom=(id)=>{
   console.log(id);
   const n= dataTablaCom.filter((row)=>row.idCompo!==id);
     setdataTablaCom(n);
-    const nd= dataTablaCom.filter((row)=>row.idCompo==id);
+    const nd= dataTablaCom.filter((row)=>row.idCompo===id);
     setComponentes((datos)=>[...datos,...nd]);
   }
   const customStyles = {
