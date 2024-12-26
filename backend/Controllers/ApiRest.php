@@ -9,6 +9,7 @@ include_once '../models/cargarDatos.php';
 include_once '../models/compras.php'; 
 include_once '../models/activo.php'; 
 include_once '../models/buscarDatos.php'; 
+include_once '../models/mantenimiento.php'; 
 include_once '../models/authMiddleware.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -50,6 +51,9 @@ switch ($opc) {
         } elseif (isset($_GET['procompras'])) {
             Compra::cargarCompra(); 
 
+        }elseif (isset($_GET['datosManten'])) {
+            Mantenimiento::cargarMantenimientos();
+
         } elseif (isset($_GET['busBines'])) {
             $idTipoBien =  $_GET['busBines'];
             BuscarDatos::buscarBienes($idTipoBien); 
@@ -86,11 +90,13 @@ switch ($opc) {
         Login::login(); 
 
         }else {
-             $decodedToken = verifyToken(); // Verificamos el token
+             //$decodedToken = verifyToken(); // Verificamos el token
             if (isset($_GET['proccompra'])) {
             Compra::nuevoProcesoCompra(); 
             }elseif (isset($_GET['nuevoActivo'])) {
                 Activo::nuevoActivo();
+            }elseif (isset($_GET['nuevoMantenimiento'])) {
+                Mantenimiento::guardarMantemiento();
             }
         }
         break;
