@@ -57,6 +57,7 @@ useEffect(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const ProcesoCompChange = async (e) => {
+    
     const tokenValid = checkTokenAndRedirect();
     if (!tokenValid) {
       mostrarMensaje({
@@ -66,6 +67,7 @@ useEffect(() => {
         timer: 3800,
       });
     }
+    e.preventDefault();
     const { name, value } = e.target;
     setForm((prevForm) => ({
       ...prevForm,
@@ -103,7 +105,8 @@ useEffect(() => {
   };
   const handleBuscar = async (e) => {
     e.preventDefault();
-    if (!serie) {
+    const valorSerie = serie.trim();
+    if (!valorSerie) {
       mostrarMensaje({
         title: "No se puede buscar",
         text: "Ingrese el numero de serie del activo",
@@ -114,7 +117,7 @@ useEffect(() => {
 
     try {
       setIsLoading(true);
-      const activosEncontrados = await cargarActivos(serie, "serie");
+      const activosEncontrados = await cargarActivos(valorSerie, "serie");
       setDatos((prevDatos) => ({
         ...prevDatos,
         activos: activosEncontrados,

@@ -23,12 +23,12 @@ CREATE TABLE proveedor(
 );
 
 
-CREATE TABLE procesoCompra();
+CREATE TABLE procesoCompra(
 	idCompra varchar(40) PRIMARY KEY,
 	fechaCompra date,
 	idProveedor int,
 	FOREIGN KEY idProveedor REFERENCES proveedor (idProveedor)
-)
+);
  
 CREATE TABLE ubicacion(
 	idUbic INT AUTO_INCREMENT PRIMARY KEY,
@@ -57,4 +57,40 @@ CREATE TABLE bien(
 CREATE TABLE estado(
 	idEstado INT AUTO_INCREMENT PRIMARY KEY,
     	nomEstado varchar (30)
+);
+
+
+CREATE TABLE actividad(
+	idActi INT AUTO_INCREMENT PRIMARY KEY,
+    nomActi varchar (130)
+);
+
+CREATE TABLE componente(
+	idCompo INT AUTO_INCREMENT PRIMARY KEY,
+	nomCompo varchar (100)
+);
+
+CREATE TABLE manteniento(
+	idManten INT AUTO_INCREMENT PRIMARY KEY,
+	codManten varchar(40),
+	fechaInico varchar(40),
+	fechaFin varchar(40),
+	idEstado int,
+	tipo varchar(4),
+	idRespons int,
+	FOREIGN KEY (idEstado) REFERENCES estado(idEstado)
+);
+
+create table observacion(
+	idObvs int AUTO_INCREMENT PRIMARY KEY,
+	campObvs varchar (350)
+);
+
+CREATE TABLE mantenientoDetalle(
+	idManten INT,
+	idActivo INT,
+	tipoMD varchar(2),
+	idReferencia int,
+	FOREIGN KEY (idManten) REFERENCES manteniento(idManten)
+	FOREIGN KEY (idActivo) REFERENCES activo(idActivo),
 );

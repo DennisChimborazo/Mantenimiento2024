@@ -27,7 +27,6 @@ function VentanaPrincipal() {
     }
   }, [checkTokenAndRedirect, navigate, sessionClosed]);
 
-  // Manejar el cierre de sesión
   const handleLogout = () => {
     localStorage.removeItem("authToken"); // Elimina el token
     setActiveView(null); // Restablecer la vista activa
@@ -70,6 +69,15 @@ function VentanaPrincipal() {
                 onClick={() => setActiveView("mantenimiento")}
               >
                 Mantenimientos
+              </a>
+            </li>
+            <li className={styles.SidebarItem}>
+              <a
+                href="#"
+                className={styles.SidebarLink}
+                onClick={() => setActiveView("detalle")}
+              >
+                Reportes
               </a>
             </li>
             <li className={styles.SidebarItem}>
