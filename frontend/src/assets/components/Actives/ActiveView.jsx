@@ -101,7 +101,8 @@ useEffect(() => {
   const handleInputChange = (e) => {
     setSerie(e.target.value); // Actualiza el estado con el valor del input
   };
-  const handleBuscar = async () => {
+  const handleBuscar = async (e) => {
+    e.preventDefault();
     if (!serie) {
       mostrarMensaje({
         title: "No se puede buscar",
