@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import ApiService from "../../Services/ApiMetodos.js";
 import mostrarMensaje from "../Mensajes/Mensaje.js";
 
-function MantenDetalle() {
+function MantenDetalle({setActiveView,mantenimiento}) {
   const [actividades, setActividades] = useState([]); 
   const [componentes, setComponentes] = useState([]); 
 
@@ -28,6 +28,18 @@ function MantenDetalle() {
     cargarComponentes();
 
   }, []);
+
+  //////////////////////////////////
+
+  const datosp=[{label:"Activo 1" ,value:"1"},{label:"Activo 2" ,value:"2"}];
+  const colum=[
+    {name:"Activo",selector:row=>row.label},
+    {name:"Opciones",cell:(row)=>
+      (<div style={{ display: "flex", gap: "10px" }}>
+        <button>Selecionar</button>
+      </div>
+    ),ignoreRowClick: true},
+  ];  
 ////////////////////////////////
   const buttonAgregarProv =(e)=>{
     e.preventDefault();
@@ -50,8 +62,6 @@ if (datosEnvio.length===0) {
     setActividades(n);
     setdatosEnvio([]);
   };}
-
-
 const agregarValores=(val)=>{
   setdatosEnvio(val);
 }
@@ -122,7 +132,21 @@ const devolverValoresCom=(id)=>{
   return (
 
     <div className="MantenDetalle">
-      <h2>DETALLE MANTENIMIENTO</h2>
+      <h2>DETALLE MANTENIMIENTO {mantenimiento}</h2>
+      <div> <label htmlFor="activos"> Activo </label> 
+      <input type="text" name="activo" id="activo" />
+      <button> buscar</button> 
+      <DataTable
+      pagination
+      paginationPerPage={5}
+      columns={colum} 
+      data={datosp}
+      noDataComponent="No ha selecionado ningun activo"
+      persistTableHead 
+      customStyles={customStyles}>
+      </DataTable>
+      <h3> Activo seleccionado </h3>
+      </div>
       <div>
         <label htmlFor="actividad">Actvidades</label>
       <Select
@@ -171,8 +195,8 @@ const devolverValoresCom=(id)=>{
       columns={columascomp} 
       data={dataTablaCom}
       noDataComponent="No ha selecionado ningun componente"
-      persistTableHead >
-        
+      persistTableHead 
+      customStyles={customStyles}>
       </DataTable>
       
     </div>
@@ -184,8 +208,25 @@ const devolverValoresCom=(id)=>{
         rows="10" 
         cols="110" 
         placeholder="Detalle alguna observacion">
-    </textarea>
-
+    </textarea> <label htmlFor="">Guardar los Datos y agregar un nuevo activo: </label>
+      <button> Agregar</button>
+    <div>
+      <h3>Listado de activos del Matenimiento </h3>
+      <DataTable
+      pagination
+      paginationPerPage={5}
+      columns={colum} 
+      data={datosp}
+      noDataComponent="No ha selecionado ningun activo"
+      persistTableHead 
+      customStyles={customStyles}>
+      </DataTable>
+      <button> Continuar despues </button>
+      <button> Finalizar Mantenimiento </button>
+    </div>
+    <div><br />
+    <br /><br />
+    </div>
     </div>
   );
 }
