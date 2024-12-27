@@ -4,7 +4,7 @@ import mostrarMensaje from "../Mensajes/Mensaje.js";
 import ApiService from "../../Services/ApiMetodos.js";
 
 
-function CrearManten({setActiveView}) {
+function CrearManten({setActiveView,setSelectedMantenimiento}) {
     const [respons,setRespons]= useState([]);
     const [formulario,setFormulario]= useState({proMant:"",fInicio:"",fFinal:"",tipo:"",responsable:""});
     const [personal,setPersonal]= useState([]);
@@ -52,7 +52,6 @@ function CrearManten({setActiveView}) {
     }
 
     const valorCombo= (val)=>{
-        console.log(val.value);
         setSelNuevaOpcion(val);
         setFormulario({
                 ...formulario,responsable:val.value,
@@ -66,7 +65,9 @@ function CrearManten({setActiveView}) {
 
     const guardar = async(e)=>{
         e.preventDefault();
-
+        setSelectedMantenimiento("MANT006");
+        setActiveView("detalleMantenimiento");
+  /* 
         if (formulario.responsable===""||formulario.fInicio===""||formulario.fFinal===""||formulario.proMant==="") {
             mostrarMensaje({
                 title:"Campos faltantes",
@@ -76,7 +77,7 @@ function CrearManten({setActiveView}) {
             });
         }else{
 
-         /*   const res=  await ApiService.enviarDatos("nuevoMantenimiento",formulario);
+         const res=  await ApiService.enviarDatos("nuevoMantenimiento",formulario);
             if (res) {
                 mostrarMensaje({
                     title: res.message,
@@ -95,8 +96,8 @@ function CrearManten({setActiveView}) {
                     timer: 3200
                 });
                 
-            } */
-        }  
+            } 
+        }  */
     }
 
 
