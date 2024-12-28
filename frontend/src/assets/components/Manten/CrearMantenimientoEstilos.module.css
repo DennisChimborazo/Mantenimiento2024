@@ -1,0 +1,59 @@
+.CrearMantenimiento {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tittle {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    /* Espaciado entre opciones */
+    width: 100%;
+    /* Ocupa todo el ancho */
+}
+
+.options-text {
+    font-family: 'Times New Roman', Times, serif;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    /* Texto más grande */
+}
+
+.options-text input {
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 10px;
+    height: 25px;
+
+}
+
+.options-calendar {
+    font-family: 'Times New Roman', Times, serif;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    /* Texto más grande */
+    margin-top: 10px;
+}
+
+.options-calendar input {
+    font-size: 1rem;
+    /* Texto más grande */
+    margin-top: 10px;
+}
