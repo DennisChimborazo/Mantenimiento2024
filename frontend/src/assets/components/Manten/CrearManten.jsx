@@ -66,38 +66,38 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
     const guardar = async (e) => {
         e.preventDefault();
-        if (formulario.responsable===""||formulario.fInicio===""||formulario.fFinal===""||formulario.proMant==="") {
+        if (formulario.responsable === "" || formulario.fInicio === "" || formulario.fFinal === "" || formulario.proMant === "") {
             mostrarMensaje({
-                title:"Campos faltantes",
+                title: "Campos faltantes",
                 text: "Es obligatorio llenar todos los campos",
-                icon:"error",
+                icon: "error",
                 timer: 3200
             });
-        }else{
+        } else {
 
-         const res =  await ApiService.enviarDatos("nuevoMantenimiento",formulario);
-         console.log(res);
+            const res = await ApiService.enviarDatos("nuevoMantenimiento", formulario);
+            console.log(res);
             if (res) {
                 mostrarMensaje({
                     title: res.message,
                     text: "Se ha creado un nuevo proceso de mantemiento",
-                    icon:"success",
+                    icon: "success",
                     timer: 3200
                 });
-                const datos=[{idMan:res, codMant:formulario.proMant}];
+                const datos = [{ idMan: res, codMant: formulario.proMant }];
                 console.log(datos);
                 setSelectedMantenimiento(JSON.stringify(datos));
                 setActiveView("detalleMantenimiento");
-            }else{
+            } else {
                 mostrarMensaje({
                     title: res,
                     text: "verifica los datos  ",
-                    icon:"error",
+                    icon: "error",
                     timer: 3200
                 });
-                
-            } 
-        }  
+
+            }
+        }
     }
 
 
@@ -111,29 +111,37 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
                 </div>
                 <div className={styles["options-calendar"]}>
 
-                <label htmlFor="fInicio">Fecha de inicio</label>
-                <input type="date" name="fInicio" id="fInicio" onChange={asignarValorFormulario} required />
+                    <label htmlFor="fInicio">Fecha de inicio</label>
+                    <input type="date" name="fInicio" id="fInicio" onChange={asignarValorFormulario} required />
                 </div>
                 <div className={styles["options-calendar"]}>
 
-                <label htmlFor="fFinal">Fecha de fin </label>
-                <input type="date" name="fFinal" id="fFinal" onChange={asignarValorFormulario} required />
+                    <label htmlFor="fFinal">Fecha de fin </label>
+                    <input type="date" name="fFinal" id="fFinal" onChange={asignarValorFormulario} required />
                 </div>
+                <div className={styles["options-checkbox"]}>
 
-                <label htmlFor="Tipo">Agente externo</label>
-                <input type="checkbox" onChange={(e) => cargarResponsable(e)} name="checResp" id="checResp" />
-                <label htmlFor="responsable"> Responsable: </label>
+                    <label htmlFor="Tipo">Agente externo</label>
+                    <input type="checkbox" onChange={(e) => cargarResponsable(e)} name="checResp" id="checResp" className={styles.checkbox} />
+                </div>
+                <div className={styles["filter-section"]}>
 
-                <Select
-                    options={respons.map((r) => ({
-                        value: r.clave,
-                        label: r.nombre
-                    }))}
-                    placeholder="Seleccione"
-                    onChange={valorCombo}
-                    value={selNuevaOpcion}
-                />
-                <button onClick={(e) => guardar(e)}> Guardar</button>
+                    <label htmlFor="responsable"> Responsable: </label>
+
+                    <Select
+                        options={respons.map((r) => ({
+                            value: r.clave,
+                            label: r.nombre
+                        }))}
+                        placeholder="Seleccione"
+                        onChange={valorCombo}
+                        value={selNuevaOpcion}
+                        className={styles["filter-select"]}
+                    />
+                </div>
+                <div className={styles["action-buttons"]}>
+                    <button className={styles["primary-button"]} onClick={(e) => guardar(e)}> Guardar</button>
+                </div>
             </div>
         </div>
     );
