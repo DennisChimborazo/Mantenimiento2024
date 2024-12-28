@@ -66,39 +66,38 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
     const guardar = async (e) => {
         e.preventDefault();
-        setSelectedMantenimiento("MANT006");
-        setActiveView("detalleMantenimiento");
-        /* 
-              if (formulario.responsable===""||formulario.fInicio===""||formulario.fFinal===""||formulario.proMant==="") {
-                  mostrarMensaje({
-                      title:"Campos faltantes",
-                      text: "Es obligatorio llenar todos los campos",
-                      icon:"error",
-                      timer: 3200
-                  });
-              }else{
-      
-               const res=  await ApiService.enviarDatos("nuevoMantenimiento",formulario);
-                  if (res) {
-                      mostrarMensaje({
-                          title: res.message,
-                          text: "Se ha creado un nuevo proceso de mantemiento",
-                          icon:"success",
-                          timer: 3200
-                      });
-                      
-                      setActiveView("detalleMantenimiento");
-      
-                  }else{
-                      mostrarMensaje({
-                          title: res,
-                          text: "verifica los datos  ",
-                          icon:"error",
-                          timer: 3200
-                      });
-                      
-                  } 
-              }  */
+        if (formulario.responsable===""||formulario.fInicio===""||formulario.fFinal===""||formulario.proMant==="") {
+            mostrarMensaje({
+                title:"Campos faltantes",
+                text: "Es obligatorio llenar todos los campos",
+                icon:"error",
+                timer: 3200
+            });
+        }else{
+
+         const res =  await ApiService.enviarDatos("nuevoMantenimiento",formulario);
+         console.log(res);
+            if (res) {
+                mostrarMensaje({
+                    title: res.message,
+                    text: "Se ha creado un nuevo proceso de mantemiento",
+                    icon:"success",
+                    timer: 3200
+                });
+                const datos=[{idMan:res, codMant:formulario.proMant}];
+                console.log(datos);
+                setSelectedMantenimiento(JSON.stringify(datos));
+                setActiveView("detalleMantenimiento");
+            }else{
+                mostrarMensaje({
+                    title: res,
+                    text: "verifica los datos  ",
+                    icon:"error",
+                    timer: 3200
+                });
+                
+            } 
+        }  
     }
 
 

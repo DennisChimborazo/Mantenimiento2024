@@ -89,7 +89,7 @@ create table observacion(
 CREATE TABLE mantenientoDetalle(
 	idManten INT,
 	idActivo INT,
-	tipoMD varchar(2),
+	tipoMD varchar(3),
 	idReferencia int,
 	FOREIGN KEY (idManten) REFERENCES manteniento(idManten)
 	FOREIGN KEY (idActivo) REFERENCES activo(idActivo),
