@@ -50,7 +50,43 @@ class Mantenimiento{
           $dataJson=json_encode($data);
           echo ($dataJson); 
     }
-}
+    public static function guardarDetalleManteniento(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $recopilacion=$data["datos"];
+        $obs=$data["obs"];
+        $datosFinales="";
+        if ($obs!=null) {
+           $idObs= self::guardarObservacion($obs);
+            $idAct=$data["idAct"];
+            $idMan=$data["idMan"];
+            $datosFinales = "('" . $idMan . "','" . $idAct . "','obs','" . $idObs . "'), " . $recopilacion;
 
+        }else {
+            $datosFinales=$recopilacion;
+        }
+        
+        $sql ="INSERT INTO mantenientodetalle (idManten, idActivo, tipoMD, idReferencia) VALUES ".$datosFinales;
+        $conn = Conexion::getInstance()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+    }
+    static function guardarObservacion($obs){
+
+        $sql ="INSERT INTO observacion (campObvs) VALUES (:obs)";
+         $conn = Conexion::getInstance()->getConnection();
+         $stmt = $conn->prepare($sql);
+         $stmt->execute([':obs' => $obs,]);
+         $lastId = $conn->lastInsertId();
+        return $lastId;
+    }
+    public static function actualizarEstado() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $id = $data["idManten"];
+        $sql="UPDATE manteniento SET idEstado = '4' WHERE idManten = :id";
+        $conn = Conexion::getInstance()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':id' => $id,]);
+    }
+}
 
 ?>

@@ -12,9 +12,7 @@ function MantenVista({ setActiveView }) {
 
     const cargarDatos = async ()=>{
       const mant= await ApiService.traerDatos("datosManten");
-      console.log("api "+mant);
       setMantemientos(mant);
-      console.log(mantenientos);
     }
  
     cargarDatos();

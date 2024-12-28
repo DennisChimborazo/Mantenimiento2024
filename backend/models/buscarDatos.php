@@ -108,17 +108,18 @@ class BuscarDatos {
     }
     public static function buscActSerie($idSerie) {
         try {
-            $sqlSelect = "SELECT a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
+            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
                                 a.modeloAct,a.colorAct,p.nomPers,u.nomUbic,e.nomEstado
                             FROM activo a
                             INNER JOIN bien b ON b.idbien=a.idbien
                             INNER JOIN persona p ON p.idPers=a.idPers
                             INNER JOIN ubicacion u ON u.idUbic=a.idUbic
                             INNER JOIN estado e ON e.idEstado =a.idEstado
-                            WHERE a.serieAct = :serie";
+                            WHERE  a.serieAct LIKE :serie";
             $conn = Conexion::getInstance()->getConnection();
             $result = $conn->prepare($sqlSelect);
-            $result->bindParam(':serie', $idSerie, PDO::PARAM_STR);
+            $likeSerie =  $idSerie."%" ; // Búsqueda parcial
+            $result->bindParam(':serie', $likeSerie, PDO::PARAM_STR); // Vincular el parámetro
             $result->execute();
             $data = $result->fetchAll(PDO::FETCH_ASSOC);
             $dataJson = json_encode($data);

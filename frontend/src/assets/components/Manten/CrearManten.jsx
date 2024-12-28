@@ -65,7 +65,7 @@ function CrearManten({setActiveView,setSelectedMantenimiento}) {
 
     const guardar = async(e)=>{
         e.preventDefault();
-        setSelectedMantenimiento("MANT006");
+        setSelectedMantenimiento("3");
         setActiveView("detalleMantenimiento");
   /* 
         if (formulario.responsable===""||formulario.fInicio===""||formulario.fFinal===""||formulario.proMant==="") {
