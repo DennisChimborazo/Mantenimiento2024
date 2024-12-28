@@ -65,9 +65,6 @@ function CrearManten({setActiveView,setSelectedMantenimiento}) {
 
     const guardar = async(e)=>{
         e.preventDefault();
-        setSelectedMantenimiento("3");
-        setActiveView("detalleMantenimiento");
-  /* 
         if (formulario.responsable===""||formulario.fInicio===""||formulario.fFinal===""||formulario.proMant==="") {
             mostrarMensaje({
                 title:"Campos faltantes",
@@ -77,7 +74,8 @@ function CrearManten({setActiveView,setSelectedMantenimiento}) {
             });
         }else{
 
-         const res=  await ApiService.enviarDatos("nuevoMantenimiento",formulario);
+         const res =  await ApiService.enviarDatos("nuevoMantenimiento",formulario);
+         console.log(res);
             if (res) {
                 mostrarMensaje({
                     title: res.message,
@@ -85,9 +83,10 @@ function CrearManten({setActiveView,setSelectedMantenimiento}) {
                     icon:"success",
                     timer: 3200
                 });
-                
+                const datos=[{idMan:res, codMant:formulario.proMant}];
+                console.log(datos);
+                setSelectedMantenimiento(JSON.stringify(datos));
                 setActiveView("detalleMantenimiento");
-
             }else{
                 mostrarMensaje({
                     title: res,
@@ -97,7 +96,7 @@ function CrearManten({setActiveView,setSelectedMantenimiento}) {
                 });
                 
             } 
-        }  */
+        }  
     }
 
 

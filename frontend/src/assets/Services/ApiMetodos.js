@@ -103,6 +103,29 @@ class ApiService {
       return null; // Retorna null en caso de error
     }
   }
+
+  static async borrarDatos(deleteApi, form) {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("No estás autenticado. Por favor, inicia sesión.");
+        return;
+      }
+  
+      const response = await axios.delete(apiUrl + `?${deleteApi}=true`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: form, 
+      });
+  
+      return response.data;
+    } catch (error) {
+      console.error("Error al enviar los datos:", error);
+      return null;
+    }
+  }
   
 }
 

@@ -26,8 +26,8 @@ function MantenVista({ setActiveView }) {
   {name:"responsable",selector:row=>row.nombreResponsable},
   {name:"Opciones",cell:(row)=>
     (<div style={{ display: "flex", gap: "10px" }}>
-      <button>Editar</button>
-      <button >Detalles</button>
+      <button>Detalles</button>
+        {row.nomEstado==="En proceso"?(<button>Editar</button>):(null)}
     </div>
   ),ignoreRowClick: true},
  ];

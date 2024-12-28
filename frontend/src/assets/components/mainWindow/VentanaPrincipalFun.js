@@ -10,7 +10,7 @@ import MantenDetalle from "../Manten/MantenDetalle";
 
 const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
   const checkTokenAndRedirect = useTokenVerification(); // Usa el hook
-  const [selectedMantenimiento, setSelectedMantenimiento] = useState(null);
+  const [selectedMantenimiento, setSelectedMantenimiento] = useState([]);
 
 
   useEffect(() => {

@@ -23,7 +23,9 @@ class Mantenimiento{
                 ':idEstado' => $estado,
                 ':tipo' => $tipo,
                 ':idRespons' => $idrespons,]);
-            echo json_encode(['success' => true, 'message' => 'Proceso de compra guardado']);
+
+                $lastId = $conn->lastInsertId();
+                echo($lastId);
         } catch (PDOException $e) {
             http_response_code(500); // Error interno del servidor
             echo json_encode(['success' => false, 'message' => 'Error al guardar el proceso de compra: ' . $e->getMessage()]);
@@ -86,6 +88,32 @@ class Mantenimiento{
         $conn = Conexion::getInstance()->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->execute([':id' => $id,]);
+    }
+    public static function borrarDatosManten() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $idMan = $data[0]["idManten"];
+        $idActv = $data[0]["idAct"];
+        $d=self::borrarObservacion($idMan,$idActv);
+        $sql="DELETE m FROM mantenientodetalle  m WHERE m.idManten= :idMan AND m.idActivo = :idAct";
+        $conn = Conexion::getInstance()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':idMan' => $idMan,':idAct' => $idActv,]);
+    }
+
+    static function borrarObservacion($idMan,$idActv){
+        $sql ="SELECT m.idReferencia FROM mantenientodetalle m WHERE m.idManten= :idMan AND m.idActivo= :idAct AND m.tipoMD='obs'";
+         $conn = Conexion::getInstance()->getConnection();
+         $stmt = $conn->prepare($sql);
+        $stmt->execute([':idMan' => $idMan,':idAct' => $idActv,]);
+        $result= $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($result) {
+            $dato=$result[0];
+            $id=$dato["idReferencia"];
+            $sqldel="DELETE FROM observacion WHERE idObvs= :id";
+            $pre = $conn->prepare($sqldel);
+            $pre->execute([':id' =>$id]);
+        }
+    
     }
 }
 

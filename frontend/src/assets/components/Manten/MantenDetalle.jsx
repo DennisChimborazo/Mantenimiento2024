@@ -5,6 +5,7 @@ import ApiService from "../../Services/ApiMetodos.js";
 import mostrarMensaje from "../Mensajes/Mensaje.js";
 
 function MantenDetalle({setActiveView,mantenimiento}) {
+  const [datosPadre,setDatosPadre]= useState([]);
 
   const [formulario,setFormulario]= useState({obs:"",datos:"",idAct:"",idMan:""});
 
@@ -26,14 +27,9 @@ function MantenDetalle({setActiveView,mantenimiento}) {
 
   const [listadoActivos,setListadoActivos]= useState([]);
 
-
   const [activoSerie,setActivoSerie]= useState(null);
 
   const [activoSerieInput,setActivoSerieInput]= useState(null);
-
-  const [activosFinalizados,setActivosFinalizados]= useState([]);
-
-
 
   useEffect(() => {
     const cagarProo = async () => {
@@ -53,11 +49,14 @@ function MantenDetalle({setActiveView,mantenimiento}) {
       }));
       setComponentes(dn);
     };
+   
     cagarProo();
     cargarComponentes();
+    console.log(mantenimiento);
+    setDatosPadre(JSON.parse(mantenimiento));
+    console.log(datosPadre);
+
   }, []);
-
-
 
   //////////////////////////////////
   const buscarActivo = async(e)=>{
@@ -67,7 +66,6 @@ function MantenDetalle({setActiveView,mantenimiento}) {
   }
                            
   const colum=[
-    {name:"id",selector:row=>row.idActivo},
     {name:"Proceso de compra",selector:row=>row.idCompra},
     {name:"Serie",selector:row=>row.serieAct},
     {name:"Codigo de barras",selector:row=>row.codigoBarraAct},
@@ -84,32 +82,41 @@ function MantenDetalle({setActiveView,mantenimiento}) {
 
   const seleccionarActivo = (e)=>{
      const filtrado=activoBusqueda.filter(a=>a.serieAct===e);
+     const s2=listadoActivos.filter(l=>l.serieAct===filtrado[0].serieAct);
+     if (s2.length===0) {
       setActivoParaDetalle(filtrado);  
       setActivoSerie(e); 
       setActivoSerieInput("");
       setActivosBusqueda([]);
+     }else{
+      mostrarMensaje({title:"Activo ya detallado", text:"El activo seleccionado ya se encuentra en la lista",
+        icon:"warning",timer:2000
+      });
+      
+     }
+
   }
 ////////////////////////////////
   const AgregarActividadTabla =(e)=>{
     e.preventDefault();
-if (datosEnvio.length===0) {
-  mostrarMensaje(
-    {title: "No se puede agregar",
-      text: "Primero debe de selecionar una actividad",
-      icon: "error",
-      timer:2500}
-  );
-}else{
-    const nuevosDatos = datosEnvio
-    .map(({ value }) => `('${mantenimiento}', '${activoParaDetalle[0].idActivo}', 'act', '${value}')`)
-    .join(", ");
-    setRecopilacionDetalles((datosActuales) => (datosActuales ? `${datosActuales}, ${nuevosDatos}` : nuevosDatos));
-    setdataTableActividades((datos)=>[...datos,...datosEnvio]);
-    const idsEnvio = datosEnvio.map((item) => item.value); 
-    const n = actividades.filter((acti) => !idsEnvio.includes(acti.value));
-    setActividades(n);
-    setdatosEnvio([]);
-  };}
+    if (datosEnvio.length===0) {
+      mostrarMensaje(
+        {title: "No se puede agregar",
+          text: "Primero debe de selecionar una actividad",
+          icon: "error",
+          timer:2500}
+      );
+    }else{
+      const nuevosDatos = datosEnvio
+      .map(({ value }) => `('${datosPadre[0].idMan}', '${activoParaDetalle[0].idActivo}', 'act', '${value}')`)
+      .join(", ");
+      setRecopilacionDetalles((datosActuales) => (datosActuales ? `${datosActuales}, ${nuevosDatos}` : nuevosDatos));
+      setdataTableActividades((datos)=>[...datos,...datosEnvio]);
+      const idsEnvio = datosEnvio.map((item) => item.value); 
+      const n = actividades.filter((acti) => !idsEnvio.includes(acti.value));
+      setActividades(n);
+      setdatosEnvio([]);
+    };}
 
 const agregarValores=(val)=>{
   setdatosEnvio(val);
@@ -163,7 +170,7 @@ const AgregarComponenteTabla =(e)=>{
     });
   }else{
     const nuevosDatos = datosEnvioComp
-  .map(({ value }) => `('${mantenimiento}', '${activoParaDetalle[0].idActivo}', 'com', '${value}')`)
+  .map(({ value }) => `('${datosPadre[0].idMan}', '${activoParaDetalle[0].idActivo}', 'com', '${value}')`)
   .join(", ");
 
   setRecopilacionDetalles((datosActuales) => (datosActuales ? `${datosActuales}, ${nuevosDatos}` : nuevosDatos));
@@ -175,9 +182,6 @@ const AgregarComponenteTabla =(e)=>{
     setdatosEnvioComp([]);
   }
 }
-
-
-
 const devolverValoresCom=(id)=>{
   const n= dataTablaCom.filter((row)=>row.value!==id);
     setdataTablaCom(n);
@@ -208,7 +212,7 @@ const agregarNuevoDettale= (e)=>{
   e.preventDefault();
   if (recopilacionDetalles!=="") {
   setFormulario({...formulario,
-    obs:observacion,datos:recopilacionDetalles,idMan:mantenimiento,idAct:activoParaDetalle[0].idActivo,});
+    obs:observacion,datos:recopilacionDetalles,idMan:datosPadre[0].idMan,idAct:activoParaDetalle[0].idActivo,});
   }else{
     mostrarMensaje({
       title:"Datos vacios", icon:"error",text:" Debe de realizar minimo una accion",timer:2000,
@@ -219,8 +223,11 @@ const agregarNuevoDettale= (e)=>{
 useEffect (()=>{
   if (formulario.datos!=="") {
     const enviarValores= async()=>{
+      console.log("id: "+datosPadre[0].idMan);
+      console.log("idFormula: "+formulario.idMan);
+
         const res= await ApiService.enviarDatos("nuevoDetalleMantenimiento",formulario);
-        console.log("bakend: "+res);
+        console.log(res);
         borrarDatos();
         setListadoActivos((act)=>[...act,...activoParaDetalle]);
         setActivoParaDetalle([]);
@@ -228,7 +235,6 @@ useEffect (()=>{
     enviarValores();
   }
 },[formulario]);
-
 
 const borrarDatos= ()=>{
   setFormulario({...formulario,obs:"",datos:""});
@@ -240,17 +246,33 @@ const borrarDatos= ()=>{
   setActividades((act)=>[...act,...dataTablaActividades]);
 }
 
-
 const columasActivosFinales=[
   {name:"Proceso de compra",selector:row=>row.idCompra},
   {name:"Serie",selector:row=>row.serieAct},
   {name:"Codigo de barras",selector:row=>row.codigoBarraAct},
   {name:"Marca",selector:row=>row.marcaAct},
-  {name:"Eliminar",cell:(row)=>(<button onClick={()=>devolverValoresCom(row.value)}>Eliminar</button>),ignoreRowClick: true},
+  {name:"Eliminar",cell:(row)=>(<button onClick={()=>eliminarActivosManteniento(row.idActivo)}>Eliminar</button>),ignoreRowClick: true},
 ];
 
 /////////////////////////
+const eliminarActivosManteniento=async (e)=>{
+    const res= await mostrarMensaje({
+      icon: "info",
+      title: "Eliminar Activo ",
+      text: "Estas seguro que deseas eliminar el activo del mantenimiento",
+      buttons: {
+        cancel: "Cancelar", 
+        confirm: "Si", 
+      },
+    });
+     if (res) {
+        const val=[{idManten:datosPadre[0].idMan , idAct:e,}];
+        const res= await ApiService.borrarDatos("borrarDatosMantenimiento",val);
+        const lista= listadoActivos.filter(l=>l.idActivo!==e);
+        setListadoActivos(lista);
+    }
 
+}
 const finalizarProcesoMantenimiento= async()=>{
  if (listadoActivos.length===0) {
   mostrarMensaje({title:"Advertencia",text:"Ningun activo se ha agregado a este mantemiento", icon:"warning",timer:2500,});
@@ -266,14 +288,15 @@ const finalizarProcesoMantenimiento= async()=>{
     },
   });
   if (res) {
-  const val=[{idManten:mantenimiento}];
+  const val=[{idManten:datosPadre[0].idMan}];
   const res= await ApiService.actualizarDatos("actuMantenimiento",val[0]);
   mostrarMensaje({title:"Finalizado con exito",text:"Se ha finalizado el proceso de mantenimiento", icon:"success",timer:2500,});
+  setActiveView("mantenimiento");
+
 }
  }
 }
 const volverMantenVista= async()=>{
-
   const res= await mostrarMensaje({
     icon: "info",
     title: "Continuar despues ",
@@ -291,7 +314,7 @@ const volverMantenVista= async()=>{
   return (
 
     <div className="MantenDetalle">
-      <h2>DETALLE MANTENIMIENTO {mantenimiento}</h2>
+      <h2>DETALLE MANTENIMIENTO: {datosPadre.length===0?(null):(datosPadre[0].codMan)}</h2>
       <div> <label htmlFor="activos"> Ingresa la serie del activo </label> 
       <input type="text" name="activo" id="activo" onChange={buscarActivo} value={activoSerieInput}/>
       <DataTable
