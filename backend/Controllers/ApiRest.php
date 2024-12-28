@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: http://localhost:3000"); // Cambia según tu frontend
 header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST,PUT,DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 include_once '../models/Login.php'; 
@@ -9,6 +9,7 @@ include_once '../models/cargarDatos.php';
 include_once '../models/compras.php'; 
 include_once '../models/activo.php'; 
 include_once '../models/buscarDatos.php'; 
+include_once '../models/mantenimiento.php'; 
 include_once '../models/authMiddleware.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -21,7 +22,7 @@ $opc = $_SERVER['REQUEST_METHOD'];
 switch ($opc) {
     case 'GET':
 
-       $decodedToken = verifyToken(); // Verificamos el token
+    //   $decodedToken = verifyToken(); // Verificamos el token
 
         if (isset($_GET['proovedor'])) {
             TraerDatos::cargarProveedor(); 
@@ -50,6 +51,9 @@ switch ($opc) {
         } elseif (isset($_GET['procompras'])) {
             Compra::cargarCompra(); 
 
+        }elseif (isset($_GET['datosManten'])) {
+            Mantenimiento::cargarMantenimientos();
+
         } elseif (isset($_GET['busBines'])) {
             $idTipoBien =  $_GET['busBines'];
             BuscarDatos::buscarBienes($idTipoBien); 
@@ -73,6 +77,7 @@ switch ($opc) {
         }elseif (isset($_GET['busActSerie'])) {
             $serie =  $_GET['busActSerie'];
             BuscarDatos::buscActSerie($serie); 
+
         }elseif (isset($_GET['activosTotales'])) {
             $serie =  $_GET['activosTotales'];
             BuscarDatos::cargarActivos($serie); 
@@ -86,14 +91,35 @@ switch ($opc) {
         Login::login(); 
 
         }else {
-             $decodedToken = verifyToken(); // Verificamos el token
+             //$decodedToken = verifyToken(); // Verificamos el token
             if (isset($_GET['proccompra'])) {
             Compra::nuevoProcesoCompra(); 
             }elseif (isset($_GET['nuevoActivo'])) {
                 Activo::nuevoActivo();
+            }elseif (isset($_GET['nuevoMantenimiento'])) {
+                Mantenimiento::guardarMantemiento();
+            }elseif (isset($_GET['nuevoDetalleMantenimiento'])) {
+                Mantenimiento::guardarDetalleManteniento();
             }
         }
         break;
+
+    case 'PUT':
+        parse_str(file_get_contents("php://input"), $_PUT);
+        $_REQUEST = array_merge($_REQUEST, $_PUT);
+        if (isset($_GET['actuMantenimiento'])) {
+            Mantenimiento::actualizarEstado(); 
+            }
+
+        break;
+        case 'DELETE':
+            
+            if (isset($_GET['borrarDatosMantenimiento'])) {
+                Mantenimiento::borrarDatosManten(); 
+                }
+    
+            break;
+
 
     default:
         http_response_code(405); // Método no permitido
