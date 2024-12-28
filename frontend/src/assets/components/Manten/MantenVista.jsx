@@ -9,32 +9,27 @@ function MantenVista({ setActiveView }) {
   const datosPrueba = [{ value: "1", label: "opcion 1" }];
 
   useEffect(() => {
-
     const cargarDatos = async () => {
       const mant = await ApiService.traerDatos("datosManten");
-      console.log("api " + mant);
       setMantemientos(mant);
-      console.log(mantenientos);
     }
-
     cargarDatos();
   }, []);
-  //// Columnas de mi tabla Mantenimientos
-  const columas = [
-    { name: "Mantenimiento", selector: row => row.codManten },
-    { name: "Fecha de inicio", selector: row => row.fechaInico },
-    { name: "Fecha de finalizacion", selector: row => row.fechaFin },
-    { name: "estado", selector: row => row.nomEstado },
-    { name: "responsable", selector: row => row.nombreResponsable },
-    {
-      name: "Opciones", cell: (row) =>
-      (<div style={{ display: "flex", gap: "10px" }}>
-        <button className={styles["primary-button"]}> Editar</button>
-        <button className={styles["primary-button"]}>Detalles</button>
-      </div>
-      ), ignoreRowClick: true
-    },
-  ];
+ //// Columnas de mi tabla Mantenimientos
+ const columas=[
+  {name:"Mantenimiento",selector:row=>row.codManten},
+  {name:"Fecha de inicio",selector:row=>row.fechaInico},
+  {name:"Fecha de finalizacion",selector:row=>row.fechaFin},
+  {name:"estado",selector:row=>row.nomEstado},
+  {name:"responsable",selector:row=>row.nombreResponsable},
+  {name:"Opciones",cell:(row)=>
+    (<div style={{ display: "flex", gap: "10px" }}>
+      <button>Detalles</button>
+        {row.nomEstado==="En proceso"?(<button>Editar</button>):(null)}
+    </div>
+  ),ignoreRowClick: true},
+ ];
+ 
 
   const StylesTable = {
     headCells: {

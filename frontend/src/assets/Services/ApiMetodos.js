@@ -61,8 +61,6 @@ class ApiService {
         throw new Error("No se encontró un token. Por favor, inicia sesión.");
       }
 
-      console.log(apiUrl + `?${getApi}=${id}`); // Aquí se construye correctamente la URL
-
       const response = await axios.get(apiUrl + `?${getApi}=${id}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Incluir el token
@@ -78,6 +76,54 @@ class ApiService {
     } catch (error) {
       console.error("Error al cargar los datos:", error);
       return []; // Retornar un arreglo vacío en caso de error
+    }
+  }
+
+  static async actualizarDatos(putApi, form) {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("No estás autenticado. Por favor, inicia sesión.");
+        return;
+      }
+      const response = await axios.put(
+        apiUrl + `?${putApi}=true`, 
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Enviar token de autenticación
+            "Content-Type": "application/json", // Especificar el tipo de contenido
+          },
+        }
+      );
+
+      return response.data; // Retornamos los datos de la respuesta para su uso posterior
+    } catch (error) {
+      console.error("Error al enviar los datos:", error);
+      return null; // Retorna null en caso de error
+    }
+  }
+
+  static async borrarDatos(deleteApi, form) {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("No estás autenticado. Por favor, inicia sesión.");
+        return;
+      }
+  
+      const response = await axios.delete(apiUrl + `?${deleteApi}=true`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: form, 
+      });
+  
+      return response.data;
+    } catch (error) {
+      console.error("Error al enviar los datos:", error);
+      return null;
     }
   }
   
