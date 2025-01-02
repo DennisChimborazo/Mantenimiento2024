@@ -3,35 +3,36 @@ import Select from "react-select";
 import DataTable from "react-data-table-component";
 import ApiService from "../../Services/ApiMetodos.js";
 import mostrarMensaje from "../Mensajes/Mensaje.js";
+import styles from "./MantenimientoDetalleEstilos.module.css"; // Importación de estilos locales
 
-function MantenDetalle({setActiveView,mantenimiento}) {
-  const [datosPadre,setDatosPadre]= useState([]);
 
-  const [formulario,setFormulario]= useState({obs:"",datos:"",idAct:"",idMan:""});
+function MantenDetalle({ setActiveView, mantenimiento }) {
+  const [datosPadre, setDatosPadre] = useState([]);
 
+  const [formulario, setFormulario] = useState({ obs: "", datos: "", idAct: "", idMan: "" });
+  
   const [recopilacionDetalles,setRecopilacionDetalles]= useState("");
   const [observacion,setObservacion]= useState("");
 
-  const [actividades, setActividades] = useState([]); 
-  const [componentes, setComponentes] = useState([]); 
+  const [actividades, setActividades] = useState([]);
+  const [componentes, setComponentes] = useState([]);
 
-  const [datosEnvioComp, setdatosEnvioComp] = useState([]); 
-  const [datosEnvio, setdatosEnvio] = useState([]); 
+  const [datosEnvioComp, setdatosEnvioComp] = useState([]);
+  const [datosEnvio, setdatosEnvio] = useState([]);
 
-  const [dataTablaActividades, setdataTableActividades] = useState([]); 
-  const [dataTablaCom, setdataTablaCom] = useState([]); 
+  const [dataTablaActividades, setdataTableActividades] = useState([]);
+  const [dataTablaCom, setdataTablaCom] = useState([]);
 
-  const [activoBusqueda,setActivosBusqueda]= useState([]);
+  const [activoBusqueda, setActivosBusqueda] = useState([]);
 
-  const [activoParaDetalle,setActivoParaDetalle]= useState([]);
+  const [activoParaDetalle, setActivoParaDetalle] = useState([]);
 
-  const [listadoActivos,setListadoActivos]= useState([]);
+  const [listadoActivos, setListadoActivos] = useState([]);
 
   const [estilos,setEstilos]= useState(false);
 
   const [activoSerieInput,setActivoSerieInput]= useState("");
-
-  useEffect(() => {
+ useEffect(() => {
     const cagarProo = async () => {
         const actData = await ApiService.traerDatos("actividad"); 
         const dn=actData.map((datos)=>({
@@ -50,7 +51,6 @@ function MantenDetalle({setActiveView,mantenimiento}) {
       setComponentes(dn);
     };
     const cargarDatosPadre = async() => {
-
       const datosRecibidos = JSON.parse(mantenimiento);
       setDatosPadre(datosRecibidos);
       if (datosRecibidos[0].accion==="editar") {
@@ -364,109 +364,145 @@ const volverMantenVista= async()=>{
     setActiveView("mantenimiento");
 }
 }
-////////////////////
+  ////////////////////
   return (
 
-    <div className="MantenDetalle">
-      <h2>
+    <div className={styles.MantenDetalle}>
+      <div className={styles.tittle}>
         DETALLE MANTENIMIENTO:{" "}
         {datosPadre.length === 0 ? "Cargando..." : datosPadre[0].codMant}
-
-      </h2>
-      <div> <label htmlFor="activos"> Ingresa la serie del activo </label> 
-      <input type="text" name="activo" id="activo" onChange={buscarActivo} value={activoSerieInput}/>
-      <DataTable
-      pagination
-      paginationPerPage={5}
-      columns={colum} 
-      data={activoBusqueda}
-      noDataComponent="No ha selecionado ningun activo"
-      persistTableHead 
-      customStyles={estilos===false ? customStyles:customStylesCambio}>
-      </DataTable>
       </div>
-      <div>
-        <label htmlFor="actividad">Actvidades</label>
-      <Select
-        isMulti
-        closeMenuOnSelect={false}
-        options={actividades.map((acti) => ({
-          value: acti.value,
-          label: acti.label,
-        }))}
-        placeholder="Selecciona una actividad"
-        onChange={agregarValores}
-        value={datosEnvio}
-      />
-      <button onClick={AgregarActividadTabla}>Agregar</button>
-      
-      <br />
-      <DataTable 
-      pagination
-      paginationPerPage={5}
-      columns={columasActividades} 
-      data={dataTablaActividades}
-      noDataComponent="No ha selecionado ninguna actividad"
-      persistTableHead 
-      customStyles={customStyles}>
-      </DataTable>
-    </div>
-      <div>
-        <label htmlFor="componentes">Componentes</label>
-        <Select
-        isMulti
-        closeMenuOnSelect={false}
-        options={componentes.map((com) => ({
-          value: com.value,
-          label: com.label,
-        }))}
-        placeholder="Selecciona un componente"
-        onChange={agregarValorCom}
-        value={datosEnvioComp}
-      />
-      <button onClick={AgregarComponenteTabla}>Agregar</button>
-      
-      <br />
-      <DataTable 
-      pagination
-      paginationPerPage={5}
-      columns={columascomp} 
-      data={dataTablaCom}
-      noDataComponent="No ha selecionado ningun componente"
-      persistTableHead 
-      customStyles={customStyles}>
-      </DataTable>
-      
-    </div>
-    
-      <label htmlFor="observacion">Observacion:</label>
-    <textarea 
-        id="observacion" 
-        name="observacion" 
-        rows="10" 
-        cols="110" 
-        placeholder="Detalle alguna observacion"
-        onChange={tomarValorInput}
-        value={observacion}>
-    </textarea> <label htmlFor="">Guardar los Datos y agregar un nuevo activo: </label>
-      <button onClick={agregarNuevoDettale}> Agregar</button>
-    <div>
-      <h3>Listado de activos del Matenimiento </h3>
-      <DataTable
-      pagination
-      paginationPerPage={5}
-      columns={columasActivosFinales} 
-      data={listadoActivos}
-      noDataComponent="No ha selecionado ningun activo"
-      persistTableHead 
-      customStyles={customStyles}>
-      </DataTable>
-      <button onClick={volverMantenVista}> Continuar despues </button>
-      <button onClick={finalizarProcesoMantenimiento}> Finalizar Mantenimiento </button>
-    </div>
-    <div><br />
-    <br /><br />
-    </div>
+      <div className={styles["actions-section"]}>
+        <label htmlFor="activos"> Ingresa la serie del activo </label>
+        <input className={styles["text-inputactive"]} type="text" name="activo" id="activo" onChange={buscarActivo} value={activoSerieInput} />
+        <DataTable
+          pagination
+          paginationPerPage={5}
+          columns={colum}
+          data={activoBusqueda}
+          noDataComponent="No ha selecionado ningun activo"
+          persistTableHead
+          customStyles={stylesTableActive}>
+            
+        </DataTable>
+        {activoSerie ? (
+
+          <h2 className={styles["style-labels"]}>Activo seleccionado: {activoSerie}</h2> // Si hay un activo seleccionado
+        ) : (
+          <h2 className={styles["style-labels"]}>No se ha seleccionado ningún activo</h2> // Si no hay activo seleccionado
+        )}
+      </div>
+      <div className={styles.contenedorTablas}>
+        <div className={styles.tablaActividad}>
+          <div className={styles["filter-section"]}>
+
+            <label htmlFor="actividad" >Actvidades</label>
+            <Select
+              isMulti
+              closeMenuOnSelect={false}
+              options={actividades.map((acti) => ({
+                value: acti.value,
+                label: acti.label,
+              }))}
+              placeholder="Selecciona una actividad"
+              onChange={agregarValores}
+              value={datosEnvio}
+              className={styles["filter-select"]}
+
+            />
+          </div>
+
+          <div className={styles["action-buttons"]}>
+            <button className={styles["primary-button"]} onClick={AgregarActividadTabla}>Agregar</button>
+          </div>
+          <br />
+          <DataTable
+            pagination
+            paginationPerPage={5}
+            columns={columasActividades}
+            data={dataTablaActividades}
+            noDataComponent="No ha selecionado ninguna actividad"
+            persistTableHead
+            customStyles={customStyles}>
+          </DataTable>
+        </div>
+        <div className={styles.tablaComponente}>
+          <div className={styles["filter-section"]}>
+
+            <label htmlFor="componentes">Componentes</label>
+            <Select
+              isMulti
+              closeMenuOnSelect={false}
+              options={componentes.map((com) => ({
+                value: com.value,
+                label: com.label,
+              }))}
+              placeholder="Selecciona un componente"
+              onChange={agregarValorCom}
+              value={datosEnvioComp}
+              className={styles["filter-select"]}
+
+            />
+          </div>
+
+          <div className={styles["action-buttons"]}>
+
+            <button className={styles["primary-button"]} onClick={AgregarComponenteTabla}>Agregar</button>
+          </div>
+
+          <br />
+          <DataTable
+            pagination
+            paginationPerPage={5}
+            columns={columascomp}
+            data={dataTablaCom}
+            noDataComponent="No ha selecionado ningun componente"
+            persistTableHead
+            customStyles={customStyles}>
+          </DataTable>
+
+        </div>
+      </div>
+      <div className={styles["actions-section"]}>
+        <label htmlFor="observacion">Observacion:</label>
+        <textarea
+          id="observacion"
+          name="observacion"
+          rows="10"
+          cols="135"
+          placeholder="Detalle alguna observacion"
+          onChange={tomarValorInput}
+          value={observacion}
+          className={styles["text-input"]}>
+        </textarea>
+      </div>
+      <div className={styles["actions-section"]}>
+        <label htmlFor="">Guardar los Datos y agregar un nuevo activo: </label>
+        <div className={styles["action-buttons"]}>
+          <button className={styles["primary-button"]} onClick={agregarNuevoDettale}> Agregar</button>
+        </div>
+      </div>
+
+      <div className={styles["style-activeFinal"]}>
+        <h3 >Listado de activos del Matenimiento </h3>
+        <DataTable
+          pagination
+          paginationPerPage={5}
+          columns={columasActivosFinales}
+          data={listadoActivos}
+          noDataComponent="No ha selecionado ningun activo"
+          persistTableHead
+          customStyles={stylesTableActiveFinal}>
+        </DataTable>
+      </div>
+      <div className={styles["actions-button"]}>
+  <button className={styles["primary-button"]} onClick={volverMantenVista}> Continuar despues </button>
+  <button className={styles["primary-button"]} onClick={finalizarProcesoMantenimiento}> Finalizar Mantenimiento </button>
+</div>
+
+      <div><br />
+        <br /><br />
+      </div>
     </div>
   );
 }

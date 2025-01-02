@@ -15,6 +15,7 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
     }
     cargarDatos();
   }, []);
+
  //// Columnas de mi tabla Mantenimientos
  const columas=[
   {name:"Mantenimiento",selector:row=>row.codManten},
@@ -50,24 +51,24 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
         color: "#FFFFFF",
         fontSize: "16px",
         fontWeight: "bold",
-        textTransform: "capitalize",  
-        border: "1px solid #ddd",     
+        textTransform: "capitalize",
+        border: "1px solid #ddd",
       },
     },
     cells: {
       style: {
-        border: "1px solid #ddd",    
+        border: "1px solid #ddd",
         fontSize: "16px",
         padding: "10px",
-        color: "#333",               
+        color: "#333",
         textAlign: "left",
-        textTransform: "capitalize",  
+        textTransform: "capitalize",
       },
     },
-   
+
   };
-  
-  
+
+
   return (
     <div className={styles.MantenPrincipal}>
       <h2 className={styles.tittle}> Mantenimientos de Activos</h2>
@@ -95,10 +96,26 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
           </div>
         </div>
         <div className={styles["actions-section"]}>
-          <input className={styles["text-input"]} type="text" name="buscar" id="buscar" />
+          <div className={styles["search-row"]}>
+            <input
+              className={styles["text-input"]}
+              type="text"
+              name="buscar"
+              id="buscar"
+              placeholder="Buscar mantenimiento"
+            />
+            <button className={styles["primary-button"]}>
+              Buscar
+            </button>
+          </div>
+
           <div className={styles["action-buttons"]}>
-            <button className={styles["primary-button"]}>Buscar</button>
-            <button className={styles["secondary-button"]} onClick={() => setActiveView("crearMantenimiento")}>Nuevo Mantenimiento</button>
+            <button
+              className={styles["secondary-button"]}
+              onClick={() => setActiveView("crearMantenimiento")}
+            >
+              Nuevo Mantenimiento
+            </button>
           </div>
         </div>
         <DataTable
