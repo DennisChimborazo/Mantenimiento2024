@@ -1,0 +1,157 @@
+.MantenDetalle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tittle {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  text-align: center;
+  /* Centra el texto del título */
+  width: 100%;
+  /* Ocupa todo el ancho disponible para centrar correctamente */
+}
+
+.contenedorTablas {
+  display: flex;
+  justify-content: flex-start;
+  /* Alinea las tablas a la izquierda */
+  gap: 30px;
+  /* Reduce el espacio entre las tablas */
+  margin-top: 20px;
+}
+
+.tablaActividad,
+.tablaComponente {
+  flex: 1;
+  /* Ambas tablas ocuparán el mismo espacio */
+  min-width: 60%;
+  /* Asegura que tengan un ancho mínimo */
+}
+
+.tablaActividad {
+  border: 2px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+
+.tablaComponente {
+  border: 2px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #ffffff;
+
+}
+
+.action-buttons {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.actions-button {
+  display: flex;
+  justify-content: center;  /* Centra horizontalmente */
+  gap: 15px;  /* Espacio entre botones */
+  margin-top: 30px;  /* Margen superior para separación */
+  width: 100%;  /* Ocupa todo el ancho disponible */
+}
+
+.primary-button,
+.secondary-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.primary-button {
+  background-color: #7c181a;
+  color: white;
+  border: none;
+}
+
+.primary-button:hover {
+  background-color: #db212f;
+}
+
+.secondary-button {
+  background-color: #7c181a;
+  color: white;
+  border: none;
+  font-size: 12px;
+
+  font-family: 'Times New Roman', Times, serif;
+
+}
+
+.secondary-button:hover {
+  background-color: #db212f;
+}
+
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  /* Alineación a la izquierda */
+  margin-top: 10px;
+  flex-direction: column;
+  width: 250px
+}
+
+.filter-select {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  font-family: 'Times New Roman', Times, serif;
+  width: 350px
+}
+
+.text-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.text-inputactive {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 300px;
+  /* Ancho del input de búsqueda */
+
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.actions-section {
+  display: flex;
+  flex-direction: column;
+  /* Alinea los elementos en columna */
+  gap: 15px;
+  /* Espaciado entre input y botón de nuevo mantenimiento */
+  margin-top: 10px;
+}
+
+.style-labels{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 14px;
+}
+
+.style-activeFinal{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 16px;
+  text-align: center;
+}
