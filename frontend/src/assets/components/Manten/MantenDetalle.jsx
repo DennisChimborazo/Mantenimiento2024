@@ -10,18 +10,18 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
   const [datosPadre, setDatosPadre] = useState([]);
 
   const [formulario, setFormulario] = useState({ obs: "", datos: "", idAct: "", idMan: "" });
-  
+
   const [recopilacionDetalles,setRecopilacionDetalles]= useState("");
   const [observacion,setObservacion]= useState("");
 
-  const [actividades, setActividades] = useState([]);
-  const [componentes, setComponentes] = useState([]);
+  const [actividades, setActividades] = useState([]); 
+  const [componentes, setComponentes] = useState([]); 
 
-  const [datosEnvioComp, setdatosEnvioComp] = useState([]);
-  const [datosEnvio, setdatosEnvio] = useState([]);
+  const [datosEnvioComp, setdatosEnvioComp] = useState([]); 
+  const [datosEnvio, setdatosEnvio] = useState([]); 
 
-  const [dataTablaActividades, setdataTableActividades] = useState([]);
-  const [dataTablaCom, setdataTablaCom] = useState([]);
+  const [dataTablaActividades, setdataTableActividades] = useState([]); 
+  const [dataTablaCom, setdataTablaCom] = useState([]); 
 
   const [activoBusqueda, setActivosBusqueda] = useState([]);
 
@@ -32,7 +32,7 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
   const [estilos,setEstilos]= useState(false);
 
   const [activoSerieInput,setActivoSerieInput]= useState("");
- useEffect(() => {
+  useEffect(() => {
     const cagarProo = async () => {
         const actData = await ApiService.traerDatos("actividad"); 
         const dn=actData.map((datos)=>({
@@ -364,7 +364,7 @@ const volverMantenVista= async()=>{
     setActiveView("mantenimiento");
 }
 }
-  ////////////////////
+////////////////////
   return (
 
     <div className={styles.MantenDetalle}>
@@ -375,71 +375,65 @@ const volverMantenVista= async()=>{
       <div className={styles["actions-section"]}>
         <label htmlFor="activos"> Ingresa la serie del activo </label>
         <input className={styles["text-inputactive"]} type="text" name="activo" id="activo" onChange={buscarActivo} value={activoSerieInput} />
-        <DataTable
-          pagination
-          paginationPerPage={5}
-          columns={colum}
-          data={activoBusqueda}
-          noDataComponent="No ha selecionado ningun activo"
-          persistTableHead
-          customStyles={stylesTableActive}>
+      <DataTable
+      pagination
+      paginationPerPage={5}
+      columns={colum} 
+      data={activoBusqueda}
+      noDataComponent="No ha selecionado ningun activo"
+      persistTableHead 
+          customStyles={customStyles}>
             
-        </DataTable>
-        {activoSerie ? (
-
-          <h2 className={styles["style-labels"]}>Activo seleccionado: {activoSerie}</h2> // Si hay un activo seleccionado
-        ) : (
-          <h2 className={styles["style-labels"]}>No se ha seleccionado ningún activo</h2> // Si no hay activo seleccionado
-        )}
+      </DataTable>
       </div>
       <div className={styles.contenedorTablas}>
         <div className={styles.tablaActividad}>
           <div className={styles["filter-section"]}>
 
             <label htmlFor="actividad" >Actvidades</label>
-            <Select
-              isMulti
-              closeMenuOnSelect={false}
-              options={actividades.map((acti) => ({
-                value: acti.value,
-                label: acti.label,
-              }))}
-              placeholder="Selecciona una actividad"
-              onChange={agregarValores}
-              value={datosEnvio}
+      <Select
+        isMulti
+        closeMenuOnSelect={false}
+        options={actividades.map((acti) => ({
+          value: acti.value,
+          label: acti.label,
+        }))}
+        placeholder="Selecciona una actividad"
+        onChange={agregarValores}
+        value={datosEnvio}
               className={styles["filter-select"]}
 
-            />
+      />
           </div>
-
+      
           <div className={styles["action-buttons"]}>
             <button className={styles["primary-button"]} onClick={AgregarActividadTabla}>Agregar</button>
           </div>
-          <br />
-          <DataTable
-            pagination
-            paginationPerPage={5}
-            columns={columasActividades}
-            data={dataTablaActividades}
-            noDataComponent="No ha selecionado ninguna actividad"
-            persistTableHead
-            customStyles={customStyles}>
-          </DataTable>
-        </div>
+      <br />
+      <DataTable 
+      pagination
+      paginationPerPage={5}
+      columns={columasActividades} 
+      data={dataTablaActividades}
+      noDataComponent="No ha selecionado ninguna actividad"
+      persistTableHead 
+      customStyles={customStyles}>
+      </DataTable>
+    </div>
         <div className={styles.tablaComponente}>
           <div className={styles["filter-section"]}>
 
-            <label htmlFor="componentes">Componentes</label>
-            <Select
-              isMulti
-              closeMenuOnSelect={false}
-              options={componentes.map((com) => ({
-                value: com.value,
-                label: com.label,
-              }))}
-              placeholder="Selecciona un componente"
-              onChange={agregarValorCom}
-              value={datosEnvioComp}
+        <label htmlFor="componentes">Componentes</label>
+        <Select
+        isMulti
+        closeMenuOnSelect={false}
+        options={componentes.map((com) => ({
+          value: com.value,
+          label: com.label,
+        }))}
+        placeholder="Selecciona un componente"
+        onChange={agregarValorCom}
+        value={datosEnvioComp}
               className={styles["filter-select"]}
 
             />
@@ -449,29 +443,29 @@ const volverMantenVista= async()=>{
 
             <button className={styles["primary-button"]} onClick={AgregarComponenteTabla}>Agregar</button>
           </div>
-
-          <br />
-          <DataTable
-            pagination
-            paginationPerPage={5}
-            columns={columascomp}
-            data={dataTablaCom}
-            noDataComponent="No ha selecionado ningun componente"
-            persistTableHead
-            customStyles={customStyles}>
-          </DataTable>
-
-        </div>
+      
+      <br />
+      <DataTable 
+      pagination
+      paginationPerPage={5}
+      columns={columascomp} 
+      data={dataTablaCom}
+      noDataComponent="No ha selecionado ningun componente"
+      persistTableHead 
+      customStyles={customStyles}>
+      </DataTable>
+      
+    </div>
       </div>
       <div className={styles["actions-section"]}>
-        <label htmlFor="observacion">Observacion:</label>
-        <textarea
-          id="observacion"
-          name="observacion"
-          rows="10"
+      <label htmlFor="observacion">Observacion:</label>
+    <textarea 
+        id="observacion" 
+        name="observacion" 
+        rows="10" 
           cols="135"
-          placeholder="Detalle alguna observacion"
-          onChange={tomarValorInput}
+        placeholder="Detalle alguna observacion"
+        onChange={tomarValorInput}
           value={observacion}
           className={styles["text-input"]}>
         </textarea>
@@ -485,24 +479,24 @@ const volverMantenVista= async()=>{
 
       <div className={styles["style-activeFinal"]}>
         <h3 >Listado de activos del Matenimiento </h3>
-        <DataTable
-          pagination
-          paginationPerPage={5}
-          columns={columasActivosFinales}
-          data={listadoActivos}
-          noDataComponent="No ha selecionado ningun activo"
-          persistTableHead
-          customStyles={stylesTableActiveFinal}>
-        </DataTable>
+      <DataTable
+      pagination
+      paginationPerPage={5}
+      columns={columasActivosFinales} 
+      data={listadoActivos}
+      noDataComponent="No ha selecionado ningun activo"
+      persistTableHead 
+          customStyles={customStyles}>
+      </DataTable>
       </div>
       <div className={styles["actions-button"]}>
   <button className={styles["primary-button"]} onClick={volverMantenVista}> Continuar despues </button>
   <button className={styles["primary-button"]} onClick={finalizarProcesoMantenimiento}> Finalizar Mantenimiento </button>
-</div>
+    </div>
 
-      <div><br />
-        <br /><br />
-      </div>
+    <div><br />
+    <br /><br />
+    </div>
     </div>
   );
 }
