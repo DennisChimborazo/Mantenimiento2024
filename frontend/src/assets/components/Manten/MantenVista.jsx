@@ -25,7 +25,7 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
   {name:"responsable",selector:row=>row.nombreResponsable},
   {name:"Opciones",cell:(row)=>
     (<div style={{ display: "flex", gap: "10px" }}>
-      <button onClick={()=>historialMantenimiento(row.idManten,row.codManten,row)}>Detalles</button>
+      <button onClick={()=>historialMantenimiento(row)}>Detalles</button>
         {row.nomEstado==="En proceso"?(<button onClick={()=>editarMantenimiento(row.idManten,row.codManten)}>Editar</button>):(null)}
     </div>
   ),ignoreRowClick: true},
@@ -37,11 +37,16 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
     setSelectedMantenimiento(JSON.stringify(datosEditar));
     setActiveView("detalleMantenimiento");
  }
- const historialMantenimiento=(id,nombre,fila)=>{
-  //const datosEditar=[{idMan:id, codMant:nombre,accion:"editar"}];
+ const historialMantenimiento=(fila)=>{
     setSelectedMantenimiento(JSON.stringify(fila));
     setActiveView("historialMantenimiento");
 
+ }
+
+ const buscar = async(e)=>{
+  e.preventDefault();
+ const res= await ApiService.buscarDatos("busManten",e.target.value);
+ setMantemientos(res);
  }
 
   const StylesTable = {
@@ -97,16 +102,14 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
         </div>
         <div className={styles["actions-section"]}>
           <div className={styles["search-row"]}>
+            <p>Ingresa el nombre: </p>
             <input
               className={styles["text-input"]}
               type="text"
               name="buscar"
               id="buscar"
               placeholder="Buscar mantenimiento"
-            />
-            <button className={styles["primary-button"]}>
-              Buscar
-            </button>
+              onChange={buscar}/>
           </div>
 
           <div className={styles["action-buttons"]}>

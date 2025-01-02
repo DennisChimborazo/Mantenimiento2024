@@ -14,6 +14,7 @@ function MantenHistorial({setActiveView,mantenimiento}) {
   
       if (datos.idManten) {
         const activo = await ApiService.buscarDatos("historialManten",datos.idManten)
+        console.log(activo);
         setDatosMantenimiento(activo);
       }
     };
@@ -58,9 +59,8 @@ function MantenHistorial({setActiveView,mantenimiento}) {
 
 const buscarActivo = async (e)=>{
     const formulario=[{idman:datosPadre.idManten,idserie:e.target.value}];
-    const busqueda= await ApiService.buscarDatos("histManSerie",formulario);
-    console.log(busqueda);
-    setDatosMantenimiento(busqueda);
+    const busqueda= await ApiService.enviarDatos("histManSerie",formulario[0]);
+   setDatosMantenimiento(busqueda);
 }
   const customStyles = {
     headCells: {

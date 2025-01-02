@@ -347,9 +347,6 @@ useEffect (()=>{
         console.log(res);
         borrarDatos();
         setListadoActivos((act)=>[...act,...activoParaDetalle]);
-        setActivoParaDetalle([]);
-        setEstilos(false);
-        setActivosBusqueda([]);
         mostrarMensaje({title:"Activo Agregado",timer:2000,icon:"success", text:"Se agrego correctamente"});
       }
     enviarValores();
@@ -361,12 +358,16 @@ useEffect (()=>{
 
 const borrarDatos= ()=>{
   setFormulario({...formulario,obs:"",datos:""});
-  setRecopilacionDetalles("");
+  setRecopilacionDetalles([]);
   setObservacion("");
   setdataTablaCom([]);
   setdataTableActividades([]);
   setComponentes((com)=>[...com,...dataTablaCom]);
   setActividades((act)=>[...act,...dataTablaActividades]);
+  setActivoParaDetalle([]);
+  setEstilos(false);
+  setActivosBusqueda([]);
+
 }
 
 const columasActivosFinales=[
@@ -502,9 +503,7 @@ const volverMantenVista= async()=>{
         placeholder="Selecciona un componente"
         onChange={agregarValorCom}
         value={datosEnvioComp}
-              className={styles["filter-select"]}
-
-            />
+        className={styles["filter-select"]} />
           </div>
 
           <div className={styles["action-buttons"]}>
@@ -542,6 +541,8 @@ const volverMantenVista= async()=>{
         <label htmlFor="">Guardar los Datos y agregar un nuevo activo: </label>
         <div className={styles["action-buttons"]}>
           <button className={styles["primary-button"]} onClick={agregarNuevoDettale}> Agregar</button>
+          <button className={styles["primary-button"]} onClick={borrarDatos}> Cancelar</button>
+
         </div>
       </div>
 

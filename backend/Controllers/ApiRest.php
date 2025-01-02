@@ -82,8 +82,9 @@ switch ($opc) {
             $serie =  $_GET['activosTotales'];
             BuscarDatos::cargarActivos($serie); 
 
-        }elseif (isset($_GET['histManSerie'])) {
-            BuscarDatos::buscHistorialManSerie(); 
+        }elseif (isset($_GET['busManten'])) {
+            $idmant =  $_GET['busManten'];
+            BuscarDatos::buscarMantenimientos($idmant); 
 
         }elseif (isset($_GET['activosManten'])) {
             $serie =  $_GET['activosManten'];
@@ -104,13 +105,19 @@ switch ($opc) {
         }else {
              //$decodedToken = verifyToken(); // Verificamos el token
             if (isset($_GET['proccompra'])) {
-            Compra::nuevoProcesoCompra(); 
+                Compra::nuevoProcesoCompra(); 
+
             }elseif (isset($_GET['nuevoActivo'])) {
                 Activo::nuevoActivo();
+
             }elseif (isset($_GET['nuevoMantenimiento'])) {
                 Mantenimiento::guardarMantemiento();
+
             }elseif (isset($_GET['nuevoDetalleMantenimiento'])) {
                 Mantenimiento::guardarDetalleManteniento();
+
+            }elseif (isset($_GET['histManSerie'])) {
+                BuscarDatos::buscHistorialManSerie(); 
             }
         }
         break;
