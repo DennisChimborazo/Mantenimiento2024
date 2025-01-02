@@ -66,11 +66,6 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
     const guardar = async (e) => {
         e.preventDefault();
-        const datos = [{ idMan: "1", codMant: "HOla mundo" }];
-                console.log(datos);
-                setSelectedMantenimiento(JSON.stringify(datos));
-                setActiveView("detalleMantenimiento");
-        /*
         if (formulario.responsable === "" || formulario.fInicio === "" || formulario.fFinal === "" || formulario.proMant === "") {
             mostrarMensaje({
                 title: "Campos faltantes",
@@ -78,6 +73,7 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
                 icon: "error",
                 timer: 3200
             });
+
         } else {
 
             const res = await ApiService.enviarDatos("nuevoMantenimiento", formulario);
@@ -103,7 +99,7 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
             }
         }
-            */
+
     }
 
 
