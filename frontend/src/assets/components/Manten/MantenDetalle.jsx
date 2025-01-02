@@ -11,7 +11,7 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
 
   const [formulario, setFormulario] = useState({ obs: "", datos: "", idAct: "", idMan: "" });
 
-  const [recopilacionDetalles,setRecopilacionDetalles]= useState("");
+  const [recopilacionDetalles,setRecopilacionDetalles]= useState([]);
   const [observacion,setObservacion]= useState("");
 
   const [actividades, setActividades] = useState([]); 
@@ -127,10 +127,8 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
           timer:2500}
       );
     }else{
-      const nuevosDatos = datosEnvio
-      .map(({ value }) => `('${datosPadre[0].idMan}', '${activoParaDetalle[0].idActivo}', 'act', '${value}')`)
-      .join(", ");
-      setRecopilacionDetalles((datosActuales) => (datosActuales ? `${datosActuales}, ${nuevosDatos}` : nuevosDatos));
+      const denv=datosEnvio.map(({value})=>({tipo:"act",valor:value}));
+      setRecopilacionDetalles((dact)=>[...dact,...denv]);
       setdataTableActividades((datos)=>[...datos,...datosEnvio]);
       const idsEnvio = datosEnvio.map((item) => item.value); 
       const n = actividades.filter((acti) => !idsEnvio.includes(acti.value));
@@ -160,20 +158,16 @@ console.log(recopilacionDetalles);
 
 }
 
-const eliminarDetalle = (clave1, clave2) => {
-  const detallesArray = recopilacionDetalles
-    .split("),") // Divide por `),` para separar los elementos
-    .map((detalle) => detalle.trim() + (detalle.trim().endsWith(")") ? "" : ")")); // Asegura que todos los elementos terminen en `)`
-  const detallesFiltrados = detallesArray.filter((detalle) => {
-    return !(detalle.includes(`'${clave1}'`) && detalle.includes(`'${clave2}'`));
-  });
-  const nuevosDetalles = detallesFiltrados.join(", ");
-  setRecopilacionDetalles(nuevosDetalles);
+const eliminarDetalle = (tipo, valor) => {
+  const eliminar = recopilacionDetalles.filter(
+    (d) => !(d.tipo.includes(tipo) && String(d.valor).includes(valor)));
+  setRecopilacionDetalles(eliminar);
 };
 /////////////////////////
 
 const agregarValorCom = (val)=>{
   setdatosEnvioComp(val);
+  console.log(val);
 };
 
 const columascomp=[
@@ -198,13 +192,9 @@ const AgregarComponenteTabla =(e)=>{
       icon: "error",
       timer:3200
     });
-  }else{
-    const nuevosDatos = datosEnvioComp
-  .map(({ value }) => `('${datosPadre[0].idMan}', '${activoParaDetalle[0].idActivo}', 'com', '${value}')`)
-  .join(", ");
-
-  setRecopilacionDetalles((datosActuales) => (datosActuales ? `${datosActuales}, ${nuevosDatos}` : nuevosDatos));
-
+  }else{ 
+    const denv=datosEnvioComp.map(({value})=>({tipo:"com",valor:value}));
+    setRecopilacionDetalles((dact)=>[...dact,...denv]);
     setdataTablaCom((datos)=>[...datos,...datosEnvioComp]);
     const idsEnvio = datosEnvioComp.map((item) => item.value); 
     const n = componentes.filter((acti) => !idsEnvio.includes(acti.value));
@@ -221,14 +211,90 @@ const devolverValoresCom=(id)=>{
     eliminarDetalle("com",id);
   }
 
-  const customStyles = {
+const customStyles = {
+  table: {
+    style: {
+      width: '100%',
+      minWidth: '400px',  // Ancho mínimo para evitar que cambie de tamaño
+      maxWidth: '500px', // Máximo para evitar que crezca demasiado
+      margin: '0 auto',   // Centra la tabla en el contenedor
+    },
+  },
   headCells: {
     style: {
-      backgroundColor: "#7c181a", // Color de fondo (verde ejemplo)
-      color: "#FFFFFF", // Color del texto (blanco)
-      fontSize: "16px", // Tamaño de fuente
-      fontWeight: "bold", // Texto en negrita
-      textTransform: "uppercase", // Mayúsculas
+      backgroundColor: "#7c181a",
+      color: "#FFFFFF",
+      fontSize: "16px",
+      fontWeight: "bold",
+      textTransform: "capitalize",
+    },
+  },
+  cells: {
+    style: {
+      fontSize: '14px',
+      padding: '10px',  // Ajusta el espaciado interno
+    },
+  },
+};
+const stylesTableActive = {
+  table: {
+    style: {
+      width: '100%',
+      minWidth: '1000px',
+      maxWidth: '1100px',
+      margin: '0 auto',
+       tableLayout: 'fixed'
+    },
+  },
+  headRow: {
+    style: {
+      minHeight: '56px',  // Aumenta la altura mínima de la fila de encabezado
+    },
+  },
+  headCells: {
+    style: {
+      backgroundColor: "#7c181a",
+      color: "#FFFFFF",
+      fontSize: "16px",
+      fontWeight: "bold",
+      textTransform: "capitalize",
+      whiteSpace: 'normal',
+      wordWrap: 'break-word',
+      textAlign: 'center',
+      minWidth: '200px',  // Aumenta el ancho mínimo de las celdas del encabezado
+      maxWidth: '300px',  // Limita el ancho máximo para evitar estiramiento excesivo
+    },
+  },
+  cells: {
+    style: {
+      fontSize: '14px',
+      padding: '10px',
+    },
+  },
+};
+
+const stylesTableActiveFinal = {
+  table: {
+    style: {
+      width: '100%',
+      minWidth: '800px',  // Ancho mínimo para evitar que cambie de tamaño
+      maxWidth: '900px', // Máximo para evitar que crezca demasiado
+      margin: '0 auto',   // Centra la tabla en el contenedor
+    },
+  },
+  headCells: {
+    style: {
+      backgroundColor: "#7c181a",
+      color: "#FFFFFF",
+      fontSize: "16px",
+      fontWeight: "bold",
+      textTransform: "capitalize",
+    },
+  },
+  cells: {
+    style: {
+      fontSize: '14px',
+      padding: '10px',  // Ajusta el espaciado interno
     },
   },
 };
@@ -261,8 +327,11 @@ const agregarNuevoDettale= (e)=>{
     );
   }else{
   if (recopilacionDetalles!=="") {
-  setFormulario({...formulario,
-    obs:observacion,datos:recopilacionDetalles,idMan:datosPadre[0].idMan,idAct:activoParaDetalle[0].idActivo,});
+    const en=recopilacionDetalles.map(({ valor,tipo }) => `('${datosPadre[0].idMan}', '${activoParaDetalle[0].idActivo}', '${tipo}', '${valor}')`)
+    .join(", ");
+    console.log(en);
+     setFormulario({...formulario,
+     obs:observacion,datos:en,idMan:datosPadre[0].idMan,idAct:activoParaDetalle[0].idActivo,});
   }else{
     mostrarMensaje({
       title:"Datos vacios", icon:"error",text:" Debe de realizar minimo una accion",timer:2000,
@@ -369,7 +438,7 @@ const volverMantenVista= async()=>{
 
     <div className={styles.MantenDetalle}>
       <div className={styles.tittle}>
-        DETALLE MANTENIMIENTO:{" "}
+        PROCESO DE MANTENIMIENTO:{" "}
         {datosPadre.length === 0 ? "Cargando..." : datosPadre[0].codMant}
       </div>
       <div className={styles["actions-section"]}>
@@ -382,8 +451,7 @@ const volverMantenVista= async()=>{
       data={activoBusqueda}
       noDataComponent="No ha selecionado ningun activo"
       persistTableHead 
-          customStyles={customStyles}>
-            
+      customStyles={estilos===false ? stylesTableActive:customStylesCambio}>
       </DataTable>
       </div>
       <div className={styles.contenedorTablas}>
@@ -486,7 +554,7 @@ const volverMantenVista= async()=>{
       data={listadoActivos}
       noDataComponent="No ha selecionado ningun activo"
       persistTableHead 
-          customStyles={customStyles}>
+          customStyles={stylesTableActiveFinal}>
       </DataTable>
       </div>
       <div className={styles["actions-button"]}>

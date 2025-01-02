@@ -33,7 +33,7 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
  /////// editar
 
  const editarMantenimiento = (id,nombre)=>{
-    const datosEditar=[{idMan:id, codMant:nombre,accion:"Historial"}];
+    const datosEditar=[{idMan:id, codMant:nombre,accion:"editar"}];
     setSelectedMantenimiento(JSON.stringify(datosEditar));
     setActiveView("detalleMantenimiento");
  }
