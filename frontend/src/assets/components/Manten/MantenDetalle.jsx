@@ -10,7 +10,7 @@ function MantenDetalle({setActiveView,mantenimiento}) {
   const [formulario,setFormulario]= useState({obs:"",datos:"",idAct:"",idMan:""});
 
   const [recopilacionDetalles,setRecopilacionDetalles]= useState("");
-  const [observacion,setObservacion]= useState(null);
+  const [observacion,setObservacion]= useState("");
 
   const [actividades, setActividades] = useState([]); 
   const [componentes, setComponentes] = useState([]); 
@@ -27,9 +27,9 @@ function MantenDetalle({setActiveView,mantenimiento}) {
 
   const [listadoActivos,setListadoActivos]= useState([]);
 
-  const [activoSerie,setActivoSerie]= useState(null);
+  const [estilos,setEstilos]= useState(false);
 
-  const [activoSerieInput,setActivoSerieInput]= useState(null);
+  const [activoSerieInput,setActivoSerieInput]= useState("");
 
   useEffect(() => {
     const cagarProo = async () => {
@@ -49,20 +49,31 @@ function MantenDetalle({setActiveView,mantenimiento}) {
       }));
       setComponentes(dn);
     };
+    const cargarDatosPadre = async() => {
+
+      const datosRecibidos = JSON.parse(mantenimiento);
+      setDatosPadre(datosRecibidos);
+      if (datosRecibidos[0].accion==="editar") {
+        const actMan= await ApiService.buscarDatos("activosManten",datosRecibidos[0].idMan);
+        setListadoActivos(actMan);
+      }
+
+    }
    
     cagarProo();
-    cargarComponentes();
-    console.log(mantenimiento);
-    setDatosPadre(JSON.parse(mantenimiento));
-    console.log(datosPadre);
+    cargarDatosPadre();
+    cargarComponentes(); }, []);
 
-  }, []);
-
+  
   //////////////////////////////////
   const buscarActivo = async(e)=>{
     setActivoSerieInput(e.target.value);
     const activo= await ApiService.buscarDatos("busActSerie",e.target.value);
     setActivosBusqueda(activo);
+    if (estilos==true) {
+      setEstilos(false);
+      setActivoParaDetalle([]);
+    }
   }
                            
   const colum=[
@@ -75,19 +86,20 @@ function MantenDetalle({setActiveView,mantenimiento}) {
     {name:"Ubicacion",selector:row=>row.nomUbic},
     {name:"Opciones",cell:(row)=>
       (<div style={{ display: "flex", gap: "10px" }}>
-        <button onClick={()=>seleccionarActivo(row.serieAct)}>Selecionar</button>
+        {estilos?(<p>Selecionado</p>)
+        :( <button onClick={()=>seleccionarActivo(row.serieAct)}>Selecionar</button>)}
       </div>
     ),ignoreRowClick: true},
   ];  
 
   const seleccionarActivo = (e)=>{
      const filtrado=activoBusqueda.filter(a=>a.serieAct===e);
-     const s2=listadoActivos.filter(l=>l.serieAct===filtrado[0].serieAct);
-     if (s2.length===0) {
+     const listAact=listadoActivos.filter(l=>l.serieAct===filtrado[0].serieAct);
+     if (listAact.length===0) {
       setActivoParaDetalle(filtrado);  
-      setActivoSerie(e); 
       setActivoSerieInput("");
-      setActivosBusqueda([]);
+      setActivosBusqueda(filtrado);
+      setEstilos(true);
      }else{
       mostrarMensaje({title:"Activo ya detallado", text:"El activo seleccionado ya se encuentra en la lista",
         icon:"warning",timer:2000
@@ -99,6 +111,14 @@ function MantenDetalle({setActiveView,mantenimiento}) {
 ////////////////////////////////
   const AgregarActividadTabla =(e)=>{
     e.preventDefault();
+    if (activoParaDetalle.length===0) {
+      mostrarMensaje(
+        {title: "Activo no seleccionado",
+          text: "Primero debe asignar un activo ",
+          icon: "error",
+          timer:2500}
+      );
+    }else{
     if (datosEnvio.length===0) {
       mostrarMensaje(
         {title: "No se puede agregar",
@@ -116,7 +136,9 @@ function MantenDetalle({setActiveView,mantenimiento}) {
       const n = actividades.filter((acti) => !idsEnvio.includes(acti.value));
       setActividades(n);
       setdatosEnvio([]);
-    };}
+    };
+  }
+  }
 
 const agregarValores=(val)=>{
   setdatosEnvio(val);
@@ -161,6 +183,14 @@ const columascomp=[
 
 const AgregarComponenteTabla =(e)=>{
   e.preventDefault();
+  if (activoParaDetalle.length===0) {
+    mostrarMensaje(
+      {title: "Activo no seleccionado",
+        text: "Primero debe asignar un activo ",
+        icon: "error",
+        timer:2500}
+    );
+  }else{
   if (datosEnvioComp.length===0) {
     mostrarMensaje({
       title: "No se puede agregar",
@@ -182,6 +212,7 @@ const AgregarComponenteTabla =(e)=>{
     setdatosEnvioComp([]);
   }
 }
+}
 const devolverValoresCom=(id)=>{
   const n= dataTablaCom.filter((row)=>row.value!==id);
     setdataTablaCom(n);
@@ -201,6 +232,17 @@ const devolverValoresCom=(id)=>{
     },
   },
 };
+const customStylesCambio = {
+  headCells: {
+    style: {
+      backgroundColor: "#3da1bf", // Color de fondo (verde ejemplo)
+      color: "#FFFFFF", // Color del texto (blanco)
+      fontSize: "16px", // Tamaño de fuente
+      fontWeight: "bold", // Texto en negrita
+      textTransform: "uppercase", // Mayúsculas
+    },
+  },
+};
 
 ///////////////////////
 
@@ -210,6 +252,14 @@ const tomarValorInput= (e)=>{
 
 const agregarNuevoDettale= (e)=>{
   e.preventDefault();
+  if (activoParaDetalle.length===0) {
+    mostrarMensaje(
+      {title: "Activo no seleccionado",
+        text: "Primero debe asignar un activo ",
+        icon: "error",
+        timer:2500}
+    );
+  }else{
   if (recopilacionDetalles!=="") {
   setFormulario({...formulario,
     obs:observacion,datos:recopilacionDetalles,idMan:datosPadre[0].idMan,idAct:activoParaDetalle[0].idActivo,});
@@ -219,22 +269,26 @@ const agregarNuevoDettale= (e)=>{
     });
   }
 }
+}
 
 useEffect (()=>{
   if (formulario.datos!=="") {
     const enviarValores= async()=>{
-      console.log("id: "+datosPadre[0].idMan);
-      console.log("idFormula: "+formulario.idMan);
-
         const res= await ApiService.enviarDatos("nuevoDetalleMantenimiento",formulario);
         console.log(res);
         borrarDatos();
         setListadoActivos((act)=>[...act,...activoParaDetalle]);
         setActivoParaDetalle([]);
+        setEstilos(false);
+        setActivosBusqueda([]);
+        mostrarMensaje({title:"Activo Agregado",timer:2000,icon:"success", text:"Se agrego correctamente"});
       }
     enviarValores();
+    
   }
 },[formulario]);
+
+
 
 const borrarDatos= ()=>{
   setFormulario({...formulario,obs:"",datos:""});
@@ -314,7 +368,11 @@ const volverMantenVista= async()=>{
   return (
 
     <div className="MantenDetalle">
-      <h2>DETALLE MANTENIMIENTO: {datosPadre.length===0?(null):(datosPadre[0].codMan)}</h2>
+      <h2>
+        DETALLE MANTENIMIENTO:{" "}
+        {datosPadre.length === 0 ? "Cargando..." : datosPadre[0].codMant}
+
+      </h2>
       <div> <label htmlFor="activos"> Ingresa la serie del activo </label> 
       <input type="text" name="activo" id="activo" onChange={buscarActivo} value={activoSerieInput}/>
       <DataTable
@@ -324,14 +382,8 @@ const volverMantenVista= async()=>{
       data={activoBusqueda}
       noDataComponent="No ha selecionado ningun activo"
       persistTableHead 
-      customStyles={customStyles}>
+      customStyles={estilos===false ? customStyles:customStylesCambio}>
       </DataTable>
-      {activoSerie ? (
-        
-        <h2>Activo seleccionado: {activoSerie}</h2> // Si hay un activo seleccionado
-      ) : (
-        <h2>No se ha seleccionado ningún activo</h2> // Si no hay activo seleccionado
-      )}
       </div>
       <div>
         <label htmlFor="actividad">Actvidades</label>

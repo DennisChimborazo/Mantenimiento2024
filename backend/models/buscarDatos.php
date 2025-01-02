@@ -129,5 +129,34 @@ class BuscarDatos {
         }
         
     }
+
+    static function buscHistorialManSerie(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $idman = $data[0]['idman'] ?? null;
+        $idserie = $data[0]['idserie'] ?? null;
+        echo ($idman." sdfs".$idserie);
+
+        // try {
+        //     $sqlSelect = "SELECT a.idCompra,a.serieAct, GROUP_CONCAT(CASE WHEN md.tipoMD = 'act' THEN act.nomActi END SEPARATOR ', ') AS actividad, GROUP_CONCAT(CASE WHEN md.tipoMD = 'com' THEN c.nomCompo END SEPARATOR ', ') AS componente, MAX(CASE WHEN md.tipoMD = 'obs' THEN o.campObvs END) AS observacion 
+        //         FROM mantenientodetalle md 
+        //         INNER JOIN activo a ON a.idActivo = md.idActivo 
+        //         LEFT JOIN actividad act ON act.idActi = md.idReferencia AND md.tipoMD = 'act' 
+        //         LEFT JOIN componente c ON c.idCompo = md.idReferencia AND md.tipoMD = 'com' 
+        //         LEFT JOIN observacion o ON o.idObvs = md.idReferencia AND md.tipoMD = 'obs' 
+        //         WHERE md.idManten= :idmanten AND a.serieAct LIKE :idserie GROUP BY a.serieAct, a.idCompra";
+        //     $conn = Conexion::getInstance()->getConnection();
+        //     $result = $conn->prepare($sqlSelect);
+        //     $likeSerie =  $idserie."%" ; // Búsqueda parcial
+        //     $result->bindParam(':idmanten', $idman, PDO::PARAM_INT); 
+        //     $result->bindParam(':idserie', $likeSerie, PDO::PARAM_INT);
+        //     $result->execute();
+        //     $data = $result->fetchAll(PDO::FETCH_ASSOC);
+        //     $dataJson = json_encode($data);
+        //     echo ($dataJson); 
+        // } catch (PDOException $e) {
+        //     echo json_encode(["error" => $e->getMessage()]);
+        // }
+    }
+
 }
 ?>

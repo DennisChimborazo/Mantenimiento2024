@@ -6,13 +6,14 @@ import ReporteVista from "../Reporte/ReporteVista";
 import MantenVista from "../Manten/MantenVista";
 import CrearManten from "../Manten/CrearManten";
 import MantenDetalle from "../Manten/MantenDetalle";
+import MantenHistorial from "../Manten/MantenHistorial";
 
 
 const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
   const checkTokenAndRedirect = useTokenVerification(); // Usa el hook
   const [selectedMantenimiento, setSelectedMantenimiento] = useState([]);
 
-
+ 
   useEffect(() => {
     if (activeView === "cerrarsecion") {
       setActiveView(null);
@@ -29,9 +30,11 @@ const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
       {activeView === "activo" && <ActiveView />}
       {activeView === "procesoCompra" && <ProcesoCompraView />}
       {activeView === "reportes" && <ReporteVista />}
-      {activeView === "mantenimiento" && (<MantenVista setActiveView={setActiveView} />)}
+      {activeView === "mantenimiento" && (<MantenVista setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento}/>)}
       {activeView === "crearMantenimiento" && (<CrearManten setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento}/>)}
       {activeView === "detalleMantenimiento" && (<MantenDetalle setActiveView={setActiveView} mantenimiento={selectedMantenimiento}/>)}
+      {activeView === "historialMantenimiento" && (<MantenHistorial setActiveView={setActiveView} mantenimiento={selectedMantenimiento}/>)}
+
     </section>
   );
 };
