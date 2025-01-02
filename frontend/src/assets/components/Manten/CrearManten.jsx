@@ -66,6 +66,11 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
     const guardar = async (e) => {
         e.preventDefault();
+        const datos = [{ idMan: "1", codMant: "HOla mundo" }];
+                console.log(datos);
+                setSelectedMantenimiento(JSON.stringify(datos));
+                setActiveView("detalleMantenimiento");
+        /*
         if (formulario.responsable === "" || formulario.fInicio === "" || formulario.fFinal === "" || formulario.proMant === "") {
             mostrarMensaje({
                 title: "Campos faltantes",
@@ -98,6 +103,7 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
             }
         }
+            */
     }
 
 
