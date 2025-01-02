@@ -52,6 +52,48 @@ class Mantenimiento{
           $dataJson=json_encode($data);
           echo ($dataJson); 
     }
+
+    static function buscarActivosManten($idmanten){
+        try {
+            $sqlSelect = "SELECT a.idCompra,a.serieAct,a.codigoBarraAct,a.marcaAct,a.modeloAct,a.colorAct,u.nomUbic
+                            FROM mantenientodetalle md
+                            INNER JOIN activo a ON md.idActivo=a.idActivo
+                            INNER JOIN ubicacion u ON u.idUbic=a.idUbic
+                            WHERE md.idManten = :manten 
+                            GROUP by a.idActivo";
+            $conn = Conexion::getInstance()->getConnection();
+            $result = $conn->prepare($sqlSelect);
+            $result->bindParam(':manten', $idmanten, PDO::PARAM_INT);
+            $result->execute();
+            $data = $result->fetchAll(PDO::FETCH_ASSOC);
+            $dataJson = json_encode($data);
+            echo ($dataJson); 
+        } catch (PDOException $e) {
+            echo json_encode(["error" => $e->getMessage()]);
+        }
+    }
+
+    static function buscarHistorialManten($idmanten){
+        try {
+            $sqlSelect = "SELECT a.idCompra,a.serieAct, GROUP_CONCAT(CASE WHEN md.tipoMD = 'act' THEN act.nomActi END SEPARATOR ', ') AS actividad, GROUP_CONCAT(CASE WHEN md.tipoMD = 'com' THEN c.nomCompo END SEPARATOR ', ') AS componente, MAX(CASE WHEN md.tipoMD = 'obs' THEN o.campObvs END) AS observacion 
+                            FROM mantenientodetalle md 
+                            INNER JOIN activo a ON a.idActivo = md.idActivo 
+                            LEFT JOIN actividad act ON act.idActi = md.idReferencia AND md.tipoMD = 'act' 
+                            LEFT JOIN componente c ON c.idCompo = md.idReferencia AND md.tipoMD = 'com' 
+                            LEFT JOIN observacion o ON o.idObvs = md.idReferencia AND md.tipoMD = 'obs' 
+                            WHERE md.idManten = :manten GROUP BY a.serieAct, a.idCompra";
+            $conn = Conexion::getInstance()->getConnection();
+            $result = $conn->prepare($sqlSelect);
+            $result->bindParam(':manten', $idmanten, PDO::PARAM_INT);
+            $result->execute();
+            $data = $result->fetchAll(PDO::FETCH_ASSOC);
+            $dataJson = json_encode($data);
+            echo ($dataJson); 
+        } catch (PDOException $e) {
+            echo json_encode(["error" => $e->getMessage()]);
+        }
+    }
+
     public static function guardarDetalleManteniento(){
         $data = json_decode(file_get_contents('php://input'), true);
         $recopilacion=$data["datos"];
@@ -116,5 +158,12 @@ class Mantenimiento{
     
     }
 }
-
+// SELECT a.serieAct,a.marcaAct,
+// CASE WHEN md.tipoMD='act' THEN act.nomActi END AS actividad,
+// CASE WHEN md.tipoMD='com' THEN c.nomCompo END AS componente
+// FROM mantenientodetalle md
+// INNER JOIN activo a on a.idActivo=md.idActivo
+// LEFT JOIN actividad act ON act.idActi = md.idReferencia AND md.tipoMD='act'
+// LEFT JOIN componente c ON c.idCompo = md.idReferencia AND md.tipoMD='com'
+// WHERE md.idManten='2'
 ?>

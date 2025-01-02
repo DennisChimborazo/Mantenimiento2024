@@ -23,7 +23,7 @@ export const useLogin = () => {
           "Content-Type": "application/json",
         },
       });
-
+   console.log(response.data);
       if (response.data.success) {
         const token = response.data.token;
         if (token) {

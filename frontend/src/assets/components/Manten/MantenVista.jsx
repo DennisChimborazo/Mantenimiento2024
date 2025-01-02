@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import ApiService from "../../Services/ApiMetodos";
 import Select from "react-select";
 import styles from "./MantenimientoVistaEstilos.module.css"; // Importación de estilos locales
-function MantenVista({ setActiveView }) {
+function MantenVista({ setActiveView,setSelectedMantenimiento }) {
 
   const [mantenientos, setMantemientos] = useState([]);
   const datosPrueba = [{ value: "1", label: "opcion 1" }];
@@ -24,12 +24,24 @@ function MantenVista({ setActiveView }) {
   {name:"responsable",selector:row=>row.nombreResponsable},
   {name:"Opciones",cell:(row)=>
     (<div style={{ display: "flex", gap: "10px" }}>
-      <button>Detalles</button>
-        {row.nomEstado==="En proceso"?(<button>Editar</button>):(null)}
+      <button onClick={()=>historialMantenimiento(row.idManten,row.codManten,row)}>Detalles</button>
+        {row.nomEstado==="En proceso"?(<button onClick={()=>editarMantenimiento(row.idManten,row.codManten)}>Editar</button>):(null)}
     </div>
   ),ignoreRowClick: true},
  ];
- 
+ /////// editar
+
+ const editarMantenimiento = (id,nombre)=>{
+    const datosEditar=[{idMan:id, codMant:nombre,accion:"Historial"}];
+    setSelectedMantenimiento(JSON.stringify(datosEditar));
+    setActiveView("detalleMantenimiento");
+ }
+ const historialMantenimiento=(id,nombre,fila)=>{
+  //const datosEditar=[{idMan:id, codMant:nombre,accion:"editar"}];
+    setSelectedMantenimiento(JSON.stringify(fila));
+    setActiveView("historialMantenimiento");
+
+ }
 
   const StylesTable = {
     headCells: {

@@ -81,6 +81,17 @@ switch ($opc) {
         }elseif (isset($_GET['activosTotales'])) {
             $serie =  $_GET['activosTotales'];
             BuscarDatos::cargarActivos($serie); 
+
+        }elseif (isset($_GET['histManSerie'])) {
+            BuscarDatos::buscHistorialManSerie(); 
+
+        }elseif (isset($_GET['activosManten'])) {
+            $serie =  $_GET['activosManten'];
+            Mantenimiento::buscarActivosManten($serie); 
+
+        }elseif (isset($_GET['historialManten'])) {
+            $histManten =  $_GET['historialManten'];
+            Mantenimiento::buscarHistorialManten($histManten); 
         }
         
         break;
