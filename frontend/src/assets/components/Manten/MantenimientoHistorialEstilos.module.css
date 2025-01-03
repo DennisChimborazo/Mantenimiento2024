@@ -1,0 +1,63 @@
+.MantenHistorial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color:#fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  .tittle {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    text-align: center;
+    /* Centra el texto del título */
+    width: 100%;
+    /* Ocupa todo el ancho disponible para centrar correctamente */
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 25px;
+    font-size: 16px;
+    padding-left: 50px;
+}
+
+.options p {
+    align-self: flex-start;  /* Alinea los párrafos a la izquierda */
+    margin-left: 0;          /* Elimina cualquier margen adicional */
+    padding-left: 300px;         /* Elimina el relleno */
+}
+.actions-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-top: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+  
+.search-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* Alinea el contenido a la izquierda */
+    gap: 10px;
+    width: 100%;  /* Asegura que ocupe el ancho completo */
+}
+  
+.text-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 300px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+  
+
+  
