@@ -32,6 +32,9 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
   const [estilos,setEstilos]= useState(false);
 
   const [activoSerieInput,setActivoSerieInput]= useState("");
+
+  const [editarMan,setEditarMan]= useState(false);
+
   useEffect(() => {
     const cagarProo = async () => {
         const actData = await ApiService.traerDatos("actividad"); 
@@ -53,9 +56,6 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
     const cargarDatosPadre = async() => {
       const datosRecibidos = JSON.parse(mantenimiento);
       setDatosPadre(datosRecibidos);
-      console.log("---------------------")
-
-      console.log(datosRecibidos)
       if (datosRecibidos[0].accion==="editar") {
         const actMan= await ApiService.buscarDatos("activosManten",datosRecibidos[0].idMan);
         setListadoActivos(actMan);
@@ -112,8 +112,8 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
 
   }
 ////////////////////////////////
-  const AgregarActividadTabla =(e)=>{
-    e.preventDefault();
+  const AgregarActividadTabla =()=>{
+   
     if (activoParaDetalle.length===0) {
       mostrarMensaje(
         {title: "Activo no seleccionado",
@@ -130,6 +130,7 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
           timer:2500}
       );
     }else{
+    console.log(datosEnvio);
       const denv=datosEnvio.map(({value})=>({tipo:"act",valor:value}));
       setRecopilacionDetalles((dact)=>[...dact,...denv]);
       setdataTableActividades((datos)=>[...datos,...datosEnvio]);
@@ -157,8 +158,6 @@ setdataTableActividades(n);
   const nd= dataTablaActividades.filter((row)=>row.value===id);
   setActividades((datos)=>[...datos,...nd]);
  eliminarDetalle("act",id);
-console.log(recopilacionDetalles);
-
 }
 
 const eliminarDetalle = (tipo, valor) => {
@@ -178,8 +177,7 @@ const columascomp=[
   {name:"Eliminar",cell:(row)=>(<button className={styles["secondary-button"]} onClick={()=>devolverValoresCom(row.value)}>Eliminar</button>),ignoreRowClick: true},
 ];
 
-const AgregarComponenteTabla =(e)=>{
-  e.preventDefault();
+const AgregarComponenteTabla =()=>{
   if (activoParaDetalle.length===0) {
     mostrarMensaje(
       {title: "Activo no seleccionado",
@@ -313,7 +311,7 @@ const customStylesCambio = {
   },
   headCells: {
     style: {
-      backgroundColor: "#7c181a", 
+      backgroundColor: "#5207d4", 
       color: "#FFFFFF", // Color del texto (blanco)
       fontSize: "16px", // Tamaño de fuente
       fontWeight: "bold", // Texto en negrita
@@ -338,10 +336,10 @@ const agregarNuevoDettale= (e)=>{
         timer:2500}
     );
   }else{
+
   if (recopilacionDetalles!=="") {
     const en=recopilacionDetalles.map(({ valor,tipo }) => `('${datosPadre[0].idMan}', '${activoParaDetalle[0].idActivo}', '${tipo}', '${valor}')`)
     .join(", ");
-    console.log(en);
      setFormulario({...formulario,
      obs:observacion,datos:en,idMan:datosPadre[0].idMan,idAct:activoParaDetalle[0].idActivo,});
   }else{
@@ -354,14 +352,23 @@ const agregarNuevoDettale= (e)=>{
 
 useEffect (()=>{
   if (formulario.datos!=="") {
+    
     const enviarValores= async()=>{
+      if (editarMan) {
+        const val=[{idManten:datosPadre[0].idMan , idAct:activoParaDetalle[0].idActivo}];
+        const resde= await ApiService.borrarDatos("borrarDatosMantenimiento",val);
+        const lista= listadoActivos.filter(l=>l.idActivo!==activoParaDetalle[0].idActivo);
+        setListadoActivos(lista);
+      }
         const res= await ApiService.enviarDatos("nuevoDetalleMantenimiento",formulario);
-        console.log(res);
         borrarDatos();
         setListadoActivos((act)=>[...act,...activoParaDetalle]);
         mostrarMensaje({title:"Activo Agregado",timer:2000,icon:"success", text:"Se agrego correctamente"});
       }
     enviarValores();
+    if (editarMan) {
+      setEditarMan(false);
+   }
     
   }
 },[formulario]);
@@ -379,7 +386,9 @@ const borrarDatos= ()=>{
   setActivoParaDetalle([]);
   setEstilos(false);
   setActivosBusqueda([]);
-
+  if (editarMan) {
+    setEditarMan(false);
+ }
 }
 
 const columasActivosFinales=[
@@ -387,11 +396,50 @@ const columasActivosFinales=[
   {name:"Serie",selector:row=>row.serieAct},
   {name:"Codigo de barras",selector:row=>row.codigoBarraAct},
   {name:"Marca",selector:row=>row.marcaAct},
-  {name:"Eliminar",cell:(row)=>(<button className={styles["secondary-button"]} onClick={()=>eliminarActivosManteniento(row.idActivo)}>Eliminar</button>),ignoreRowClick: true},
+  {name:"Eliminar",cell:(row)=>(
+    <div style={{ display: "flex", gap: "10px" }}>
+  <button className={styles["secondary-button"]} onClick={()=>eliminarActivosManteniento(row.idActivo)}>Eliminar</button>
+  <button className={styles["secondary-button"]} onClick={()=>funEditarManten(row.idActivo)}>Editar</button>
+  </div>
+  ),ignoreRowClick: true},
 ];
 
 /////////////////////////
+
+const funEditarManten= async (e)=>{
+  const sel= listadoActivos.filter((act)=>act.idActivo==e);
+  setActivoParaDetalle(sel);
+  setActivosBusqueda(sel);
+  setEstilos(true);
+  const formulario={idman:datosPadre[0].idMan,idact:e};
+  const valores = await ApiService.enviarDatos("histManEditAct",formulario);
+  for (const val of valores) {
+
+    if (val.tipoMD === "act") {
+      const bus= actividades.filter((a)=>a.value==val.idReferencia);
+      setdatosEnvio((act)=>[...act,...bus]);
+
+    } else if (val.tipoMD === "com") {
+      const bus= componentes.filter((a)=>a.value==val.idReferencia);
+      setdatosEnvioComp((com)=>[...com,...bus]);
+
+    } else {
+       const obs = await ApiService.buscarDatos("busobserva", val.idReferencia);
+       setObservacion(obs[0].campObvs);
+    }
+}
+setEditarMan(true);
+} 
+
+useEffect(()=>{
+  if (editarMan) {
+    AgregarActividadTabla();
+    AgregarComponenteTabla();
+  }
+},[editarMan]);
+
 const eliminarActivosManteniento=async (e)=>{
+ 
     const res= await mostrarMensaje({
       icon: "info",
       title: "Eliminar Activo ",
@@ -404,14 +452,15 @@ const eliminarActivosManteniento=async (e)=>{
         },
       },
     });
+
      if (res) {
         const val=[{idManten:datosPadre[0].idMan , idAct:e,}];
         const res= await ApiService.borrarDatos("borrarDatosMantenimiento",val);
         const lista= listadoActivos.filter(l=>l.idActivo!==e);
         setListadoActivos(lista);
     }
-
 }
+
 const finalizarProcesoMantenimiento= async()=>{
  if (listadoActivos.length===0) {
   mostrarMensaje({title:"Advertencia",text:"Ningun activo se ha agregado a este mantemiento", icon:"warning",timer:2500,});
@@ -466,8 +515,19 @@ const volverMantenVista= async()=>{
         {datosPadre.length === 0 ? "Cargando..." : datosPadre[0].codMant}
       </div>
       <div className={styles["actions-section"]}>
-        <label htmlFor="activos"> Ingresa la serie del activo </label>
-        <input className={styles["text-inputactive"]} type="text" name="activo" id="activo" onChange={buscarActivo} value={activoSerieInput} />
+        {!editarMan && (
+        <>
+          <label htmlFor="activos">Ingresa la serie del activo</label>
+          <input
+            className={styles["text-inputactive"]}
+            type="text"
+            name="activo"
+            id="activo"
+            onChange={buscarActivo}
+            value={activoSerieInput}
+          />
+        </>
+      )}
       <DataTable
       pagination
       paginationPerPage={5}
@@ -563,7 +623,8 @@ const volverMantenVista= async()=>{
       <div className={styles["actions-section"]}>
         <label htmlFor="">Guardar los Datos y agregar un nuevo activo: </label>
         <div className={styles["actions-button"]}>
-          <button className={styles["primary-button"]} onClick={agregarNuevoDettale}> Agregar</button>
+
+          <button className={styles["primary-button"]} onClick={agregarNuevoDettale}> {editarMan?"Editar":"Agregar"}</button>
           <button className={styles["primary-button"]} onClick={borrarDatos}> Cancelar</button>
 
         </div>
