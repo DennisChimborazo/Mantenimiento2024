@@ -55,7 +55,7 @@ class Mantenimiento{
 
     static function buscarActivosManten($idmanten){
         try {
-            $sqlSelect = "SELECT a.idCompra,a.serieAct,a.codigoBarraAct,a.marcaAct,a.modeloAct,a.colorAct,u.nomUbic
+            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,a.marcaAct,a.modeloAct,a.colorAct,u.nomUbic
                             FROM mantenientodetalle md
                             INNER JOIN activo a ON md.idActivo=a.idActivo
                             INNER JOIN ubicacion u ON u.idUbic=a.idUbic
@@ -64,6 +64,27 @@ class Mantenimiento{
             $conn = Conexion::getInstance()->getConnection();
             $result = $conn->prepare($sqlSelect);
             $result->bindParam(':manten', $idmanten, PDO::PARAM_INT);
+            $result->execute();
+            $data = $result->fetchAll(PDO::FETCH_ASSOC);
+            $dataJson = json_encode($data);
+            echo ($dataJson); 
+        } catch (PDOException $e) {
+            echo json_encode(["error" => $e->getMessage()]);
+        }
+    }
+    static function buscarActivosMantenEditar(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $idman = $data['idman'];
+        $idact = $data['idact'];
+        try {
+            $sqlSelect = "SELECT tipoMD, idReferencia
+                            FROM mantenientodetalle 
+                            WHERE idManten = :manten AND idActivo= :idac";
+            $conn = Conexion::getInstance()->getConnection();
+            $result = $conn->prepare($sqlSelect);
+            $result->bindParam(':manten', $idman, PDO::PARAM_INT);
+            $result->bindParam(':idac', $idact, PDO::PARAM_INT);
+
             $result->execute();
             $data = $result->fetchAll(PDO::FETCH_ASSOC);
             $dataJson = json_encode($data);

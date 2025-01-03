@@ -129,6 +129,23 @@ class BuscarDatos {
         }
         
     }
+    public static function buscObservacion($idObvs) {
+        try {
+            $sqlSelect = "SELECT campObvs
+                            FROM observacion
+                            WHERE  idObvs = :id ";
+            $conn = Conexion::getInstance()->getConnection();
+            $result = $conn->prepare($sqlSelect);
+            $result->bindParam(':id', $idObvs, PDO::PARAM_STR);
+            $result->execute();
+            $data = $result->fetchAll(PDO::FETCH_ASSOC);
+            $dataJson = json_encode($data);
+            echo ($dataJson); 
+        } catch (PDOException $e) {
+            echo json_encode(["error" => $e->getMessage()]);
+        }
+        
+    }
 
     static function buscHistorialManSerie(){
         $data = json_decode(file_get_contents('php://input'), true);
