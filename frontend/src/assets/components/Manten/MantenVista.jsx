@@ -25,8 +25,8 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
   {name:"responsable",selector:row=>row.nombreResponsable},
   {name:"Opciones",cell:(row)=>
     (<div style={{ display: "flex", gap: "10px" }}>
-      <button onClick={()=>historialMantenimiento(row)}>Detalles</button>
-        {row.nomEstado==="En proceso"?(<button onClick={()=>editarMantenimiento(row.idManten,row.codManten)}>Editar</button>):(null)}
+      <button className={styles["secondary-button"]} onClick={()=>historialMantenimiento(row)}>Detalles</button>
+        {row.nomEstado==="En proceso"?(<button className={styles["secondary-button"]} onClick={()=>editarMantenimiento(row.idManten,row.codManten)}>Editar</button>):(null)}
     </div>
   ),ignoreRowClick: true},
  ];

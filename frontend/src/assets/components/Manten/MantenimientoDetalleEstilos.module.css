@@ -82,7 +82,7 @@
 }
 
 .primary-button:hover {
-  background-color: #db212f;
+  background-color: #db212f !important;
 }
 
 .secondary-button {
@@ -96,8 +96,17 @@
 }
 
 .secondary-button:hover {
-  background-color: #db212f;
+  background-color: #db212f !important;
 }
+.third-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.third-button:hover {
+  background-color: #495057 !important;
+}
+
 
 .filter-section {
   display: flex;

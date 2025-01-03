@@ -53,6 +53,9 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
     const cargarDatosPadre = async() => {
       const datosRecibidos = JSON.parse(mantenimiento);
       setDatosPadre(datosRecibidos);
+      console.log("---------------------")
+
+      console.log(datosRecibidos)
       if (datosRecibidos[0].accion==="editar") {
         const actMan= await ApiService.buscarDatos("activosManten",datosRecibidos[0].idMan);
         setListadoActivos(actMan);
@@ -87,7 +90,7 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
     {name:"Opciones",cell:(row)=>
       (<div style={{ display: "flex", gap: "10px" }}>
         {estilos?(<p>Selecionado</p>)
-        :( <button onClick={()=>seleccionarActivo(row.serieAct)}>Selecionar</button>)}
+        :( <button className={styles["secondary-button"]} onClick={()=>seleccionarActivo(row.serieAct)}>Selecionar</button>)}
       </div>
     ),ignoreRowClick: true},
   ];  
@@ -144,7 +147,7 @@ const agregarValores=(val)=>{
 
   const columasActividades=[
     {name:"Actividades realizadas",selector:row=>row.label},
-    {name:"Eliminar",cell:(row)=>(<button onClick={()=>devolverValores(row.value)}>Eliminar</button>),ignoreRowClick: true},
+    {name:"Eliminar",cell:(row)=>(<button className={styles["secondary-button"]} onClick={()=>devolverValores(row.value)}>Eliminar</button>),ignoreRowClick: true},
   ];
 
 const devolverValores=(id)=>{
@@ -172,7 +175,7 @@ const agregarValorCom = (val)=>{
 
 const columascomp=[
   {name:"Componente",selector:row=>row.label},
-  {name:"Eliminar",cell:(row)=>(<button onClick={()=>devolverValoresCom(row.value)}>Eliminar</button>),ignoreRowClick: true},
+  {name:"Eliminar",cell:(row)=>(<button className={styles["secondary-button"]} onClick={()=>devolverValoresCom(row.value)}>Eliminar</button>),ignoreRowClick: true},
 ];
 
 const AgregarComponenteTabla =(e)=>{
@@ -299,13 +302,22 @@ const stylesTableActiveFinal = {
   },
 };
 const customStylesCambio = {
+  table: {
+    style: {
+      width: '100%',
+      minWidth: '1000px',
+      maxWidth: '1100px',
+      margin: '0 auto',
+       tableLayout: 'fixed'
+    },
+  },
   headCells: {
     style: {
-      backgroundColor: "#3da1bf", // Color de fondo (verde ejemplo)
+      backgroundColor: "#7c181a", 
       color: "#FFFFFF", // Color del texto (blanco)
       fontSize: "16px", // Tamaño de fuente
       fontWeight: "bold", // Texto en negrita
-      textTransform: "uppercase", // Mayúsculas
+      textTransform: "capitalize", // Mayúsculas
     },
   },
 };
@@ -375,7 +387,7 @@ const columasActivosFinales=[
   {name:"Serie",selector:row=>row.serieAct},
   {name:"Codigo de barras",selector:row=>row.codigoBarraAct},
   {name:"Marca",selector:row=>row.marcaAct},
-  {name:"Eliminar",cell:(row)=>(<button onClick={()=>eliminarActivosManteniento(row.idActivo)}>Eliminar</button>),ignoreRowClick: true},
+  {name:"Eliminar",cell:(row)=>(<button className={styles["secondary-button"]} onClick={()=>eliminarActivosManteniento(row.idActivo)}>Eliminar</button>),ignoreRowClick: true},
 ];
 
 /////////////////////////
@@ -386,7 +398,10 @@ const eliminarActivosManteniento=async (e)=>{
       text: "Estas seguro que deseas eliminar el activo del mantenimiento",
       buttons: {
         cancel: "Cancelar", 
-        confirm: "Si", 
+        confirm: {
+          text: "Si",
+          className: styles["primary-button"], 
+        },
       },
     });
      if (res) {
@@ -408,7 +423,12 @@ const finalizarProcesoMantenimiento= async()=>{
     text: "Estas seguro que deseas finalizar",
     buttons: {
       cancel: "Cancelar", 
-      confirm: "Finalizar", 
+      confirm: 
+      {
+        text: "Finalizar", 
+        className: styles["primary-button"],
+      },
+      
     },
   });
   if (res) {
@@ -426,8 +446,11 @@ const volverMantenVista= async()=>{
     title: "Continuar despues ",
     text: "Estas seguro que desea continar en otro momento",
     buttons: {
-      cancel: "Cancelar", 
-      confirm: "Si", 
+      cancel: "Cancelar",
+      confirm:{
+        text: "Si", 
+        className: styles["primary-button"],
+      },
     },
   });
   if (res) {
@@ -539,7 +562,7 @@ const volverMantenVista= async()=>{
       </div>
       <div className={styles["actions-section"]}>
         <label htmlFor="">Guardar los Datos y agregar un nuevo activo: </label>
-        <div className={styles["action-buttons"]}>
+        <div className={styles["actions-button"]}>
           <button className={styles["primary-button"]} onClick={agregarNuevoDettale}> Agregar</button>
           <button className={styles["primary-button"]} onClick={borrarDatos}> Cancelar</button>
 

@@ -83,10 +83,9 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
                     title: res.message,
                     text: "Se ha creado un nuevo proceso de mantemiento",
                     icon: "success",
-                    timer: 3200
+                    timer: 2200
                 });
                 const datos = [{ idMan: res, codMant: formulario.proMant }];
-                console.log(datos);
                 setSelectedMantenimiento(JSON.stringify(datos));
                 setActiveView("detalleMantenimiento");
             } else {
