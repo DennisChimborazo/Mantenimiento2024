@@ -12,24 +12,35 @@
     margin-bottom: 15px;
     margin-top: 15px;
     text-align: center;
-    /* Centra el texto del título */
     width: 100%;
-    /* Ocupa todo el ancho disponible para centrar correctamente */
   }
-  .options {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    margin-top: 25px;
-    font-size: 16px;
-    padding-left: 50px;
+
+
+.contenedor {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Dos columnas, la primera para labels y la segunda para párrafos */
+    column-gap: 100px;
+    row-gap: 15px;
+    align-items: center;
+    justify-content: flex-start;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
 }
 
-.options p {
-    align-self: flex-start;  /* Alinea los párrafos a la izquierda */
-    margin-left: 0;          /* Elimina cualquier margen adicional */
-    padding-left: 300px;         /* Elimina el relleno */
+.contenedor label {
+    text-align: right;
+    font-weight: bold;
+    justify-content: flex-end;
+
+    color: #555;
+}
+
+.contenedor p {
+    margin: 0;
+    padding: 10px;
+    width: 100%;
 }
 .actions-section {
     display: flex;

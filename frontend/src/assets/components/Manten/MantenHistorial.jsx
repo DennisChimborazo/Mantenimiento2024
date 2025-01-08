@@ -74,9 +74,10 @@ function MantenHistorial({ setActiveView, mantenimiento }) {
     table: {
       style: {
         width: '100%',
-        minWidth: '1000px',  // Ancho mínimo para evitar que cambie de tamaño
-        maxWidth: '1100px', // Máximo para evitar que crezca demasiado
-        paddingLeft: '25px'
+        minWidth: '800px',  // Ancho mínimo para evitar que cambie de tamaño
+        maxWidth: '900px', // Máximo para evitar que crezca demasiado
+        paddingLeft: '25px',
+        margin: '0 auto',
       },
     },
     headCells: {
@@ -99,7 +100,8 @@ function MantenHistorial({ setActiveView, mantenimiento }) {
   return (
     <div className={styles.MantenHistorial}>
       <h2 className={styles.tittle}>Detalle de Mantenimiento: {" "} {datosPadre.length === 0 ? "Cargando..." : datosPadre.codManten}</h2>
-      <div className={styles.options}>
+      <div className={styles.contenedor}>
+
         <label htmlFor=""> Fecha inicio: </label>
         <p>{datosPadre.length === 0 ? "Cargando..." : datosPadre.fechaInico}</p>
         <label htmlFor=""> Fecha Final: </label>
@@ -108,8 +110,8 @@ function MantenHistorial({ setActiveView, mantenimiento }) {
         <p>{datosPadre.length === 0 ? "Cargando..." : datosPadre.nombreResponsable}</p>
         <label htmlFor=""> Estado: </label>
         <p>{datosPadre.length === 0 ? "Cargando..." : datosPadre.nomEstado}</p>
+        </div>
 
-      </div>
       <div className={styles["actions-section"]}>
         <div  className={styles["search-row"]}>
         <label htmlFor="busAct">Buscar activo</label>

@@ -278,9 +278,10 @@ const stylesTableActiveFinal = {
   table: {
     style: {
       width: '100%',
-      minWidth: '800px',  // Ancho mínimo para evitar que cambie de tamaño
-      maxWidth: '900px', // Máximo para evitar que crezca demasiado
+      minWidth: '970px',  // Ancho mínimo para evitar que cambie de tamaño
+      maxWidth: '110px', // Máximo para evitar que crezca demasiado
       margin: '0 auto',   // Centra la tabla en el contenedor
+      tableLayout: 'auto',
     },
   },
   headCells: {
@@ -296,6 +297,8 @@ const stylesTableActiveFinal = {
     style: {
       fontSize: '14px',
       padding: '10px',  // Ajusta el espaciado interno
+      wordBreak: 'break-word',  // Evita que el texto desborde
+      whiteSpace: 'normal',
     },
   },
 };

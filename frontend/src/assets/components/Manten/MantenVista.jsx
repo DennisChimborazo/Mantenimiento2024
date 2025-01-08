@@ -114,7 +114,7 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
 
           <div className={styles["action-buttons"]}>
             <button
-              className={styles["secondary-button"]}
+              className={styles["primary-button"]}
               onClick={() => setActiveView("crearMantenimiento")}
             >
               Nuevo Mantenimiento
