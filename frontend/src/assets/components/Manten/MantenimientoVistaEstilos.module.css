@@ -21,23 +21,39 @@
   gap: 20px;
 }
 
-/* Estilos para las secciones de filtros */
+/* Ajuste para que los filtros estén alineados en línea y no tan separados */
 .filter-section {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* Reducido el espacio entre filtros */
-  align-items: center;
   justify-content: flex-start; /* Alineación a la izquierda */
+  align-items: flex-start;
+  flex-wrap: wrap;
   margin-top: 1em;
+  gap: 150px; /* Se redujo el espacio general entre filtros */
 }
 
-/* Estilos para los grupos de filtros */
+/* Agrupar el estado y el responsable en columna */
 .filter-group {
   display: flex;
   flex-direction: column;
-  width: 250px; /* Ajuste de ancho para mayor uniformidad */
+  gap: 5px;  /* Se redujo el espacio entre los elementos dentro del grupo */
+  width: 220px;  /* Se ajustó el ancho para reducir la separación horizontal */
 }
 
+.filter-group1 {
+  display: flex;
+  flex-direction: column; /* Cambiar a columna para que los elementos estén alineados verticalmente */
+  align-items: flex-start;
+  gap: 20px; /* Ajustar el espacio entre los filtros */
+  margin-top: 1em;
+}
+/* Agrupar el responsable y el checkbox en fila */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Ajustes al label y select para mejor alineación */
 .filter-group label {
   font-size: 16px;
   color: #333;
@@ -51,17 +67,51 @@
   font-family: 'Times New Roman', Times, serif;
 }
 
+/* Calendarios alineados verticalmente */
+.options-calendar {
+  font-family: 'Times New Roman', Times, serif;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  margin-top: 10px;
+  width: 180px;
+  margin-left: 50px;
+  
+}
+
+.options-calendar input {
+  font-size: 14px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.options-checkbox {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #7c181a;
+}
+
+/* Estilo para la sección de búsqueda */
 .actions-section {
   display: flex;
-  flex-direction: column; /* Alinea los elementos en columna */
-  gap: 15px;  /* Espaciado entre input y botón de nuevo mantenimiento */
+  flex-direction: column;
+  gap: 15px;
   margin-top: 10px;
 }
 
 .search-row {
   display: flex;
   align-items: center;
-  gap: 10px;  /* Espaciado entre el input y el botón Buscar */
+  gap: 10px;
 }
 
 .text-input {
@@ -69,14 +119,16 @@
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  width: 300px;  /* Ancho del input de búsqueda */
+  width: 300px;
   font-family: 'Times New Roman', Times, serif;
 }
 
 .action-buttons {
   display: flex;
-  margin-top: 10px;  /* Espacio para el botón Nuevo Mantenimiento */
+  margin-top: 10px;
 }
+
+/* Botones principales y secundarios */
 .primary-button,
 .secondary-button {
   padding: 10px 20px;
@@ -92,6 +144,7 @@
   color: white;
   border: none;
 }
+
 .primary-button:hover {
   background-color: #db212f;
 }
@@ -101,13 +154,15 @@
   color: white;
   border: none;
   font-size: 12px;
-
-  font-family: 'Times New Roman', Times, serif;
-
+  margin-left: 40px;
+  margin-top: 5px;
 }
+
 .secondary-button:hover {
   background-color: #db212f;
 }
+
+/* Estilos de la tabla de datos */
 .react-data-table {
   margin-top: 20px;
 }
