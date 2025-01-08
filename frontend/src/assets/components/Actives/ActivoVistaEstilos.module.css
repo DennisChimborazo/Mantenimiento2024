@@ -115,6 +115,7 @@
     max-width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   .active-table th,
@@ -134,7 +135,7 @@
     background-color: #f2f2f2;
   }
   
-  .active-table tr:hover {
+  .active-table tr:hover { 
     background-color: #ddd;
   }
   
@@ -150,6 +151,7 @@
     border-radius: 5px;
     cursor: pointer;
     margin-right: 5px;
+    font-family: 'Times New Roman', Times, serif;
   }
   
   .table-button:hover {
