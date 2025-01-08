@@ -178,6 +178,51 @@ class Mantenimiento{
         }
     
     }
+
+    public static function actuInfMantemiento() {
+        $data = json_decode(file_get_contents('php://input'), true);
+    
+        $id = $data['idManten'];
+        $proceso = $data['proMant'];
+        $fechaInicio = $data['fInicio'];
+        $fechaFinal = $data['fFinal'];
+        $tipo = $data['tipo'];
+        $idrespons = $data['responsable'];
+        $estado = "3";
+    
+        $conn = Conexion::getInstance()->getConnection();
+    
+        try {
+            $query = "UPDATE manteniento 
+                      SET codManten = :codMan, 
+                          fechaInico = :fInc, 
+                          fechaFin = :fFin, 
+                          idEstado = :est, 
+                          tipo = :tip, 
+                          idRespons = :res 
+                      WHERE idManten = :id";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([
+                ':id' => $id,
+                ':codMan' => $proceso,
+                ':fInc' => $fechaInicio,
+                ':fFin' => $fechaFinal,
+                ':est' => $estado,
+                ':tip' => $tipo,
+                ':res' => $idrespons
+            ]);
+    
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(['success' => true, 'message' => 'Registro actualizado correctamente']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'No se encontró el registro o no hubo cambios']);
+            }
+        } catch (PDOException $e) {
+            http_response_code(500); // Error interno del servidor
+            echo json_encode(['success' => false, 'message' => 'Error al actualizar el registro: ' . $e->getMessage()]);
+        }
+    }
+    
 }
 // SELECT a.serieAct,a.marcaAct,
 // CASE WHEN md.tipoMD='act' THEN act.nomActi END AS actividad,

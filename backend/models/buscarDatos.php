@@ -282,6 +282,17 @@ class BuscarDatos {
          $dataJson = json_encode($data);
           echo ($dataJson); 
     }
+
+    public static function cargarEditManten($id) {
+        $sqlSelect = "SELECT * FROM manteniento WHERE idManten= :id";
+        $conn = Conexion::getInstance()->getConnection();
+        $result = $conn->prepare($sqlSelect);
+        $result->bindParam(':id', $id, PDO::PARAM_INT); 
+        $result->execute();
+        $data = $result->fetchAll(PDO::FETCH_ASSOC);
+        $dataJson = json_encode($data);
+         echo ($dataJson); 
+    }
     
 
 }

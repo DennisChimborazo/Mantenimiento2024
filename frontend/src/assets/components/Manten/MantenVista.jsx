@@ -80,37 +80,41 @@ function MantenVista({ setActiveView, setSelectedMantenimiento, setMantenimietoE
   }
   const editarInfMantenimiento = (fila) => {
     setMantenimietoEdit(JSON.stringify(fila));
-    console.log(fila);
-    //  setActiveView("crearMantenimiento");
-  }
+    setActiveView("crearMantenimiento");
+ }
+ const nuevoInfMantenimiento = (fila) => {
+  const d={codManten:""}
+    setMantenimietoEdit(JSON.stringify(d));
+   setActiveView("crearMantenimiento");
+ }
 
-  const asignarValorFecha = (e) => {
-    setSelCombEstado("");
-    setSelCombRespo("");
-    setInpbuscar("");
-    setRanFechas({
-      ...ranFechas, [e.target.name]: e.target.value,
-    });
-  }
-  const buscarRangoFechas = async (e) => {
-    e.preventDefault();
-    if (ranFechas.busFechInio === "" || ranFechas.busFechFinal === "") {
-      mostrarMensaje({ title: "Seleccione dos fechas", text: "Debe asignar una fecha de inicio y fin", timer: 2000, icon: "info" });
-    } else {
-      const fini = new Date(ranFechas.busFechInio);
-      const ffin = new Date(ranFechas.busFechFinal);
-      if (fini > ffin) {
-        mostrarMensaje({ title: "Fechas invalidas", text: "Seleccione un rango de fechas Valido", timer: 2000, icon: "info" });
-      } else {
-        const res = await ApiService.enviarDatos("busMantRanFechas", ranFechas);
-        setMantemientos(res);
-      }
+ const asignarValorFecha =(e)=>{
+  setSelCombEstado("");
+  setSelCombRespo("");
+  setInpbuscar("");
+  setRanFechas({
+    ...ranFechas,[e.target.name]:e.target.value,
+  });
+ }
+ const buscarRangoFechas= async (e)=>{
+  e.preventDefault();
+   if (ranFechas.busFechInio===""||ranFechas.busFechFinal==="") {
+    mostrarMensaje({title:"Seleccione dos fechas",text:"Debe asignar una fecha de inicio y fin",timer:2000,icon:"info"});
+   }else{
+    const fini= new Date(ranFechas.busFechInio);
+    const ffin= new Date(ranFechas.busFechFinal);
+    if (fini>ffin) {
+    mostrarMensaje({title:"Fechas invalidas",text:"Seleccione un rango de fechas Valido",timer:2000,icon:"info"});
+    }else{
+      const res = await ApiService.enviarDatos("busMantRanFechas",ranFechas);
+      setMantemientos(res);
     }
-  }
-  const borrarDatos = () => {
-    setRanFechas({ busFechInio: "", busFechFinal: "" });
-    setInpbuscar("");
-  }
+   }
+ }
+ const borrarDatos= ()=>{
+  setRanFechas({busFechInio:"",busFechFinal:""});
+  setInpbuscar("");
+ }
 
   const buscar = async (e) => {
     e.preventDefault();
@@ -235,8 +239,7 @@ function MantenVista({ setActiveView, setSelectedMantenimiento, setMantenimietoE
           <div className={styles["action-buttons"]}>
             <button
               className={styles["primary-button"]}
-              onClick={() => setActiveView("crearMantenimiento")}
-            >
+              onClick={nuevoInfMantenimiento}>
               Nuevo Mantenimiento
             </button>
           </div>

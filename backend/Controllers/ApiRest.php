@@ -101,6 +101,10 @@ switch ($opc) {
         }elseif (isset($_GET['historialManten'])) {
             $histManten =  $_GET['historialManten'];
             Mantenimiento::buscarHistorialManten($histManten); 
+
+        }elseif (isset($_GET['busMantcomple'])) {
+            $id =  $_GET['busMantcomple'];
+            BuscarDatos::cargarEditManten($id);
         }
         
         break;
@@ -133,8 +137,7 @@ switch ($opc) {
             }elseif (isset($_GET['busMantRanFechas'])) {
                 BuscarDatos::buscarMantenRanFechas(); 
                 
-            }
-            elseif (isset($_GET['busMantRespons'])) {
+            }elseif (isset($_GET['busMantRespons'])) {
                 BuscarDatos::buscarMantenRespons();
             }
         }
@@ -146,6 +149,11 @@ switch ($opc) {
         if (isset($_GET['actuMantenimiento'])) {
             Mantenimiento::actualizarEstado(); 
             }
+            elseif (isset($_GET['actuInfManten'])) {
+            Mantenimiento::actuInfMantemiento(); 
+            }
+
+            
 
         break;
         case 'DELETE':
