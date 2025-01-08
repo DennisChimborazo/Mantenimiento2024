@@ -77,10 +77,15 @@ function MantenVista({ setActiveView,setSelectedMantenimiento,setMantenimietoEdi
 
  }
  const editarInfMantenimiento=(fila)=>{
+  console.log(fila);
     setMantenimietoEdit(JSON.stringify(fila));
-    console.log(fila);
-  //  setActiveView("crearMantenimiento");
- }
+    setActiveView("crearMantenimiento");
+ } 
+ const nuevoInfMantenimiento=()=>{
+  const nuevo={codManten:""};
+  setMantenimietoEdit(JSON.stringify(nuevo));
+  setActiveView("crearMantenimiento");
+}
 
  const asignarValorFecha =(e)=>{
   setSelCombEstado("");
@@ -225,8 +230,7 @@ function MantenVista({ setActiveView,setSelectedMantenimiento,setMantenimietoEdi
           <div className={styles["action-buttons"]}>
             <button
               className={styles["primary-button"]}
-              onClick={() => setActiveView("crearMantenimiento")}
-            >
+              onClick={nuevoInfMantenimiento}>
               Nuevo Mantenimiento
             </button>
           </div>
