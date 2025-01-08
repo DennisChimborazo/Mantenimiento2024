@@ -198,7 +198,91 @@ class BuscarDatos {
          $dataJson = json_encode($data);
           echo ($dataJson); 
     }
-
+    
+    public static function buscarMantenEstado($estado){
+        $sql="SELECT m.idManten, m.codManten, m.fechaInico, m.fechaFin, e.nomEstado,
+                    CASE 
+                        WHEN m.tipo = 'ex' THEN p.nomProveedor
+                        WHEN m.tipo = 'in' THEN per.nomPers
+                    END AS nombreResponsable
+                FROM 
+                    manteniento m
+                INNER JOIN 
+                    estado e ON e.idEstado = m.idEstado
+                LEFT JOIN 
+                    proveedor p ON m.idRespons = p.idProveedor AND m.tipo = 'ex'
+                LEFT JOIN 
+                    persona per ON m.idRespons = per.idPers AND m.tipo = 'in'
+                 WHERE e.idEstado= :id";
+         $conn = Conexion::getInstance()->getConnection();
+         $result = $conn->prepare($sql);
+         $result->bindParam(':id', $estado, PDO::PARAM_INT); // Vincular el parámetro
+         $result->execute();
+         $data = $result->fetchAll(PDO::FETCH_ASSOC);
+         $dataJson = json_encode($data);
+          echo ($dataJson); 
+    }
+    
+    public static function buscarMantenRanFechas(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $fechaInicio=$data["busFechInio"];
+        $fechaFinal=$data["busFechFinal"];
+        $sql="SELECT m.idManten, m.codManten, m.fechaInico, m.fechaFin, e.nomEstado,
+                    CASE 
+                        WHEN m.tipo = 'ex' THEN p.nomProveedor
+                        WHEN m.tipo = 'in' THEN per.nomPers
+                    END AS nombreResponsable
+                FROM 
+                    manteniento m
+                INNER JOIN 
+                    estado e ON e.idEstado = m.idEstado
+                LEFT JOIN 
+                    proveedor p ON m.idRespons = p.idProveedor AND m.tipo = 'ex'
+                LEFT JOIN 
+                    persona per ON m.idRespons = per.idPers AND m.tipo = 'in'
+                 WHERE 
+                    m.fechaInico BETWEEN :fecInc AND :fecFin
+                    OR m.fechaFin BETWEEN :fecInc AND :fecFin
+                    OR (:fecInc BETWEEN m.fechaInico AND m.fechaFin)
+                    OR (:fecFin BETWEEN m.fechaInico AND m.fechaFin)";
+         $conn = Conexion::getInstance()->getConnection();
+         $result = $conn->prepare($sql);
+         $result->bindParam(':fecInc', $fechaInicio, PDO::PARAM_STR); 
+         $result->bindParam(':fecFin', $fechaFinal, PDO::PARAM_STR);
+         $result->execute();
+         $data = $result->fetchAll(PDO::FETCH_ASSOC);
+         $dataJson = json_encode($data);
+          echo ($dataJson); 
+    }
+    
+    public static function buscarMantenRespons(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $tipo=$data["tipo"];
+        $idRespon=$data["idRespon"];
+        $sql="SELECT m.idManten, m.codManten, m.fechaInico, m.fechaFin, e.nomEstado,
+                    CASE 
+                        WHEN m.tipo = 'ex' THEN p.nomProveedor
+                        WHEN m.tipo = 'in' THEN per.nomPers
+                    END AS nombreResponsable
+                FROM 
+                    manteniento m
+                INNER JOIN 
+                    estado e ON e.idEstado = m.idEstado
+                LEFT JOIN 
+                    proveedor p ON m.idRespons = p.idProveedor AND m.tipo = 'ex'
+                LEFT JOIN 
+                    persona per ON m.idRespons = per.idPers AND m.tipo = 'in'
+                 WHERE m.tipo= :tip AND m.idRespons= :id";
+         $conn = Conexion::getInstance()->getConnection();
+         $result = $conn->prepare($sql);
+         $result->bindParam(':id', $idRespon, PDO::PARAM_INT); 
+         $result->bindParam(':tip', $tipo, PDO::PARAM_STR);
+         $result->execute();
+         $data = $result->fetchAll(PDO::FETCH_ASSOC);
+         $dataJson = json_encode($data);
+          echo ($dataJson); 
+    }
+    
 
 }
 ?>
