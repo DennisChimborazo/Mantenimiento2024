@@ -56,7 +56,6 @@ function CrearManten({ setActiveView, setSelectedMantenimiento, mantenimietoEdit
                     const val = provConvertido.filter((dato) => dato.clave === bus[0].idRespons);
                     setSelNuevaOpcion({ value: val[0].clave, label: val[0].nombre });
                     setRespons(provConvertido);
-
                 }
             }
         };

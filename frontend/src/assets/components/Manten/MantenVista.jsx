@@ -79,10 +79,13 @@ function MantenVista({ setActiveView, setSelectedMantenimiento, setMantenimietoE
 
   }
   const editarInfMantenimiento = (fila) => {
-  console.log(fila);
     setMantenimietoEdit(JSON.stringify(fila));
-    console.log(fila);
-  //  setActiveView("crearMantenimiento");
+    setActiveView("crearMantenimiento");
+ }
+ const nuevoInfMantenimiento = (fila) => {
+  const d={codManten:""}
+    setMantenimietoEdit(JSON.stringify(d));
+   setActiveView("crearMantenimiento");
  }
 
  const asignarValorFecha =(e)=>{
