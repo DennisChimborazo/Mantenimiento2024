@@ -12,11 +12,9 @@ function MantenHistorial({ setActiveView, mantenimiento }) {
     const cargarYTraerDatos = async () => {
       const datos = JSON.parse(mantenimiento);
       setDatosPadre(datos);
-      console.log(datos);
-
+      
       if (datos.idManten) {
         const activo = await ApiService.buscarDatos("historialManten", datos.idManten)
-        console.log(activo);
         setDatosMantenimiento(activo);
       }
     };

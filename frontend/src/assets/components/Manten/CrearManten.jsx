@@ -75,7 +75,11 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
             });
 
         } else {
-
+            const fini= new Date(formulario.fInicio);
+            const ffin= new Date(formulario.fFinal);
+            if (fini>ffin) {
+            mostrarMensaje({title:"Fechas invalidas",text:"Seleccione un rango de fechas Valido",timer:2000,icon:"info"});
+            }else{
             const res = await ApiService.enviarDatos("nuevoMantenimiento", formulario);
             console.log(res);
             if (res) {
@@ -98,10 +102,8 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
             }
         }
-
+        }
     }
-
-
     return (
         <div className={styles.CrearMantenimiento}>
             <h2 className={styles.tittle}> Crear nuevo Proceso de Mantenimiento</h2>

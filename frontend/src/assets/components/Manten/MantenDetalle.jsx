@@ -113,7 +113,6 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
   }
 ////////////////////////////////
   const AgregarActividadTabla =()=>{
-   
     if (activoParaDetalle.length===0) {
       mostrarMensaje(
         {title: "Activo no seleccionado",
@@ -130,7 +129,6 @@ function MantenDetalle({ setActiveView, mantenimiento }) {
           timer:2500}
       );
     }else{
-    console.log(datosEnvio);
       const denv=datosEnvio.map(({value})=>({tipo:"act",valor:value}));
       setRecopilacionDetalles((dact)=>[...dact,...denv]);
       setdataTableActividades((datos)=>[...datos,...datosEnvio]);
@@ -169,7 +167,6 @@ const eliminarDetalle = (tipo, valor) => {
 
 const agregarValorCom = (val)=>{
   setdatosEnvioComp(val);
-  console.log(val);
 };
 
 const columascomp=[
@@ -311,7 +308,7 @@ const customStylesCambio = {
   },
   headCells: {
     style: {
-      backgroundColor: "#5207d4", 
+      backgroundColor: "#87c0ea", 
       color: "#FFFFFF", // Color del texto (blanco)
       fontSize: "16px", // Tamaño de fuente
       fontWeight: "bold", // Texto en negrita
@@ -363,8 +360,14 @@ useEffect (()=>{
         const res= await ApiService.enviarDatos("nuevoDetalleMantenimiento",formulario);
         borrarDatos();
         setListadoActivos((act)=>[...act,...activoParaDetalle]);
+        if (editarMan) {
+        mostrarMensaje({title:"Activo editado",timer:2000,icon:"success", text:"Se acrualizo con exito"});
+          
+        }else{
         mostrarMensaje({title:"Activo Agregado",timer:2000,icon:"success", text:"Se agrego correctamente"});
       }
+    }
+
     enviarValores();
     if (editarMan) {
       setEditarMan(false);
@@ -372,8 +375,6 @@ useEffect (()=>{
     
   }
 },[formulario]);
-
-
 
 const borrarDatos= ()=>{
   setFormulario({...formulario,obs:"",datos:""});
@@ -407,7 +408,9 @@ const columasActivosFinales=[
 /////////////////////////
 
 const funEditarManten= async (e)=>{
-  const sel= listadoActivos.filter((act)=>act.idActivo==e);
+  borrarDatos();
+  mostrarMensaje({title:"Activo seleccionado",text:"Ha selecionado un activo para edicion",timer:2000,icon:"info"});
+  const sel= listadoActivos.filter((act)=>act.idActivo===e);
   setActivoParaDetalle(sel);
   setActivosBusqueda(sel);
   setEstilos(true);
@@ -416,11 +419,11 @@ const funEditarManten= async (e)=>{
   for (const val of valores) {
 
     if (val.tipoMD === "act") {
-      const bus= actividades.filter((a)=>a.value==val.idReferencia);
+      const bus= actividades.filter((a)=>a.value===val.idReferencia);
       setdatosEnvio((act)=>[...act,...bus]);
 
     } else if (val.tipoMD === "com") {
-      const bus= componentes.filter((a)=>a.value==val.idReferencia);
+      const bus= componentes.filter((a)=>a.value===val.idReferencia);
       setdatosEnvioComp((com)=>[...com,...bus]);
 
     } else {
@@ -433,8 +436,12 @@ setEditarMan(true);
 
 useEffect(()=>{
   if (editarMan) {
+    if (datosEnvio.length!==0) {
     AgregarActividadTabla();
+    }
+    if (datosEnvioComp.length!==0) {
     AgregarComponenteTabla();
+    }
   }
 },[editarMan]);
 
@@ -455,8 +462,12 @@ const eliminarActivosManteniento=async (e)=>{
 
      if (res) {
         const val=[{idManten:datosPadre[0].idMan , idAct:e,}];
-        const res= await ApiService.borrarDatos("borrarDatosMantenimiento",val);
+        const resp= await ApiService.borrarDatos("borrarDatosMantenimiento",val);
         const lista= listadoActivos.filter(l=>l.idActivo!==e);
+        if (resp) {
+          mostrarMensaje({title:"Borrado con exito",text:"Se ha removido al activo del proceso", icon:"success",timer:2500,});
+          
+        }
         setListadoActivos(lista);
     }
 }
@@ -483,7 +494,9 @@ const finalizarProcesoMantenimiento= async()=>{
   if (res) {
   const val=[{idManten:datosPadre[0].idMan}];
   const res= await ApiService.actualizarDatos("actuMantenimiento",val[0]);
+  if (res) {
   mostrarMensaje({title:"Finalizado con exito",text:"Se ha finalizado el proceso de mantenimiento", icon:"success",timer:2500,});
+  }
   setActiveView("mantenimiento");
 
 }
@@ -553,11 +566,8 @@ const volverMantenVista= async()=>{
         placeholder="Selecciona una actividad"
         onChange={agregarValores}
         value={datosEnvio}
-              className={styles["filter-select"]}
-
-      />
+        className={styles["filter-select"]}/>
           </div>
-      
           <div className={styles["action-buttons"]}>
             <button className={styles["primary-button"]} onClick={AgregarActividadTabla}>Agregar</button>
           </div>
