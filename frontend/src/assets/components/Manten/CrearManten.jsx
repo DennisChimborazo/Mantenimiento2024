@@ -5,12 +5,13 @@ import ApiService from "../../Services/ApiMetodos.js";
 import styles from "./CrearMantenimientoEstilos.module.css"; // Importación de estilos locales
 
 
-function CrearManten({ setActiveView, setSelectedMantenimiento }) {
+function CrearManten({ setActiveView, setSelectedMantenimiento,mantenimietoEdit}) {
     const [respons, setRespons] = useState([]);
     const [formulario, setFormulario] = useState({ proMant: "", fInicio: "", fFinal: "", tipo: "", responsable: "" });
     const [personal, setPersonal] = useState([]);
     const [proveedor, setProveedor] = useState([]);
     const [selNuevaOpcion, setSelNuevaOpcion] = useState("");
+    const [datosPadre,setDatosPadre]=([]);
 
 
     useEffect(() => {
@@ -28,12 +29,23 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
                 clave: d.idPers,
                 nombre: d.nomPers,
             }));
+
+            
             setPersonal(perConvertido);
 
             setRespons(perConvertido);
             setFormulario({ ...formulario, tipo: "in", });
         }
+        const cargarDatosPadre= ()=>{
+            const datosRecibidos=JSON.parse(mantenimietoEdit);
+            setDatosPadre(datosPadre);
+            console.log(datosRecibidos);
+            console.log("-----");
+
+        }
+        cargarDatosPadre();
         cargarDatos();
+
     }, []);
 
     const cargarResponsable = (e) => {
@@ -66,6 +78,9 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
 
     const guardar = async (e) => {
         e.preventDefault();
+        console.log(datosPadre);
+        console.log("---------");
+
         if (formulario.responsable === "" || formulario.fInicio === "" || formulario.fFinal === "" || formulario.proMant === "") {
             mostrarMensaje({
                 title: "Campos faltantes",
@@ -124,9 +139,9 @@ function CrearManten({ setActiveView, setSelectedMantenimiento }) {
                 </div>
                 <div className={styles["options-checkbox"]}>
 
-                    <label htmlFor="Tipo">Agente externo</label>
+                    <label htmlFor="Tipo">Agente externo{
                     <input type="checkbox" onChange={(e) => cargarResponsable(e)} name="checResp" id="checResp" className={styles.checkbox} />
-                </div>
+                    }</label>                    </div>
                 <div className={styles["filter-section"]}>
 
                     <label htmlFor="responsable"> Responsable: </label>

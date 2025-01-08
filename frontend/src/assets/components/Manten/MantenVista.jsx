@@ -4,7 +4,7 @@ import ApiService from "../../Services/ApiMetodos";
 import Select from "react-select";
 import styles from "./MantenimientoVistaEstilos.module.css"; // Importación de estilos locales
 import mostrarMensaje from "../Mensajes/Mensaje";
-function MantenVista({ setActiveView,setSelectedMantenimiento }) {
+function MantenVista({ setActiveView,setSelectedMantenimiento,setMantenimietoEdit }) {
 
   const [mantenientos, setMantemientos] = useState([]);
   const selEstados=[{value:"3",label:"En proceso"},{value:"4",label:"Terminado"}];
@@ -55,8 +55,12 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
   {name:"responsable",selector:row=>row.nombreResponsable},
   {name:"Opciones",cell:(row)=>
     (<div style={{ display: "flex", gap: "10px" }}>
-      <button className={styles["secondary-button"]} onClick={()=>historialMantenimiento(row)}>Detalles</button>
-        {row.nomEstado==="En proceso"?(<button className={styles["secondary-button"]} onClick={()=>editarMantenimiento(row.idManten,row.codManten)}>Editar</button>):(null)}
+      <button className={styles["secondary-button"]} onClick={()=>historialMantenimiento(row)}>Historial</button>
+        {row.nomEstado==="En proceso"?(
+          <button className={styles["secondary-button"]} onClick={()=>editarInfMantenimiento(row)}>Editar Informacion</button>):(null)}
+         {row.nomEstado==="En proceso"?(
+          <button className={styles["secondary-button"]} onClick={()=>editarMantenimiento(row.idManten,row.codManten)}>Editar proceso</button>):(null)}
+
     </div>
   ),ignoreRowClick: true},
  ];
@@ -72,6 +76,12 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
     setActiveView("historialMantenimiento");
 
  }
+ const editarInfMantenimiento=(fila)=>{
+    setMantenimietoEdit(JSON.stringify(fila));
+    console.log(fila);
+  //  setActiveView("crearMantenimiento");
+ }
+
  const asignarValorFecha =(e)=>{
   setSelCombEstado("");
   setSelCombRespo("");
@@ -185,8 +195,8 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
           </div>
           <div className={styles["filter-group"]}>
             <label htmlFor="" className={styles.formLabel}>Responsable: </label>
-            <label htmlFor="Tipo">Agente externo</label>
-            <input type="checkbox" onChange={(e) => cargarResponsable(e)} name="checResp" id="checResp"  />
+            <label htmlFor="Tipo">Agente externo  { <input type="checkbox" onChange={(e) => cargarResponsable(e)} name="checResp" id="checResp"  />
+           }</label>
                
             <Select className={styles["filter-select"]}
               options={datosComboRes.map((d) => ({

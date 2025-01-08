@@ -12,6 +12,8 @@ import MantenHistorial from "../Manten/MantenHistorial";
 const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
   const checkTokenAndRedirect = useTokenVerification(); // Usa el hook
   const [selectedMantenimiento, setSelectedMantenimiento] = useState([]);
+  const [seleccionMantenimietoEdit, setMantenimietoEdit] = useState([]);
+
 
  
   useEffect(() => {
@@ -30,8 +32,8 @@ const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
       {activeView === "activo" && <ActiveView />}
       {activeView === "procesoCompra" && <ProcesoCompraView />}
       {activeView === "reportes" && <ReporteVista />}
-      {activeView === "mantenimiento" && (<MantenVista setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento}/>)}
-      {activeView === "crearMantenimiento" && (<CrearManten setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento}/>)}
+      {activeView === "mantenimiento" && (<MantenVista setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento} setMantenimietoEdit={setMantenimietoEdit}/>)}
+      {activeView === "crearMantenimiento" && (<CrearManten setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento} mantenimietoEdit={seleccionMantenimietoEdit}/>)}
       {activeView === "detalleMantenimiento" && (<MantenDetalle setActiveView={setActiveView} mantenimiento={selectedMantenimiento}/>)}
       {activeView === "historialMantenimiento" && (<MantenHistorial setActiveView={setActiveView} mantenimiento={selectedMantenimiento}/>)}
 
