@@ -3,16 +3,46 @@ import DataTable from "react-data-table-component";
 import ApiService from "../../Services/ApiMetodos";
 import Select from "react-select";
 import styles from "./MantenimientoVistaEstilos.module.css"; // Importación de estilos locales
+import mostrarMensaje from "../Mensajes/Mensaje";
 function MantenVista({ setActiveView,setSelectedMantenimiento }) {
 
   const [mantenientos, setMantemientos] = useState([]);
-  const datosPrueba = [{ value: "1", label: "opcion 1" }];
+  const selEstados=[{value:"3",label:"En proceso"},{value:"4",label:"Terminado"}];
+  const [ranFechas,setRanFechas]=useState({busFechInio:"",busFechFinal:""});
+  const [inpbuscar,setInpbuscar]= useState("");
+  const [selCombEstado,setSelCombEstado]= useState("");
+  const [selCombRespo,setSelCombRespo]= useState("");
+  const [datosComboRes,setDatosComboRes]= useState([]);
+  const [personal, setPersonal] = useState([]);
+  const [proveedor, setProveedor] = useState([]);
+  const [responsable, setResponsable] = useState("");
 
   useEffect(() => {
     const cargarDatos = async () => {
       const mant = await ApiService.traerDatos("datosManten");
       setMantemientos(mant);
     }
+
+    const cargarDatosRes = async () => {
+      let prov = await ApiService.traerDatos("proovedor");
+      const provConvertido = prov.map((d) => ({
+          clave: d.idProveedor,
+          nombre: d.nomProveedor,
+      }));
+
+      setProveedor(provConvertido);
+
+      let per = await ApiService.traerDatos("responsable");
+      let perConvertido = per.map((d) => ({
+          clave: d.idPers,
+          nombre: d.nomPers,
+      }));
+
+      setPersonal(perConvertido);
+      setDatosComboRes(perConvertido);
+      setResponsable("in");
+  }
+    cargarDatosRes();
     cargarDatos();
   }, []);
 
@@ -42,9 +72,40 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
     setActiveView("historialMantenimiento");
 
  }
+ const asignarValorFecha =(e)=>{
+  setSelCombEstado("");
+  setSelCombRespo("");
+  setInpbuscar("");
+  setRanFechas({
+    ...ranFechas,[e.target.name]:e.target.value,
+  });
+ }
+ const buscarRangoFechas= async (e)=>{
+  e.preventDefault();
+   if (ranFechas.busFechInio===""||ranFechas.busFechFinal==="") {
+    mostrarMensaje({title:"Seleccione dos fechas",text:"Debe asignar una fecha de inicio y fin",timer:2000,icon:"info"});
+   }else{
+    const fini= new Date(ranFechas.busFechInio);
+    const ffin= new Date(ranFechas.busFechFinal);
+    if (fini>ffin) {
+    mostrarMensaje({title:"Fechas invalidas",text:"Seleccione un rango de fechas Valido",timer:2000,icon:"info"});
+    }else{
+      const res = await ApiService.enviarDatos("busMantRanFechas",ranFechas);
+      setMantemientos(res);
+    }
+   }
+ }
+ const borrarDatos= ()=>{
+  setRanFechas({busFechInio:"",busFechFinal:""});
+  setInpbuscar("");
+ }
 
  const buscar = async(e)=>{
   e.preventDefault();
+  setSelCombEstado("");
+  setSelCombRespo("");
+  setRanFechas({busFechInio:"",busFechFinal:""});
+  setInpbuscar(e.target.value);
  const res= await ApiService.buscarDatos("busManten",e.target.value);
  setMantemientos(res);
  }
@@ -73,32 +134,70 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
 
   };
 
+  const cargarResponsable = (e) => {
+    setSelCombRespo("");
+    let tip = "";
+    if (e.target.checked) {
+        setDatosComboRes(proveedor);
+        tip = "ex";
+    } else {
+      setDatosComboRes(personal);
+        tip = "in";
+    }
+    setResponsable(tip);
+}
+
+ const filtroCombos= async (e,nombre)=>{
+  borrarDatos();
+  if (nombre.name==="comEstado") {
+    setSelCombRespo("");
+    setSelCombEstado(e);
+   const respuesta= await ApiService.buscarDatos("busMantEstado",e.value);
+   setMantemientos(respuesta);
+  }else{
+    const envDat={idRespon:e.value,tipo:responsable};
+    setSelCombEstado("");
+    setSelCombRespo(e);
+    const res = await ApiService.enviarDatos("busMantRespons",envDat);
+    setMantemientos(res);
+  }
+ }
 
   return (
     <div className={styles.MantenPrincipal}>
       <h2 className={styles.tittle}> Mantenimientos de Activos</h2>
       <form className={styles["active-form"]}>
         <div className={styles["filter-section"]}>
+        <div><p>Busqueda por rango de fechas: </p>
+          <label htmlFor="">Fecha Inico</label>
+                <input type="date" name="busFechInio" onChange={asignarValorFecha} value={ranFechas.busFechInio} />
+                <label htmlFor="">Fecha Final</label>
+                <input type="date" name="busFechFinal" onChange={asignarValorFecha} value={ranFechas.busFechFinal}/>
+                <button onClick={buscarRangoFechas}>Buscar</button>
+           </div>
           <div className={styles["filter-group"]}>
-            <label htmlFor="" >Filtro 1</label>
+            <label htmlFor="" >Estado:</label>
             <Select className={styles["filter-select"]}
-              options={datosPrueba} />
+              options={selEstados}
+              onChange={filtroCombos}
+              value={selCombEstado}
+              name="comEstado" />
           </div>
           <div className={styles["filter-group"]}>
-            <label htmlFor="" className={styles.formLabel}>Filtro 2</label>
+            <label htmlFor="" className={styles.formLabel}>Responsable: </label>
+            <label htmlFor="Tipo">Agente externo</label>
+            <input type="checkbox" onChange={(e) => cargarResponsable(e)} name="checResp" id="checResp"  />
+               
             <Select className={styles["filter-select"]}
-              options={datosPrueba} />
+              options={datosComboRes.map((d) => ({
+                value: d.clave,
+                label: d.nombre,
+              }))} 
+              onChange={filtroCombos}
+              name="comRespons" 
+              value={selCombRespo}/>
           </div>
-          <div className={styles["filter-group"]}>
-            <label htmlFor="" className={styles.formLabel}>Filtro 3</label>
-            <Select className={styles["filter-select"]}
-              options={datosPrueba} />
-          </div>
-          <div className={styles["filter-group"]}>
-            <label htmlFor="" className={styles.formLabel}>Filtro 4</label>
-            <Select className={styles["filter-select"]}
-              options={datosPrueba} />
-          </div>
+          
         </div>
         <div className={styles["actions-section"]}>
           <div className={styles["search-row"]}>
@@ -109,7 +208,8 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
               name="buscar"
               id="buscar"
               placeholder="Buscar mantenimiento"
-              onChange={buscar}/>
+              onChange={buscar}
+              value={inpbuscar}/>
           </div>
 
           <div className={styles["action-buttons"]}>
@@ -126,7 +226,7 @@ function MantenVista({ setActiveView,setSelectedMantenimiento }) {
           paginationPerPage={10}
           columns={columas}
           data={mantenientos}
-          noDataComponent="No ha selecionado ninguna actividad"
+          noDataComponent="Ningun Mantenimiento"
           persistTableHead
           customStyles={StylesTable}>
         </DataTable>

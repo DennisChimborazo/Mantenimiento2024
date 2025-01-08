@@ -90,6 +90,10 @@ switch ($opc) {
             $idobs =  $_GET['busobserva'];
             BuscarDatos::buscObservacion($idobs); 
 
+        }elseif (isset($_GET['busMantEstado'])) {
+            $id =  $_GET['busMantEstado'];
+            BuscarDatos::buscarMantenEstado($id); 
+            
         }elseif (isset($_GET['activosManten'])) {
             $serie =  $_GET['activosManten'];
             Mantenimiento::buscarActivosManten($serie); 
@@ -125,6 +129,13 @@ switch ($opc) {
 
             }elseif (isset($_GET['histManEditAct'])) {
                 Mantenimiento::buscarActivosMantenEditar(); 
+
+            }elseif (isset($_GET['busMantRanFechas'])) {
+                BuscarDatos::buscarMantenRanFechas(); 
+                
+            }
+            elseif (isset($_GET['busMantRespons'])) {
+                BuscarDatos::buscarMantenRespons();
             }
         }
         break;
