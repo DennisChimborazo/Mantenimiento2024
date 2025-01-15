@@ -2,19 +2,14 @@ import React, { useEffect,useState } from "react";
 import { useTokenVerification } from "../../Services/TokenVerification"; // Importa el hook
 import ProcesoCompraView from "../compra/ProcesoCompraView";
 import ActiveView from "../Actives/ActiveView";
-import ReporteVista from "../Reporte/ReporteVista";
-import MantenVista from "../Manten/MantenVista";
-import CrearManten from "../Manten/CrearManten";
-import MantenDetalle from "../Manten/MantenDetalle";
-import MantenHistorial from "../Manten/MantenHistorial";
+import MantenPrincipal from "../Manten/MantenPrincipal";
+import MantenProceso from "../Manten/MantenProceso";
+import ModalHisManten from "../Manten/ModalHisManten";
 
 
 const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
   const checkTokenAndRedirect = useTokenVerification(); // Usa el hook
-  const [selectedMantenimiento, setSelectedMantenimiento] = useState([]);
-  const [seleccionMantenimietoEdit, setMantenimietoEdit] = useState([]);
-
-
+  const [datosMantenimiento, setDatosMantenimiento] = useState("");
  
   useEffect(() => {
     if (activeView === "cerrarsecion") {
@@ -31,12 +26,11 @@ const VentanaPrincipalFun = ({ activeView, setActiveView }) => {
     <section className="content">
       {activeView === "activo" && <ActiveView />}
       {activeView === "procesoCompra" && <ProcesoCompraView />}
-      {activeView === "reportes" && <ReporteVista />}
-      {activeView === "mantenimiento" && (<MantenVista setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento} setMantenimietoEdit={setMantenimietoEdit}/>)}
-      {activeView === "crearMantenimiento" && (<CrearManten setActiveView={setActiveView} setSelectedMantenimiento={setSelectedMantenimiento} mantenimietoEdit={seleccionMantenimietoEdit}/>)}
-      {activeView === "detalleMantenimiento" && (<MantenDetalle setActiveView={setActiveView} mantenimiento={selectedMantenimiento}/>)}
-      {activeView === "historialMantenimiento" && (<MantenHistorial setActiveView={setActiveView} mantenimiento={selectedMantenimiento}/>)}
+      {activeView === "reportes" && <ModalHisManten />}
 
+      {activeView === "mantenimiento" && (<MantenPrincipal setActiveView={setActiveView} setDatosMantenimiento={setDatosMantenimiento} datosMantenimiento={datosMantenimiento} />)}
+      {activeView === "MantenProceso" && (<MantenProceso setActiveView={setActiveView} datosMantenimiento={datosMantenimiento} />)}
+      
     </section>
   );
 };

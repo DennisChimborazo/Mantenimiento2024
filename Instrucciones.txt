@@ -16,6 +16,7 @@ npm install jwt-decode
 npm i react-select
 npm i react-data-table-component
 npm i sweetalert
+npm install react-icons --save
 
  ------ Php JWT-------
 se mecesita instalar composer https://getcomposer.org/download/

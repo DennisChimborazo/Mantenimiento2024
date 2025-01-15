@@ -18,7 +18,7 @@ class BuscarDatos {
     }
     public static function buscActPorCompra($compra) {
         try {
-            $sqlSelect = "SELECT a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
+            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
                                 a.modeloAct,a.colorAct,p.nomPers,u.nomUbic,e.nomEstado
                             FROM activo a
                             INNER JOIN procesocompra pc ON pc.idCompra = a.idCompra
@@ -41,7 +41,7 @@ class BuscarDatos {
 
     public static function buscActTipoBien($tipoBien) {
         try {
-            $sqlSelect = "SELECT a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
+            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
                                 a.modeloAct,a.colorAct,p.nomPers,u.nomUbic,e.nomEstado
                             FROM activo a
                             INNER JOIN bien b ON b.idbien=a.idbien
@@ -64,7 +64,7 @@ class BuscarDatos {
     }
     public static function buscActUbicacion($idUbicacion) {
         try {
-            $sqlSelect = "SELECT a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
+            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
                                 a.modeloAct,a.colorAct,p.nomPers,u.nomUbic,e.nomEstado
                             FROM activo a
                             INNER JOIN bien b ON b.idbien=a.idbien
@@ -86,7 +86,7 @@ class BuscarDatos {
     }
     public static function buscActEstado($idEstado) {
         try {
-            $sqlSelect = "SELECT a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
+            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
                                 a.modeloAct,a.colorAct,p.nomPers,u.nomUbic,e.nomEstado
                             FROM activo a
                             INNER JOIN bien b ON b.idbien=a.idbien
@@ -108,7 +108,7 @@ class BuscarDatos {
     }
     public static function buscActSerie($idSerie) {
         try {
-            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
+            $sqlSelect = "SELECT a.idActivo,a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,b.nombien,a.marcaAct,
                                 a.modeloAct,a.colorAct,p.nomPers,u.nomUbic,e.nomEstado
                             FROM activo a
                             INNER JOIN bien b ON b.idbien=a.idbien
@@ -133,7 +133,7 @@ class BuscarDatos {
         try {
             $sqlSelect = "SELECT campObvs
                             FROM observacion
-                            WHERE  idObvs = :id ";
+                            WHERE  idmanAct = :id ";
             $conn = Conexion::getInstance()->getConnection();
             $result = $conn->prepare($sqlSelect);
             $result->bindParam(':id', $idObvs, PDO::PARAM_STR);

@@ -4,8 +4,12 @@ import styles from "./ActivoVistaEstilos.module.css"; // Importa los estilos esp
 import { useVistaActivo } from "./ActiveViewFun.js"; 
 import mostrarMensaje from "../Mensajes/Mensaje.js";
 import { useTokenVerification } from "../../Services/TokenVerification";
+import ModalEditarActivo from "./ModalEditarActivo.jsx";
+import stylesModal from "./ModalEdEstilos.module.css";
 
 const ActiveView = ({ onClose }) => {
+  const [estadoAbrirModal, setEstadoAbrirModal] = useState(false);
+  const [actEditar,setActEditar]=useState("");
   const checkTokenAndRedirect = useTokenVerification(); // Verificar token
     const {
       form,
@@ -58,7 +62,7 @@ useEffect(() => {
 
   const ProcesoCompChange = async (e) => {
     
-    const tokenValid = checkTokenAndRedirect();
+  const tokenValid = checkTokenAndRedirect();
     if (!tokenValid) {
       mostrarMensaje({
        title: "Has excedido el tiempo de la sesión",
@@ -147,6 +151,15 @@ useEffect(() => {
     setIsModalOpen(false);
   };
   const { procesoCompras,tipoActivos,ubicaciones,estados,activos} = datos;
+
+  const abrirModal = (act,e) => {
+    setActEditar(act);
+    e.preventDefault()
+    setEstadoAbrirModal(true); // Aquí sí puedes cambiar el estado de forma controlada
+  };
+  const cerrarModal = () => {
+    setEstadoAbrirModal(false);
+  };
 
   return (
     <div className={styles.vistaActivo}>
@@ -296,7 +309,7 @@ useEffect(() => {
                 <td>{activo.nomUbic}</td>
                 <td>{activo.nomEstado}</td>
                 <td>
-                <button className={styles["table-button"]}>Editar</button> <br /><br />
+                <button className={styles["table-button"]} onClick={(e)=>abrirModal(activo,e)}>Editar</button> <br /><br />
                 <button className={styles["table-button"]}>Historial</button>
               </td>
               </tr>
@@ -317,6 +330,18 @@ useEffect(() => {
           </div>
         </div>
       )}
+
+      {estadoAbrirModal && (
+       <div className={stylesModal["modal-overlay"]}>
+                 <div className={stylesModal.modal}>  
+            <ModalEditarActivo
+              onClose={cerrarModal}
+              actEditar={actEditar}
+            />
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 }

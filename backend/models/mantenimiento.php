@@ -4,7 +4,7 @@ class Mantenimiento{
         $data = json_decode(file_get_contents('php://input'), true);
         $proceso = $data['proMant'];
         $fechaInicio = $data['fInicio'];
-        $fechaFinal = $data['fFinal'];
+        $fechaFinal = "S/N";
         $tipo = $data['tipo'];
         $idrespons = $data['responsable'];
         $estado="3"; 
@@ -32,7 +32,7 @@ class Mantenimiento{
         }
     }
     public static function cargarMantenimientos(){
-        $sql="SELECT m.idManten, m.codManten, m.fechaInico, m.fechaFin, e.nomEstado,
+        $sql="SELECT m.idManten, m.codManten, m.fechaInico, m.fechaFin, e.nomEstado,m.tipo,
                     CASE 
                         WHEN m.tipo = 'ex' THEN p.nomProveedor
                         WHEN m.tipo = 'in' THEN per.nomPers
@@ -55,8 +55,8 @@ class Mantenimiento{
 
     static function buscarActivosManten($idmanten){
         try {
-            $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,a.marcaAct,a.modeloAct,a.colorAct,u.nomUbic
-                            FROM mantenientodetalle md
+            $sqlSelect = "SELECT md.idmanAct,md.idEstado,a.idActivo,a.idCompra,a.serieAct,a.codigoBarraAct,a.marcaAct,a.modeloAct,a.colorAct,u.nomUbic
+                            FROM manten_activ md
                             INNER JOIN activo a ON md.idActivo=a.idActivo
                             INNER JOIN ubicacion u ON u.idUbic=a.idUbic
                             WHERE md.idManten = :manten 
@@ -75,16 +75,13 @@ class Mantenimiento{
     static function buscarActivosMantenEditar(){
         $data = json_decode(file_get_contents('php://input'), true);
         $idman = $data['idman'];
-        $idact = $data['idact'];
         try {
             $sqlSelect = "SELECT tipoMD, idReferencia
                             FROM mantenientodetalle 
-                            WHERE idManten = :manten AND idActivo= :idac";
+                            WHERE idmanAct = :manten";
             $conn = Conexion::getInstance()->getConnection();
             $result = $conn->prepare($sqlSelect);
             $result->bindParam(':manten', $idman, PDO::PARAM_INT);
-            $result->bindParam(':idac', $idact, PDO::PARAM_INT);
-
             $result->execute();
             $data = $result->fetchAll(PDO::FETCH_ASSOC);
             $dataJson = json_encode($data);
@@ -96,13 +93,14 @@ class Mantenimiento{
 
     static function buscarHistorialManten($idmanten){
         try {
-            $sqlSelect = "SELECT a.idCompra,a.serieAct, GROUP_CONCAT(CASE WHEN md.tipoMD = 'act' THEN act.nomActi END SEPARATOR ', ') AS actividad, GROUP_CONCAT(CASE WHEN md.tipoMD = 'com' THEN c.nomCompo END SEPARATOR ', ') AS componente, MAX(CASE WHEN md.tipoMD = 'obs' THEN o.campObvs END) AS observacion 
-                            FROM mantenientodetalle md 
-                            INNER JOIN activo a ON a.idActivo = md.idActivo 
+            $sqlSelect = "SELECT  a.idCompra,a.serieAct, GROUP_CONCAT(CASE WHEN md.tipoMD = 'act' THEN act.nomActi END SEPARATOR ', ') AS actividad, GROUP_CONCAT(CASE WHEN md.tipoMD = 'com' THEN c.nomCompo END SEPARATOR ', ') AS componente, MAX(CASE WHEN md.tipoMD = 'obs' THEN o.campObvs END) AS observacion 
+                            FROM manten_activ ma 
+                            INNER JOIN mantenientodetalle md ON ma.idmanAct=md.idmanAct
+                            INNER JOIN activo a ON a.idActivo = ma.idActivo
                             LEFT JOIN actividad act ON act.idActi = md.idReferencia AND md.tipoMD = 'act' 
                             LEFT JOIN componente c ON c.idCompo = md.idReferencia AND md.tipoMD = 'com' 
                             LEFT JOIN observacion o ON o.idObvs = md.idReferencia AND md.tipoMD = 'obs' 
-                            WHERE md.idManten = :manten GROUP BY a.serieAct, a.idCompra";
+                            WHERE ma.idManten = :manten GROUP BY a.serieAct, a.idCompra";
             $conn = Conexion::getInstance()->getConnection();
             $result = $conn->prepare($sqlSelect);
             $result->bindParam(':manten', $idmanten, PDO::PARAM_INT);
@@ -120,64 +118,81 @@ class Mantenimiento{
         $recopilacion=$data["datos"];
         $obs=$data["obs"];
         $datosFinales="";
+        $idMan=$data["idManAct"];
         if ($obs!=null) {
-           $idObs= self::guardarObservacion($obs);
-            $idAct=$data["idAct"];
-            $idMan=$data["idMan"];
-            $datosFinales = "('" . $idMan . "','" . $idAct . "','obs','" . $idObs . "'), " . $recopilacion;
+           $idObs= self::guardarObservacion($obs,$idMan);
+            $datosFinales = "('" . $idMan . "','obs','" . $idObs . "'), " . $recopilacion;
 
         }else {
             $datosFinales=$recopilacion;
         }
         
-        $sql ="INSERT INTO mantenientodetalle (idManten, idActivo, tipoMD, idReferencia) VALUES ".$datosFinales;
+        $sql ="INSERT INTO mantenientodetalle (	idmanAct , tipoMD, idReferencia) VALUES ".$datosFinales;
         $conn = Conexion::getInstance()->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->execute();
-    }
-    static function guardarObservacion($obs){
+        self::actualizarEstadoactivo($idMan);
 
-        $sql ="INSERT INTO observacion (campObvs) VALUES (:obs)";
+    }
+    static function guardarObservacion($obs,$idMan){
+
+        $sql ="INSERT INTO observacion (campObvs,idmanAct) VALUES (:obs, :id)";
          $conn = Conexion::getInstance()->getConnection();
          $stmt = $conn->prepare($sql);
-         $stmt->execute([':obs' => $obs,]);
+         $stmt->execute([':obs' => $obs,':id' => $idMan,]);
          $lastId = $conn->lastInsertId();
         return $lastId;
     }
     public static function actualizarEstado() {
         $data = json_decode(file_get_contents('php://input'), true);
         $id = $data["idManten"];
-        $sql="UPDATE manteniento SET idEstado = '4' WHERE idManten = :id";
+        $estado = $data["estado"];
+        $fecha = $data["fecha"];
+
+        $sql="UPDATE manteniento SET idEstado = :est,fechaFin = :fFin WHERE idManten = :id";
         $conn = Conexion::getInstance()->getConnection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute([':id' => $id,]);
+        $stmt->execute([':est' => $estado,':fFin' => $fecha,':id' => $id,]);
     }
     public static function borrarDatosManten() {
         $data = json_decode(file_get_contents('php://input'), true);
-        $idMan = $data[0]["idManten"];
-        $idActv = $data[0]["idAct"];
-        $d=self::borrarObservacion($idMan,$idActv);
-        $sql="DELETE m FROM mantenientodetalle  m WHERE m.idManten= :idMan AND m.idActivo = :idAct";
+        $idMan = $data["idManten"]; 
+        $edit = $data["edit"];
+
         $conn = Conexion::getInstance()->getConnection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([':idMan' => $idMan,':idAct' => $idActv,]);
+        try {
+            $conn->beginTransaction();
+            self::borrarMantenimientoDetalle($conn, $idMan);
+            self::borrarObservacion($conn, $idMan);
+            if ($edit!="si") {
+            self::borrarMantenActiv($conn, $idMan);
+            }
+            $conn->commit();
+            return json_encode(["success" => true]);
+        } catch (Exception $e) {
+            $conn->rollBack();
+            return json_encode(["success" => false, "error" => $e->getMessage()]);
+        }
     }
 
-    static function borrarObservacion($idMan,$idActv){
-        $sql ="SELECT m.idReferencia FROM mantenientodetalle m WHERE m.idManten= :idMan AND m.idActivo= :idAct AND m.tipoMD='obs'";
-         $conn = Conexion::getInstance()->getConnection();
-         $stmt = $conn->prepare($sql);
-        $stmt->execute([':idMan' => $idMan,':idAct' => $idActv,]);
-        $result= $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if ($result) {
-            $dato=$result[0];
-            $id=$dato["idReferencia"];
-            $sqldel="DELETE FROM observacion WHERE idObvs= :id";
-            $pre = $conn->prepare($sqldel);
-            $pre->execute([':id' =>$id]);
-        }
-    
+    static function borrarObservacion($conn, $idMan) {
+        $sqldel = "DELETE FROM observacion WHERE idmanAct = :id";
+        $pre = $conn->prepare($sqldel);
+        $pre->execute([':id' => $idMan]);
     }
+    
+    static function borrarMantenActiv($conn, $idMan) {
+        $sqldel = "DELETE FROM manten_activ WHERE idmanAct = :id";
+        $pre = $conn->prepare($sqldel);
+        $pre->execute([':id' => $idMan]);
+    }
+    
+    static function borrarMantenimientoDetalle($conn, $idMan) {
+        $sql = "DELETE FROM mantenientodetalle WHERE idmanAct = :id";
+        $pre = $conn->prepare($sql);
+        $pre->execute([':id' => $idMan]);
+    }
+    
 
     public static function actuInfMantemiento() {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -185,10 +200,8 @@ class Mantenimiento{
         $id = $data['idManten'];
         $proceso = $data['proMant'];
         $fechaInicio = $data['fInicio'];
-        $fechaFinal = $data['fFinal'];
         $tipo = $data['tipo'];
         $idrespons = $data['responsable'];
-        $estado = "3";
     
         $conn = Conexion::getInstance()->getConnection();
     
@@ -196,8 +209,6 @@ class Mantenimiento{
             $query = "UPDATE manteniento 
                       SET codManten = :codMan, 
                           fechaInico = :fInc, 
-                          fechaFin = :fFin, 
-                          idEstado = :est, 
                           tipo = :tip, 
                           idRespons = :res 
                       WHERE idManten = :id";
@@ -206,8 +217,6 @@ class Mantenimiento{
                 ':id' => $id,
                 ':codMan' => $proceso,
                 ':fInc' => $fechaInicio,
-                ':fFin' => $fechaFinal,
-                ':est' => $estado,
                 ':tip' => $tipo,
                 ':res' => $idrespons
             ]);
@@ -222,14 +231,23 @@ class Mantenimiento{
             echo json_encode(['success' => false, 'message' => 'Error al actualizar el registro: ' . $e->getMessage()]);
         }
     }
-    
-}
-// SELECT a.serieAct,a.marcaAct,
-// CASE WHEN md.tipoMD='act' THEN act.nomActi END AS actividad,
-// CASE WHEN md.tipoMD='com' THEN c.nomCompo END AS componente
-// FROM mantenientodetalle md
-// INNER JOIN activo a on a.idActivo=md.idActivo
-// LEFT JOIN actividad act ON act.idActi = md.idReferencia AND md.tipoMD='act'
-// LEFT JOIN componente c ON c.idCompo = md.idReferencia AND md.tipoMD='com'
-// WHERE md.idManten='2'
+
+    public static function actualizarEstadoactivo($id) {
+        $sql="UPDATE manten_activ SET idEstado = '4'  WHERE idmanAct = :id";
+        $conn = Conexion::getInstance()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':id' => $id,]);
+    }
+///////////////////////// Refractorizacion 
+    public static function guardarMantenActiv(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $formEnv = $data['formEnv'];
+        $sql = "INSERT INTO manten_activ (idManten, idActivo,idEstado) VALUES ".$formEnv;
+        $conn = Conexion::getInstance()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return json_encode(true);
+        }
+    }
+
 ?>
