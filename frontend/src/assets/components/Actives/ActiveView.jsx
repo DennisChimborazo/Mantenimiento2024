@@ -159,6 +159,10 @@ useEffect(() => {
   };
   const cerrarModal = () => {
     setEstadoAbrirModal(false);
+    setDatos((prevDatos) => ({
+      ...prevDatos,
+      activos: [],
+    }));
   };
 
   return (

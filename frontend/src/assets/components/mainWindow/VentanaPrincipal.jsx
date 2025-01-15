@@ -75,15 +75,6 @@ function VentanaPrincipal() {
               <a
                 href="#"
                 className={styles.SidebarLink}
-                onClick={() => setActiveView("modal")}
-              >
-                Reportes
-              </a>
-            </li>
-            <li className={styles.SidebarItem}>
-              <a
-                href="#"
-                className={styles.SidebarLink}
                 onClick={() => setActiveView("reportes")}
               >
                 Reportes
