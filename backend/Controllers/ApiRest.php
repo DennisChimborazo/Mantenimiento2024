@@ -23,9 +23,12 @@ switch ($opc) {
     case 'GET':
 
     //   $decodedToken = verifyToken(); // Verificamos el token
-
+    
         if (isset($_GET['proovedor'])) {
             TraerDatos::cargarProveedor(); 
+
+        }   elseif (isset($_GET['todActivos'])) {
+            TraerDatos::cargarActivos(); 
 
         }  elseif (isset($_GET['tipobien'])) {
             TraerDatos::cargarTipoBien(); 
@@ -139,6 +142,8 @@ switch ($opc) {
                 
             }elseif (isset($_GET['busMantRespons'])) {
                 BuscarDatos::buscarMantenRespons();
+            }elseif (isset($_GET['guarMantenActiv'])) {
+                Mantenimiento::guardarMantenActiv();
             }
         }
         break;

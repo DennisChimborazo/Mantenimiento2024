@@ -63,7 +63,13 @@ class TraerDatos {
         echo json_encode($data); 
     }
     public static function cargarActivos() {
-        $sqlSelect = "SELECT * FROM activo";
+        $sqlSelect = "SELECT a.idActivo,a.idCompra,a.serieAct,a.marcaAct,a.modeloAct,
+                            a.colorAct,a.codigoBarraAct,
+                            a.idbien,tp.idtipBien,u.nomUbic,b.nombien
+                        FROM activo a 
+                        INNER JOIN ubicacion u ON u.idUbic=a.idUbic
+                        INNER JOIN bien b ON b.idbien=a.idbien
+                        INNER JOIN tipobien tp ON tp.idtipBien =b.idtipBien";
         $stmt = self::$conn->prepare($sqlSelect); // Usar self::$conn en lugar de $conn
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -81,16 +81,23 @@ CREATE TABLE manteniento(
 	FOREIGN KEY (idEstado) REFERENCES estado(idEstado)
 );
 
-create table observacion(
-	idObvs int AUTO_INCREMENT PRIMARY KEY,
-	campObvs varchar (350)
-);
-
 CREATE TABLE mantenientoDetalle(
-	idManten INT,
-	idActivo INT,
+	idmanAct INT,
 	tipoMD varchar(3),
 	idReferencia int,
-	FOREIGN KEY (idManten) REFERENCES manteniento(idManten)
-	FOREIGN KEY (idActivo) REFERENCES activo(idActivo),
+	FOREIGN KEY (idmanAct) REFERENCES manten_activ(idmanAct)
+);
+
+CREATE TABLE manten_activ(
+	idmanAct INT AUTO_INCREMENT PRIMARY KEY,
+    idManten int,
+    idActivo int,
+    FOREIGN key (idManten) REFERENCES manteniento (idManten),
+    FOREIGN KEY (idActivo) REFERENCES activo (idActivo)
+);
+create table observacion(
+	idObvs int AUTO_INCREMENT PRIMARY KEY,
+	campObvs varchar (350),
+    idmanAct int,
+    FOREIGN KEY (idmanAct) REFERENCES manten_activ(idmanAct)
 );

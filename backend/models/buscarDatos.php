@@ -133,7 +133,7 @@ class BuscarDatos {
         try {
             $sqlSelect = "SELECT campObvs
                             FROM observacion
-                            WHERE  idObvs = :id ";
+                            WHERE  idmanAct = :id ";
             $conn = Conexion::getInstance()->getConnection();
             $result = $conn->prepare($sqlSelect);
             $result->bindParam(':id', $idObvs, PDO::PARAM_STR);
