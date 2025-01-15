@@ -58,6 +58,49 @@ class Activo {
         }
             
     }
+    public static function actualizarActivo() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $serie = $data['serieAct'];
+        $marca = $data['marcaAct'];
+        $modelo = $data['modeloAct'];
+        $color = $data['colorAct'];
+        $codBarras = $data['codigoBarraAct'];
+        $idCompra = $data['idCompra'];
+        $idUbic = $data['idUbic'];
+        $idPers = $data['idPers'];
+        $idbien = $data['idbien'];
+        $idEstado = $data['idEstado'];
+        $idact = $data['idActivo'];
+        try {
+            $query = "UPDATE activo SET
+                     serieAct = :serie, marcaAct= :marca, modeloAct= :modelo ,
+                     colorAct= :color,codigoBarraAct= :codBarras,idCompra= :idCompra,
+                     idUbic= :idUbic ,idPers= :idPers,idbien=:idbien,idEstado= :idEstado
+                      WHERE idActivo = :idactiv";
+            $conn = Conexion::getInstance()->getConnection();
+            $stmt = $conn->prepare($query);
+            $stmt->execute([
+                ':serie' => $serie,
+                ':marca' => $marca,
+                ':modelo' => $modelo,
+                ':color' => $color,
+                ':codBarras' => $codBarras,
+                ':idCompra' => $idCompra,
+                ':idUbic' => $idUbic,
+                ':idPers' => $idPers,
+                ':idbien' => $idbien,
+                ':idEstado' => $idEstado,
+                ':idactiv' => $idact,
+            ]);
+            echo json_encode(['success' => true, 'message' => 'Proceso de compra guardado']);
+        } catch (PDOException $e) {
+            http_response_code(500); // Error interno del servidor
+            echo json_encode(['success' => false, 'message' => 'Error al guardar el proceso de compra: ' . $e->getMessage()]);
+        }
+            
+    }
+    
+
 }
 
 ?>

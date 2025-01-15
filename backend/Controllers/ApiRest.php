@@ -153,10 +153,13 @@ switch ($opc) {
         $_REQUEST = array_merge($_REQUEST, $_PUT);
         if (isset($_GET['actuMantenimiento'])) {
             Mantenimiento::actualizarEstado(); 
-            }
-            elseif (isset($_GET['actuInfManten'])) {
-            Mantenimiento::actuInfMantemiento(); 
-            }
+        }
+        elseif (isset($_GET['actuInfManten'])) {
+            Mantenimiento::actuInfMantemiento();
+
+        }elseif (isset($_GET['actuActivo'])) {
+            Activo::actualizarActivo(); 
+        }
 
             
 
