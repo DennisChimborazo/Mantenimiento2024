@@ -58,7 +58,62 @@ function ModalHisManten({onClose,datosHistorial}) {
           ),
         },
     ];
-
+    const customStyles = {
+      header: {
+        style: {
+          minHeight: '56px',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          color: '#ffffff',
+          backgroundColor: '#7c181a',
+          
+        },
+      },
+      headRow: {
+        style: {
+          backgroundColor: '#7c181a',
+          borderTop: '1px solid #dddddd',
+    
+        },
+      },
+      headCells: {
+        style: {
+          fontSize: '10px',
+          fontWeight: '600',
+          textTransform: 'uppercase',
+          paddingLeft: '8px',
+          paddingRight: '8px',
+          color: '#ffffff',
+    
+        },
+      },
+      rows: {
+        style: {
+          backgroundColor: '#ffffff',
+          '&:nth-of-type(even)': {
+            backgroundColor: '#f9f9f9', // Color alternativo para filas pares
+          },
+          '&:hover': {
+            backgroundColor: '#ffe3e3', // Color al pasar el cursor
+          },
+        },
+      },
+      cells: {
+        style: {
+          paddingLeft: '8px',
+          paddingRight: '8px',
+        },
+      },
+      pagination: {
+        style: {
+          borderTop: '1px solid #dddddd',
+          backgroundColor: '#ffffff',
+          padding: '8px',
+        },
+        
+      },
+    };
+    
     return (
         <div className={styles.modalContainer}>
             <TiArrowBack size={30} onClick={()=>onClose()} />
@@ -68,6 +123,7 @@ function ModalHisManten({onClose,datosHistorial}) {
                 pagination
                 paginationPerPage={4}
                 noDataComponent="No hay activo registrados"
+                customStyles={customStyles}
                 persistTableHead
             />
         </div>

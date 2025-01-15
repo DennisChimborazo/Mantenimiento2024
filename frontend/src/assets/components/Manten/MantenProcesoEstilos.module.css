@@ -1,0 +1,62 @@
+.MantenProceso {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tittle {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.options {
+    display: flex;
+    gap: 40px; /* Incrementa el espacio entre las opciones */
+    width: 100%;
+    align-items: center; /* Alinea verticalmente al centro */
+    justify-content: space-between; /* Distribuye las opciones equitativamente */
+    margin-top: 25px;
+    font-size: 15px;
+    flex-wrap: wrap; /* Permite que las opciones se ajusten en varias filas si hay poco espacio */
+  }
+  
+  .options label {
+    flex-grow: 1; /* Permite que las etiquetas ocupen un espacio igual */
+    text-align: center; /* Centra el texto de cada etiqueta */
+    margin: 0 10px; /* Añade margen lateral para mayor separación */
+  }
+  
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los botones se alineen en varias líneas si es necesario */
+    gap: 20px; /* Espaciado uniforme entre los botones */
+    margin-top: 20px;
+    justify-content: flex-start; /* Alinea los botones a la izquierda */
+  }
+  
+  .primary-button {
+    padding: 10px 40px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #7c181a;
+    color: white;
+    border: none;
+    text-align: center;
+    margin: 0; /* Asegúrate de que los márgenes no interfieran */
+  }
+  .primary-button:hover {
+    background-color: #db212f;
+  }
+  .data-table-container {
+    margin-top: 20px; /* Espacio adicional entre la tabla y otros elementos */
+    padding: 10px; /* Opcional: Añade un relleno para evitar que los datos estén pegados a los bordes */
+    background-color: #f9f9f9; /* Fondo opcional */
+    border-radius: 8px; /* Esquinas redondeadas */
+  }

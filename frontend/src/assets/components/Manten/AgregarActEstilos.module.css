@@ -1,0 +1,86 @@
+.AgregarActivo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tittle {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.filtros-container {
+  display: grid; /* Use grid to create columns */
+  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+  gap: 15px; /* Space between the columns */
+  padding: 10px;
+  width: 100%;
+}
+
+.filtros-container label {
+  margin-right: 5px;
+  display: block; /* Make labels block elements to take full width */
+  margin-bottom: 10px;
+}
+
+.filtros-container input[type="text"],
+.filtros-container .Select {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Make input fields and selects take full column width */
+}
+.filtros-container input[type="text"]{
+  width: 250px;
+}
+
+.filtros-container .combo{
+  width: 260px;
+}
+
+.filtros-container .icon-clear {
+  cursor: pointer;
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.filtros-container .icon-clear:hover {
+  transform: scale(1.1);
+}
+
+
+.action-buttons{
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.primary-button{
+  padding: 10px 40px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Times New Roman', Times, serif;
+  background-color: #7c181a;
+  color: white;
+  border: none;
+  text-align: center;
+
+}
+
+.primary-button:hover {
+  background-color: #db212f;
+}
+.data-table-container {
+  margin-top: 10px; /* Espacio adicional entre la tabla y otros elementos */
+  padding: 10px; /* Opcional: Añade un relleno para evitar que los datos estén pegados a los bordes */
+  background-color: #f9f9f9; /* Fondo opcional */
+  border-radius: 8px; /* Esquinas redondeadas */
+  width: 800px;
+}

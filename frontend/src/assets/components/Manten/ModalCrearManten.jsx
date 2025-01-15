@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Select from "react-select";
 import mostrarMensaje from "../Mensajes/Mensaje";
 import ApiService from "../../Services/ApiMetodos";
+import styles from "./CrearMantenimientoEstilos.module.css";
 
 function ModalCrearManten({ onClose, setActiveView, setDatosMantenimiento, datosPadre }) {
   const [formulario, setFormulario] = useState({idManten:"", proMant: "", fInicio: "", tipo: "", responsable: "" });
@@ -99,10 +100,10 @@ function ModalCrearManten({ onClose, setActiveView, setDatosMantenimiento, datos
 
   return (
     <div>
-      <div className="">
-        <p>Nuevo Mantenimiento</p>
-        <div className="">
-          <div className="">
+      <div className={styles["CrearMantenimiento"]}>
+        <p className={styles.tittle}>Nuevo Mantenimiento</p>
+        <div className={styles.options}>
+          <div className={styles["options-text"]}>
             <label htmlFor="proMant">Proceso:</label>
             <input
               type="text"
@@ -113,7 +114,7 @@ function ModalCrearManten({ onClose, setActiveView, setDatosMantenimiento, datos
               value={formulario.proMant}
             />
           </div>
-          <div className="">
+          <div className={styles["options-calendar"]}>
             <label htmlFor="fInicio">Fecha de inicio</label>
             <input
               type="date"
@@ -124,17 +125,18 @@ function ModalCrearManten({ onClose, setActiveView, setDatosMantenimiento, datos
               value={formulario.fInicio}
             />
           </div>
-          <div className="">
+          <div className={styles["options-checkbox"]}>
             <label htmlFor="Tipo">Agente externo
               <input
                 type="checkbox"
+                className={styles["checkbox"]}
                 onChange={(e) => cargarResponsable(e)}
                 name="checResp"
                 id="checResp"
               />
             </label>
           </div>
-          <div className="">
+          <div className={styles["filter-section"]}>
             <label htmlFor="responsable">Responsable:</label>
             <Select
               options={responsable.map((r) => ({
@@ -144,11 +146,12 @@ function ModalCrearManten({ onClose, setActiveView, setDatosMantenimiento, datos
               placeholder="Seleccione"
               onChange={valorCombo}
               value={labelCombo}
+              className={styles["filter-select"]}
             />
           </div>
-          <div className="">
-            <button className="" onClick={cerrarModal}>Cancelar</button>
-            <button className="" onClick={guardarMantenimiento}>Guardar</button>
+          <div className={styles["action-buttons"]}>
+            <button className={styles["primary-button"]} onClick={cerrarModal}>Cancelar</button>
+            <button className={styles["primary-button"]} onClick={guardarMantenimiento}>Guardar</button>
           </div>
         </div>
       </div>

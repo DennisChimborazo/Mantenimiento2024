@@ -1,4 +1,4 @@
-.CrearMantenimiento {
+.EditarMantenimiento {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,7 +13,6 @@
     margin-bottom: 15px;
     margin-top: 15px;
 }
-
 .options {
     display: flex;
     flex-direction: column;
@@ -131,26 +130,3 @@
   .primary-button:hover {
     background-color: #db212f;
   }
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo transparente oscuro */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000; /* Asegúrate de que esté en el frente */
-    
-  }
-  
-  .modal {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 800px; /* Ajusta el tamaño según sea necesario */
-    max-width: 90%;
-  }
-  

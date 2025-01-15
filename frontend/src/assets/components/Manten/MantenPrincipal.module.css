@@ -1,0 +1,83 @@
+.Mantenimiento {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+.filtros-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaciado entre los elementos */
+    padding: 10px;
+  }
+  
+  .filtros-container label {
+    margin-right: 5px;
+  }
+  
+  .filtros-container input[type="text"],
+  .filtros-container input[type="date"] {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .filtros-container .Select {
+    min-width: 150px; /* Tamaño mínimo para el dropdown */
+  }
+  
+  .filtros-container .icon-clear {
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.2s ease;
+  }
+  
+  .filtros-container .icon-clear:hover {
+    transform: scale(1.1);
+  }
+  .action-buttons {
+    display: flex;
+    justify-content: flex-start; /* Alinea los botones al lado izquierdo */
+    gap: 10px;
+    margin-top: 15px; /* Añade separación respecto a los filtros */
+    margin-bottom: 10px;
+}
+
+.primary-button,
+.secondary-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.primary-button {
+    background-color: #7c181a;
+    color: white;
+    border: none;
+}
+
+.primary-button:hover {
+    background-color: #db212f;
+}
+
+.secondary-button {
+    background-color: #7c181a;
+    color: #fff;
+    border: 1px solid #ccc;
+}
+
+.secondary-button:hover {
+    background-color: #db212f;
+}
+  
+.data-table-container {
+    margin-top: 10px; /* Espacio adicional entre la tabla y otros elementos */
+    padding: 10px; /* Opcional: Añade un relleno para evitar que los datos estén pegados a los bordes */
+    background-color: #f9f9f9; /* Fondo opcional */
+    border-radius: 8px; /* Esquinas redondeadas */
+  }

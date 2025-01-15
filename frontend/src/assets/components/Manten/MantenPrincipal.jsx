@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ModalCrearManten from "./ModalCrearManten";
 import styles from "./CrearMantenimientoEstilos.module.css";
+import styles1 from "./MantenPrincipal.module.css";
 import ApiService from "../../Services/ApiMetodos";
 import DataTable from "react-data-table-component";
 import ModalHisManten from "./ModalHisManten";
@@ -187,11 +188,66 @@ const limpiarFiltros=()=>{
     setValorInputBuscar("")
     setMantemientosTabla(mantenientos);
 }
+const customStyles = {
+  header: {
+    style: {
+      minHeight: '56px',
+      fontSize: '18px',
+      fontWeight: 'bold',
+      color: '#ffffff',
+      backgroundColor: '#7c181a',
+      
+    },
+  },
+  headRow: {
+    style: {
+      backgroundColor: '#7c181a',
+      borderTop: '1px solid #dddddd',
+
+    },
+  },
+  headCells: {
+    style: {
+      fontSize: '14px',
+      fontWeight: '600',
+      textTransform: 'uppercase',
+      paddingLeft: '8px',
+      paddingRight: '8px',
+      color: '#ffffff',
+
+    },
+  },
+  rows: {
+    style: {
+      backgroundColor: '#ffffff',
+      '&:nth-of-type(even)': {
+        backgroundColor: '#f9f9f9', // Color alternativo para filas pares
+      },
+      '&:hover': {
+        backgroundColor: '#ffe3e3', // Color al pasar el cursor
+      },
+    },
+  },
+  cells: {
+    style: {
+      paddingLeft: '8px',
+      paddingRight: '8px',
+    },
+  },
+  pagination: {
+    style: {
+      borderTop: '1px solid #dddddd',
+      backgroundColor: '#ffffff',
+      padding: '8px',
+    },
+    
+  },
+};
 
   return (
-    <div>
+    <div className={styles1.Mantenimiento}>
       <h2>Mantenimientos</h2>
-      <div>
+      <div className={styles1["filtros-container"]}>
         <label htmlFor="">Buscar</label>
         <input type="text" onChange={buscarCodMantenimiento} value={valorInputBuscar} />
         <label>Fecha inicial</label>
@@ -201,7 +257,7 @@ const limpiarFiltros=()=>{
         <label htmlFor="">Estado</label>
         <Select
             options={estadosCombo}
-            placeholder="Seleccione actividades"
+            placeholder="Seleccione el estado"
             onChange={buscarManEstados}
             value={valorSelect}
           />
@@ -209,15 +265,20 @@ const limpiarFiltros=()=>{
         <FcClearFilters size={30} onClick={limpiarFiltros} />
       </div>
 
-      <button onClick={abrirModal}>Nuevo Mantenimiento</button>
+      <div className={styles1["action-buttons"]}>
+      <button onClick={abrirModal} className={styles1["primary-button"]}>Nuevo Mantenimiento</button>
+      </div>
+      <div className={styles1["data-table-container"]}>
       <DataTable
           pagination
-          paginationPerPage={10}
+          paginationPerPage={5}
           columns={columasMantenimientos}
           data={mantenientosTabla}
           noDataComponent="Ningun Mantenimiento"
+          customStyles={customStyles}
           persistTableHead>
         </DataTable>
+        </div>
 
 
       {estadoAbrirModal && (
