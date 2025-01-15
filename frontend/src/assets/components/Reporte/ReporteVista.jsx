@@ -8,6 +8,10 @@ import { TiArrowBack } from "react-icons/ti";
 import mostrarMensaje from "../Mensajes/Mensaje";
 import Select from "react-select";
 import GraficoBurbuja from "./GraficoBurbuja";
+import Doughnut from "./Doughnut";
+import GraficoArea from "./GraficoArea";
+import GraficoPastelComAct from "./GraficoPastelComAct";
+
 
 
 function ReporteVista({setActiveView}) {
@@ -16,8 +20,10 @@ function ReporteVista({setActiveView}) {
   const [mantenientosTemp, setMantemientosTemp] = useState([]);
   const [valorFechaInicio,setValorFechaInicio]=useState("");
   const [valorFechaFinal,setValorFechaFinal]=useState("");
+  const [datosCodManten,setdatosCodManten]= useState("")
   const [actividades,setActividades]= useState([])
   const [componentes,setComponentes]= useState([])
+  const[contadores,setContadores]=useState({act:"",com:""})
      
 
   useEffect(() => {
@@ -34,6 +40,9 @@ function ReporteVista({setActiveView}) {
       }
     };
     cargarValores();
+
+    // buscarCantidadComponentes
+    //     buscarCantidadAcciones
   }, []); 
 const volver=()=>{
   setActiveView("reportes")
@@ -101,6 +110,20 @@ setMantemientosTabla(datosFiltrados);
 setMantemientosTemp(datosFiltrados);
 };
 
+const verDatos=(e)=>{
+  setdatosCodManten(e.value)
+}
+const verNumAct=(e)=>{
+  console.log(e.value);
+  setContadores({...contadores,act:e.value});
+  console.log(contadores);
+
+}
+const verNumCompo=(e)=>{
+  console.log(e.value);
+  setContadores({...contadores,com:e.value});
+  console.log(contadores);
+}
   return (
     <div className={styles["reporte-container"]}>
       
@@ -115,13 +138,36 @@ setMantemientosTemp(datosFiltrados);
                   value: acti.idManten,
                   label: acti.codManten,
                 }))}
+                onChange={verDatos}
                 ></Select>
             </div>
             
             <div className={styles["grafico-container"]}>
+              <div className={styles["grafico-item"]}>
+               <GraficoPastelComAct valoresPadre={datosCodManten} />
+            </div>
+            <div>
+              <label htmlFor="">Actividades</label>
+            <Select
+                placeholder="Seleccione Actividad"
+                options={actividades.map((acti) => ({
+                  value: acti.idActi,
+                  label: acti.nomActi,
+                }))}
+                onChange={verNumAct}
+                
+                ></Select>
+              <label htmlFor="">Componentes</label>
 
-            <div className={styles["grafico-item"]}>
-              <GraficoBurbuja valoresPadre={mantenientosTabla} />
+                <Select
+                placeholder="Seleccione componente"
+                options={componentes.map((acti) => ({
+                  value: acti.idCompo ,
+                  label: acti.nomCompo ,
+                }))}
+                onChange={verNumCompo}
+                ></Select>
+                <GraficoBarras  valoresPadre={contadores} ></GraficoBarras>
             </div>
            
             </div>
