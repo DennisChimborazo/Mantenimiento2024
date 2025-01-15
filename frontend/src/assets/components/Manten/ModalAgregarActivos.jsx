@@ -314,7 +314,6 @@ function ModalAgregarActivos({ onClose, inforMantenimiento, activos, setRefresca
           <label htmlFor=""> Serie</label>
           <input type="text" onChange={filtroSerie} value={inpBuscarSerie} />
         </div>
-        <FcClearFilters size={30} onClick={limpiarFiltros} />
        
 
       </div>
@@ -322,6 +321,8 @@ function ModalAgregarActivos({ onClose, inforMantenimiento, activos, setRefresca
         <button className={styles["primary-button"]} onClick={observarActivos}>Activos Selecionados</button>
         <button className={styles["primary-button"]} onClick={cerrarModal}> Cerrar</button>
         <button className={styles["primary-button"]} onClick={guardarDatos}>Guardar</button>
+        <FcClearFilters size={30} onClick={limpiarFiltros} />
+
       </div>
       <div className={styles["data-table-container"]}>
       <DataTable
